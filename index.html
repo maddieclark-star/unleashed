@@ -14,7 +14,10 @@
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/sections/header.css" />
   <link rel="stylesheet" href="css/sections/hero.css" />
+  <link rel="stylesheet" href="css/sections/usps.css" />
   <link rel="stylesheet" href="css/sections/page-cards.css" />
+  <link rel="stylesheet" href="css/sections/choice.css" />
+  <link rel="stylesheet" href="css/sections/image-lr.css" />
 </head>
 <body>
 
@@ -42,10 +45,10 @@
       </nav>
 
       <div class="header__actions">
-        <a class="btn btn--primary btn--reverse" href="#">
+        <a class="btn btn--nav btn--primary btn--reverse" href="#">
           <span class="btn__label">Log in</span>
         </a>
-        <a class="btn btn--dark" href="#">
+        <a class="btn btn--nav btn--dark" href="#">
           <span class="btn__label">Get a quote</span>
         </a>
       </div>
@@ -143,12 +146,138 @@
     </div>
   </section>
 
-  <section class="page-cards">
+  <section class="usps">
     <div class="headline">
+      <div class="headline__lhs">
+        <span class="eyebrow eyebrow--sticker eyebrow--raised">
+          <span class="sticker">
+            <img class="sticker__icon" src="assets/icons/paw-sticker.svg" alt="" />
+          </span>
+          <span class="eyebrow__label">Insurance, turned on it&rsquo;s tail</span>
+        </span>
+
+        <div class="headline__text">
+          <h2 class="headline__heading">Insurance that shows up all year, not just at claim time.</h2>
+          <p class="headline__body">From prevention to protection to rewards, Unleashed is built around your pet, not just their vet bills.</p>
+        </div>
+      </div>
+
+      <div class="headline__cta">
+        <a class="btn btn--default btn--dark" href="#">
+          <span class="btn__label">See how it works</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="usps__collection">
+      <div class="usps__row">
+        <article class="usp-card">
+          <span class="usp-card__icon">
+            <span class="usp-card__emoji" aria-hidden="true">&#128138;</span>
+          </span>
+          <div class="usp-card__content">
+            <div class="usp-card__text">
+              <h3 class="usp-card__title">Be proactive</h3>
+              <p class="usp-card__body">Wellness and preventative care to keep them healthy, not just covered.</p>
+            </div>
+            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+              <span class="btn__label">Read more</span>
+              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </a>
+          </div>
+        </article>
+
+        <article class="usp-card">
+          <span class="usp-card__icon">
+            <span class="usp-card__emoji" aria-hidden="true">&#128657;</span>
+          </span>
+          <div class="usp-card__content">
+            <div class="usp-card__text">
+              <h3 class="usp-card__title">Be covered</h3>
+              <p class="usp-card__body">Accident and illness cover for when the unexpected happens.</p>
+            </div>
+            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+              <span class="btn__label">Read more</span>
+              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </a>
+          </div>
+        </article>
+
+        <article class="usp-card">
+          <span class="usp-card__icon">
+            <span class="usp-card__emoji" aria-hidden="true">&#9997;&#65039;</span>
+          </span>
+          <div class="usp-card__content">
+            <div class="usp-card__text">
+              <h3 class="usp-card__title">Be picky</h3>
+              <p class="usp-card__body">Build your own or pick a package. Your pet, your priorities.</p>
+            </div>
+            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+              <span class="btn__label">Read more</span>
+              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <div class="usps__row">
+        <article class="usp-card">
+          <span class="usp-card__icon">
+            <span class="usp-card__emoji" aria-hidden="true">&#128176;</span>
+          </span>
+          <div class="usp-card__content">
+            <div class="usp-card__text">
+              <h3 class="usp-card__title">Be rewarded</h3>
+              <p class="usp-card__body">Good pet parenting pays off, with rewards and money back.</p>
+            </div>
+            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+              <span class="btn__label">Read more</span>
+              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </a>
+          </div>
+        </article>
+
+        <article class="usp-card">
+          <span class="usp-card__icon">
+            <span class="usp-card__emoji" aria-hidden="true">&#9742;&#65039;</span>
+          </span>
+          <div class="usp-card__content">
+            <div class="usp-card__text">
+              <h3 class="usp-card__title">24/7 TeleVet</h3>
+              <p class="usp-card__body">Live vet advice any time, day or night, by phone or video.</p>
+            </div>
+            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+              <span class="btn__label">Read more</span>
+              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </a>
+          </div>
+        </article>
+
+        <article class="usp-card">
+          <span class="usp-card__icon">
+            <span class="usp-card__emoji" aria-hidden="true">&#128041;</span>
+          </span>
+          <div class="usp-card__content">
+            <div class="usp-card__text">
+              <h3 class="usp-card__title">Multi-pet discount</h3>
+              <p class="usp-card__body">Cover more than one pet and save on every policy.</p>
+            </div>
+            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+              <span class="btn__label">Read more</span>
+              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-cards">
+    <div class="headline headline--centred">
       <div class="headline__group">
-        <span class="eyebrow eyebrow--shadow">
-          <span class="sticker" aria-hidden="true">
-            <span class="sticker__icon sticker__icon--paw"></span>
+        <span class="eyebrow eyebrow--sticker eyebrow--raised-pink">
+          <span class="sticker sticker--pink" aria-hidden="true">
+            <img class="sticker__icon" src="assets/icons/paw-sticker.svg" alt="" />
           </span>
           <span class="eyebrow__label">Insurance, turned on it&rsquo;s tail</span>
         </span>
@@ -160,7 +289,7 @@
       </div>
 
       <div class="headline__cta">
-        <a class="btn btn--accent btn--md" href="#">
+        <a class="btn btn--accent btn--default" href="#">
           <span class="btn__label">Get a Free Quote</span>
         </a>
       </div>
@@ -183,7 +312,7 @@
             </div>
 
             <div class="page-cards__cta">
-              <a class="btn btn--accent btn--md" href="#">
+              <a class="btn btn--accent btn--default" href="#">
                 <span class="btn__label">Explore dog cover</span>
               </a>
             </div>
@@ -212,7 +341,7 @@
             </div>
 
             <div class="page-cards__cta">
-              <a class="btn btn--accent btn--md" href="#">
+              <a class="btn btn--accent btn--default" href="#">
                 <span class="btn__label">Explore cat cover</span>
               </a>
             </div>
@@ -230,6 +359,243 @@
           </div>
         </div>
       </article>
+    </div>
+  </section>
+
+  <section class="choice">
+    <div class="headline headline--centred headline--invert">
+      <div class="headline__group">
+        <span class="eyebrow eyebrow--sticker eyebrow--invert">
+          <span class="sticker sticker--blue">
+            <img class="sticker__icon" src="assets/icons/paw-sticker.svg" alt="" />
+          </span>
+          <span class="eyebrow__label">It&rsquo;s all about choice</span>
+        </span>
+
+        <div class="headline__text">
+          <h2 class="headline__heading">One cover, three ways to make it yours.</h2>
+          <p class="headline__body headline__body--lg">Every policy shares the same core cover for accident and illness.<br />You choose how much you shape it, from a ready-made package to building it yourself.</p>
+        </div>
+      </div>
+
+      <div class="headline__cta">
+        <a class="btn btn--default btn--brand" href="#">
+          <span class="btn__label">Get a Free Quote</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="choice__cards">
+
+      <!-- Card 1 — Build Your Own.
+           Slider fills are the Figma pixel widths as a share of the 363px
+           column: 145, 89 and 289. -->
+      <article class="choice__card">
+        <div class="choice__heading choice__heading--deep">
+          <span class="eyebrow eyebrow--bar">
+            <span class="sticker sticker--brand">
+              <img class="sticker__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </span>
+            <span class="eyebrow__caption">Annual cover</span>
+            <span class="eyebrow__value">$15,000</span>
+          </span>
+
+          <div class="choice__controls">
+            <div class="slider" style="--slider-fill: 39.9%">
+              <div class="slider__row">
+                <span class="slider__label">Annual limit</span>
+                <span class="slider__value">$8,000</span>
+              </div>
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__handle slider__handle--pink"></div>
+              </div>
+            </div>
+
+            <div class="slider" style="--slider-fill: 24.5%">
+              <div class="slider__row">
+                <span class="slider__label">Accident excess</span>
+                <span class="slider__value">$250</span>
+              </div>
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__handle slider__handle--pink"></div>
+              </div>
+            </div>
+
+            <div class="slider" style="--slider-fill: 79.6%">
+              <div class="slider__row">
+                <span class="slider__label">Reimbursement</span>
+                <span class="slider__value">80%</span>
+              </div>
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__handle slider__handle--pink"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="choice__infographic">
+          <span class="eyebrow eyebrow--sticker eyebrow--teal">
+            <span class="sticker sticker--blue">
+              <img class="sticker__icon" src="assets/icons/lightning-glyph.svg" alt="" />
+            </span>
+            <span class="eyebrow__label">Empower me</span>
+          </span>
+          <div class="choice__infographic-text">
+            <h3 class="choice__infographic-title">Build Your Own</h3>
+            <p class="choice__infographic-body">Set your annual cover, excess and reimbursement. Total control.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 — Choose a package. -->
+      <article class="choice__card">
+        <div class="choice__heading choice__heading--shallow">
+          <div class="choice__controls choice__controls--tiers">
+            <div class="tier">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Bronze</span>
+              <span class="tier__value">$5,000</span>
+            </div>
+            <div class="tier tier--selected">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Silver</span>
+              <span class="tier__value">$15,000</span>
+            </div>
+            <div class="tier">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Gold</span>
+              <span class="tier__value">$35,000</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="choice__infographic">
+          <span class="eyebrow eyebrow--sticker eyebrow--teal">
+            <span class="sticker sticker--blue">
+              <img class="sticker__icon" src="assets/icons/lightning-glyph.svg" alt="" />
+            </span>
+            <span class="eyebrow__label">Guide me</span>
+          </span>
+          <div class="choice__infographic-text">
+            <h3 class="choice__infographic-title">Choose a package</h3>
+            <p class="choice__infographic-body">Pick a ready-made tier, Bronze, Silver or Gold.<br />The fastest way to covered.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 — Package, then personalise.
+           The "Excess" slider has no value on its trailing edge. That is how
+           Figma has it (13020:15542 carries a label and nothing else) and it
+           is built as-is on instruction — flagged, not filled in. -->
+      <article class="choice__card">
+        <div class="choice__heading choice__heading--shallow">
+          <div class="choice__controls choice__controls--mixed">
+            <div class="tier tier--selected">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Silver</span>
+              <span class="tier__value">$15,000</span>
+            </div>
+
+            <div class="choice__controls">
+              <div class="slider" style="--slider-fill: 8%">
+                <div class="slider__row">
+                  <span class="slider__label">Excess</span>
+                </div>
+                <div class="slider__track">
+                  <div class="slider__fill"></div>
+                  <div class="slider__handle"></div>
+                </div>
+              </div>
+
+              <div class="slider" style="--slider-fill: 13.2%">
+                <div class="slider__row">
+                  <span class="slider__label">Accident excess</span>
+                  <span class="slider__value">$250</span>
+                </div>
+                <div class="slider__track">
+                  <div class="slider__fill"></div>
+                  <div class="slider__handle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="choice__infographic choice__infographic--fixed">
+          <span class="eyebrow eyebrow--sticker eyebrow--teal">
+            <span class="sticker sticker--blue">
+              <img class="sticker__icon" src="assets/icons/lightning-glyph.svg" alt="" />
+            </span>
+            <span class="eyebrow__label">A bit of both</span>
+          </span>
+          <div class="choice__infographic-text">
+            <h3 class="choice__infographic-title">Package, then personalise</h3>
+            <p class="choice__infographic-body">Start from a tier, then adjust the few things that matter to you.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="image-lr">
+    <div class="image-lr__blob" aria-hidden="true">
+      <img src="assets/shapes/image-lr-blob.svg" alt="" />
+    </div>
+
+    <div class="image-lr__container">
+      <div class="image-lr__panel">
+        <div class="image-lr__swoosh" aria-hidden="true">
+          <img src="assets/shapes/image-lr-swoosh.svg" alt="" />
+        </div>
+
+        <div class="image-lr__photo">
+          <img src="assets/img/image-lr-dog-cutout.png" alt="A Hungarian vizsla tilting its head with its tongue poking out" />
+        </div>
+
+        <div class="image-lr__card">
+          <div class="image-lr__headline">
+            <div class="image-lr__eyebrow-group">
+              <span class="eyebrow eyebrow--sticker eyebrow--raised-pink">
+                <span class="sticker sticker--pink">
+                  <img class="sticker__icon" src="assets/icons/paw-sticker.svg" alt="" />
+                </span>
+                <span class="eyebrow__label">What&rsquo;s covered</span>
+              </span>
+
+              <h2 class="image-lr__heading">No nasty surprises.</h2>
+            </div>
+
+            <div class="image-lr__text">
+              <p class="image-lr__body">Every policy covers accident and illness as standard, plus emergency pet boarding and 24/7 TeleVet advice.</p>
+
+              <ul class="image-lr__bullets">
+                <li class="image-lr__bullet image-lr__bullet--top">
+                  <img class="image-lr__bullet-icon" src="assets/icons/paw-bullet.svg" alt="" />
+                  <span class="image-lr__bullet-text">We show inclusions, exclusions and waiting periods up front, not buried in a PDF.</span>
+                </li>
+                <li class="image-lr__bullet">
+                  <img class="image-lr__bullet-icon" src="assets/icons/paw-bullet.svg" alt="" />
+                  <span class="image-lr__bullet-text">Accident and illness&nbsp; &middot; &nbsp;Emergency pet boarding</span>
+                </li>
+                <li class="image-lr__bullet">
+                  <img class="image-lr__bullet-icon" src="assets/icons/paw-bullet.svg" alt="" />
+                  <span class="image-lr__bullet-text">24/7 TeleVet advice&nbsp; &middot; &nbsp;Optional wellness extras</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="image-lr__cta">
+            <a class="btn btn--default btn--brand-pink" href="#">
+              <span class="btn__label">See what&rsquo;s covered</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

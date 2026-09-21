@@ -5,21 +5,20 @@
    ========================================================================== */
 
 /* ---------- Button ----------
-   Markup: <a/button class="btn btn--{primary|secondary|dark}">
+   Markup: <a/button class="btn btn--{size} btn--{primary|secondary|dark}">
              <span class="btn__label">Label</span>
            </a>
    "btn--reverse" is an additional modifier (combine with btn--primary or
    btn--secondary) for placing that variant on an inverted surface —
    seen on the header's "Log in" button. Default state only, no hover yet.
+
+   A size modifier is required — .btn on its own carries no geometry.
 */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--spacing-900);
-  padding-inline: var(--spacing-300);
-  padding-block: var(--spacing-150);
   border-radius: var(--radius-button);
   border: none;
 }
@@ -61,6 +60,14 @@
   color: var(--cta-colour-secondary-invert-text);
 }
 
+/* Quiet — secondary dropped to a grey hairline instead of the
+   full-contrast border. An instance-level override in Figma, not a kit
+   variant: the USP cards' "Read more" rebinds the border to
+   colour/grey/200 while keeping the secondary text colour. */
+.btn--secondary.btn--quiet {
+  border-color: var(--colour-grey-200);
+}
+
 /* Dark — solid invert surface, e.g. header CTA on a light bar */
 .btn--dark {
   background: var(--surface-colour-surface-invert-primary);
@@ -69,44 +76,69 @@
   color: var(--text-colour-text-primary-invert);
 }
 
-/* Accent — pink surface with a DARK label. Distinct from btn--primary,
-   which is the same pink with a white label. Page Cards binds this pair
-   to surface-accent-dark + text-primary rather than the cta/primary-*
-   tokens, so it gets its own variant rather than an override. */
-.btn--accent {
-  background: var(--surface-colour-surface-accent-dark);
+/* ---------- Button sizes ----------
+   The UI Kit's Button component set (13052:17120 → 1103:1217) exposes a
+   "Size" property with three desktop steps. These mirror it exactly:
+
+     Small    44px   16 / 10   Sm Button (14px)
+     Default  52px   26 / 14   Button    (16px)
+     Large    60px   30 / 18   Lg Button (18px)
+
+   Only the horizontal paddings and the 44px height land on the token
+   scale. The vertical paddings and the 52/60 heights are unbound in
+   Figma — no value on the spacing scale matches any of them.
+*/
+
+.btn--sm {
+  height: var(--spacing-900);
+  padding-inline: var(--spacing-200);
+  padding-block: 10px;
+  gap: var(--spacing-50);
 }
-.btn--accent .btn__label {
-  color: var(--text-colour-text-primary);
+.btn--sm .btn__label {
+  font-size: var(--size-button-sm-button);
 }
 
-/* Size modifier — the mid size sitting between default (44px tall) and
-   btn--lg (52px, 18px label). 52px tall, 16px label. Seen on Page Cards. */
-.btn--md {
-  height: auto;
-  /* 26px / 14px — unbound in Figma, no spacing token matches either. */
+.btn--default {
+  height: 52px;
   padding-inline: 26px;
   padding-block: 14px;
+  gap: var(--spacing-100);
 }
 
-/* Size modifier — canonical "Large" size from the UI Kit (default .btn
-   matches the header's compact size). Seen on the hero quote widget CTA. */
 .btn--lg {
-  height: auto;
-  /* 30px / 18px — Figma's own "Large" button spec, unbound to any
-     token (no value in the spacing scale matches either number). */
+  height: 60px;
   padding-inline: 30px;
   padding-block: 18px;
+  gap: var(--spacing-100);
 }
 .btn--lg .btn__label {
   font-size: var(--size-button-lg-button);
 }
 
+/* Nav pill — deliberately outside the kit's size scale. The header's
+   "Log in" and "Get a quote" (13051:16950, 13051:16952) are not Button
+   instances in Figma at all, but bespoke 44px pills carrying a 16px
+   Sm Body label where the kit's Small carries a 14px one. Kept separate
+   so the kit sizes above stay a faithful mirror of the component set. */
+.btn--nav {
+  height: var(--spacing-900);
+  padding-inline: var(--spacing-300);
+  padding-block: var(--spacing-150);
+}
+
+/* Trailing icon, e.g. Icon/Arrow/Right on a "Read more".
+   20px square, unbound in Figma. */
+.btn__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
 /* ---------- Eyebrow ----------
    Markup: <span class="eyebrow"><span class="eyebrow__label">Label</span></span>
-   A "Sticker" can precede the label — when one is present the left
-   padding tightens to spacing/50 so the pill still reads as 44px tall.
-   "eyebrow--shadow" adds the pink drop shadow seen on Page Cards.
+   A "Sticker" icon can precede the label (not needed yet — no section
+   built so far uses it) — gap is already in place for when one does.
 */
 
 .eyebrow {
@@ -118,22 +150,21 @@
   padding-inline: var(--grid-gutter);
   padding-block: var(--spacing-150);
   border-radius: var(--radius-button);
-}
+  /* Figma drop shadow 0,4 blur 6.45 in yellow/300 at 14%. box-shadow rather
+     than filter: drop-shadow — the pill is a solid rounded rect, so the two
+     are visually identical here, and box-shadow avoids creating a containing
+     block for the sticker icon that sits inside this pill in other sections.
 
-/* With a sticker the pill keeps a fixed 44px height and the sticker
-   sits flush against a spacing/50 left inset. */
-.eyebrow:has(.sticker) {
-  height: var(--spacing-900);
-  padding-block: var(--spacing-50);
-  padding-left: var(--spacing-50);
-  padding-right: var(--grid-gutter);
-}
+     DELIBERATE DEVIATION: opacity raised 14% -> 18% -> 27% on request —
+     it read as too faint against the cream hero background. Geometry still
+     matches Figma. Don't "correct" this back at pixel QA.
 
-.eyebrow--shadow {
-  /* unbound in Figma — pink/800 at 14%, 0 4px 6.45px */
-  filter: drop-shadow(
-    0 4px 6.45px color-mix(in srgb, var(--colour-pink-800) 14%, transparent)
-  );
+     Also worth knowing: sampling Figma's own 265x72 render of this node
+     shows its shadow decays over a ~2x wider radius than a 6.45px CSS blur
+     produces (fitted sigma ~5.8 vs the 3.2 that 6.45px gives), at a peak
+     alpha of ~0.11 — i.e. Figma's blur value does NOT map 1:1 to CSS. The
+     glow is wider, not darker. Blur left at Figma's stated 6.45 for now. */
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-yellow-300) 27%, transparent);
 }
 
 .eyebrow__label {
@@ -146,87 +177,91 @@
   white-space: nowrap;
 }
 
+/* Sticker variant — tightens the leading edge so the 37px badge seats
+   inside the pill, and pins the height, since the badge is taller than
+   the block padding the label-only eyebrow is built around. Figma holds
+   the frame at 44 and lets the badge centre itself (4px padding, badge
+   overhanging it by 0.5px top and bottom). Trailing padding unchanged. */
+.eyebrow--sticker {
+  height: var(--spacing-900);
+  padding-block: 0;
+  padding-left: var(--spacing-50);
+}
+
+/* Raised — soft yellow lift. USPs only so far; the hero's eyebrow
+   (13013:13426) is flat, so this is opt-in rather than baked in. */
+.eyebrow--raised {
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-yellow-500) 14%, transparent);
+}
+
 
 /* ---------- Sticker ----------
    Circular icon badge. Markup:
-     <span class="sticker">
-       <span class="sticker__icon sticker__icon--paw"></span>
-     </span>
-   Size and surface are driven by custom properties so a section can
-   scale the badge without restyling it. The glyph is the exported SVG
-   used as a mask, which keeps the vector authoritative while letting
-   the fill come from a token.
+     <span class="sticker"><img class="sticker__icon" src="…" alt="" /></span>
+   The 37px badge and 21.583px glyph are unbound in Figma — neither
+   lands on the spacing scale.
 */
 
 .sticker {
-  --sticker-size: 37px;
-  --sticker-surface: var(--colour-pink-300);
-  --sticker-glyph: var(--surface-colour-surface-invert-primary);
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: none;
-  inline-size: var(--sticker-size);
-  block-size: var(--sticker-size);
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
   border-radius: var(--radius-round);
-  background: var(--sticker-surface);
+  background: var(--colour-yellow-200);
 }
 
 .sticker__icon {
-  /* Figma keeps the glyph at 58.33% of the badge at every size. */
-  inline-size: 58.33%;
-  block-size: 58.33%;
-  background: var(--sticker-glyph);
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
-
-.sticker__icon--paw {
-  -webkit-mask-image: url("../assets/icons/paw-glyph.svg");
-  mask-image: url("../assets/icons/paw-glyph.svg");
+  width: 21.583px;
+  height: 21.583px;
 }
 
 
 /* ---------- Global / Headline ----------
-   Eyebrow + heading + body + CTA, centred. Same markup in USPs,
-   Page Cards and Making Choice Simple. The measure of the text column
-   varies by section, so it is exposed as --headline-measure.
+   Eyebrow + heading + body on the left, CTA pinned bottom-right.
+   Same frame in USPs (13013:13704), Page Cards and Making Choice Simple.
+   Markup:
+     <div class="headline">
+       <div class="headline__lhs">
+         <span class="eyebrow">…</span>
+         <div class="headline__text">
+           <h2 class="headline__heading">…</h2>
+           <p class="headline__body">…</p>
+         </div>
+       </div>
+       <div class="headline__cta">…</div>
+     </div>
 */
 
 .headline {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-400);
-  inline-size: 100%;
-  max-inline-size: var(--grid-max-container-size);
-  /* unbound in Figma — 902px, does not land on the 12-col grid */
-  --headline-measure: 902px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  row-gap: var(--spacing-800);
+  width: 100%;
+  max-width: var(--grid-max-container-size);
 }
 
-.headline__group {
+/* 580 / 320 are explicit in Figma and unbound to any token. */
+.headline__lhs {
   display: flex;
+  flex: 1 0 0;
   flex-direction: column;
-  align-items: center;
-  gap: var(--grid-gutter);
-  inline-size: var(--headline-measure);
-  max-inline-size: 100%;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  max-width: 580px;
+  min-width: 320px;
 }
 
 .headline__text {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
   gap: var(--spacing-200);
-  inline-size: 100%;
-  text-align: center;
+  width: 100%;
 }
 
 .headline__heading {
@@ -252,4 +287,512 @@
   align-items: flex-start;
   justify-content: flex-end;
   gap: var(--spacing-200);
+  flex-shrink: 0;
+}
+
+
+/* ---------- USP card ----------
+   Emoji badge, title, body, "Read more". Six instances in the USPs
+   section (13015:13925 and siblings).
+*/
+
+.usp-card {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-500);
+  min-width: 0;
+  padding: var(--spacing-300);
+  background: var(--surface-colour-surface-primary);
+  border-radius: var(--radius-card);
+}
+
+/* 14px inset and the 12.8px radius are both unbound in Figma — the
+   radius in particular matches no step on the radius scale. */
+.usp-card__icon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--spacing-800);
+  height: var(--spacing-800);
+  padding: 14px;
+  background: var(--colour-pink-100);
+  border-radius: 12.8px;
+}
+
+/* The badge glyphs are emoji text layers in Figma, not vectors, set in
+   Heading/H4 — so they stay text here and render from the system emoji
+   font exactly as Figma renders them. */
+.usp-card__emoji {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h4);
+  line-height: var(--line-height-heading-h4);
+  letter-spacing: var(--letter-spacing-heading-h4);
+  color: var(--surface-colour-surface-invert-primary);
+}
+
+.usp-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  width: 100%;
+}
+
+.usp-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-50);
+  width: 100%;
+}
+
+.usp-card__title {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h5);
+  line-height: var(--line-height-heading-h5);
+  letter-spacing: var(--letter-spacing-heading-h5);
+  color: var(--text-colour-text-primary);
+}
+
+.usp-card__body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-secondary);
+}
+
+
+/* ==========================================================================
+   Added for Making Choice Simple (13020:14688).
+   Everything below is additive — no rule above this line was touched.
+   ========================================================================== */
+
+
+/* ---------- Teal shadow family ----------
+   Four shadows in Making Choice Simple are built on teal hues that are
+   unbound in Figma. Each is used more than once, so per CLAUDE.md they are
+   not hardcoded at the section level — they live here, on the components
+   that own them. They are deliberately NOT in tokens.css: no Figma variable
+   backs them, and inventing token names would create the drift the colour
+   rules warn about.
+
+     #098274  eyebrow lift, on light surfaces   (14% and 32%)
+     #007063  eyebrow lift, on the dark band    (14%)
+     #03ab98  selected-tier glow                (40%)
+     #0cb3a0  slider track, at 20% over white   (resolves to #cef0ec)
+*/
+:root {
+  --shadow-teal-light: #098274;
+  --shadow-teal-dark: #007063;
+  --shadow-teal-glow: #03ab98;
+  --slider-track-teal: #0cb3a0;
+}
+
+
+/* ---------- Button: brand ----------
+   Blue/500-brand surface with a dark label. The Making Choice Simple CTA
+   (13020:15209) is a Button instance rebound to the brand blue — the kit's
+   primary is pink, so this is a fifth colour variant rather than an
+   instance override of an existing one. */
+
+.btn--brand {
+  background: var(--colour-blue-500-brand);
+}
+.btn--brand .btn__label {
+  color: var(--text-colour-text-primary);
+}
+
+
+/* ---------- Eyebrow variants ---------- */
+
+/* Invert — sits on a dark band. Translucent white fill rather than a solid
+   one, white label, and the lift swapped to the darker teal. 13020:15201. */
+.eyebrow--invert {
+  background: color-mix(in srgb, var(--surface-colour-surface-primary) 16%, transparent);
+  box-shadow: 0 4px 12.9px color-mix(in srgb, var(--shadow-teal-dark) 14%, transparent);
+}
+.eyebrow--invert .eyebrow__label {
+  color: var(--text-colour-text-primary-invert);
+}
+
+/* Teal — the raised eyebrow on a blue/100 surface. Same geometry as
+   .eyebrow--raised, but the lift is teal instead of yellow, because the
+   yellow reads as dirt against blue/100. 13020:15389, 15813, 15827. */
+.eyebrow--teal {
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--shadow-teal-light) 14%, transparent);
+}
+
+/* Bar — the eyebrow stretched to fill its column and carrying a value on the
+   trailing edge, as a summary row. 13020:15505. Taller than the standard
+   pill (52 vs 44) and its sticker is a 44px square rather than the 37px
+   circle, so the badge meets the pill edge on three sides.
+
+   Figma also carries a 1px rgba(5,173,154,0) border here — fully
+   transparent. Dropped rather than reproduced: with border-box it would
+   eat 2px off the inner height and leave the badge at 42 instead of 44,
+   which is a visible change in exchange for something that draws nothing. */
+.eyebrow--bar {
+  display: flex;
+  flex-shrink: 0;
+  width: 100%;
+  height: 52px;
+  padding-block: var(--spacing-50);
+  padding-left: var(--spacing-50);
+  box-shadow: 0 1px 5.95px color-mix(in srgb, var(--shadow-teal-light) 32%, transparent);
+}
+
+/* Label sits between the badge and the value, taking the slack. */
+.eyebrow__caption {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-caption);
+  line-height: var(--line-height-body-sm-caption);
+  letter-spacing: var(--letter-spacing-body-sm-caption);
+  color: var(--text-colour-text-secondary);
+}
+
+.eyebrow__value {
+  flex-shrink: 0;
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h6);
+  line-height: var(--line-height-heading-h6);
+  letter-spacing: var(--letter-spacing-heading-h6);
+  color: var(--text-colour-text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+/* ---------- Sticker variants ----------
+   The base sticker is yellow/200. These rebind the fill only. */
+
+.sticker--blue {
+  background: var(--colour-blue-200);
+}
+
+/* Brand — the badge inside .eyebrow--bar. Square-ish rather than round:
+   44 wide against the pill's 52px inner height, so it fills vertically.
+   Both dimensions unbound in Figma. */
+.sticker--brand {
+  width: 44px;
+  height: 100%;
+  background: var(--colour-blue-500-brand);
+}
+
+
+/* ---------- Global / Headline: centred ----------
+   The default of the two Global/Headline layouts — eyebrow, heading, body and
+   CTA all centred in a 902px column, CTA on its own row below the body.
+   Used by Making Choice Simple (13020:15199) and Page Cards (13020:1522).
+
+   The split variant above (.headline__lhs) is the USPs exception. Both are
+   correct. See CLAUDE.md — do not unify them.
+
+   Markup:
+     <div class="headline headline--centred">
+       <div class="headline__group">
+         <span class="eyebrow">…</span>
+         <div class="headline__text">
+           <h2 class="headline__heading">…</h2>
+           <p class="headline__body">…</p>
+         </div>
+       </div>
+       <div class="headline__cta">…</div>
+     </div>
+*/
+
+.headline--centred {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: var(--spacing-400);
+}
+
+/* 902 is explicit in Figma and unbound to any token. */
+.headline__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--grid-gutter);
+  width: 902px;
+  max-width: 100%;
+}
+
+/* Centres the heading and body, which the split variant left-aligns. Scoped
+   to the centred variant so .headline__text keeps its existing behaviour. */
+.headline--centred .headline__text {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Invert — the whole headline on a dark band. */
+.headline--invert .headline__heading {
+  color: var(--text-colour-text-primary-invert);
+}
+.headline--invert .headline__body {
+  color: var(--text-colour-text-secondary-invert);
+}
+
+/* Making Choice Simple sets its body in Lg Body (20/28); the USPs headline
+   uses Body (18/28). Opt-in rather than a change to the base. */
+.headline__body--lg {
+  font-size: var(--size-body-lg-body);
+  line-height: var(--line-height-body-lg-body);
+  letter-spacing: var(--letter-spacing-body-lg-body);
+}
+
+
+/* ---------- Slider control ----------
+   Label row, track, fill, handle. Static visual — fill width and handle
+   position are declarative, set per instance via --slider-fill. No drag
+   behaviour: interactivity is build-order step 12, not now.
+
+   Markup:
+     <div class="slider" style="--slider-fill: 40%">
+       <div class="slider__row">
+         <span class="slider__label">Annual limit</span>
+         <span class="slider__value">$8,000</span>
+       </div>
+       <div class="slider__track">
+         <div class="slider__fill"></div>
+         <div class="slider__handle"></div>
+       </div>
+     </div>
+*/
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-100);
+  width: 100%;
+}
+
+.slider__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.slider__label,
+.slider__value {
+  flex-shrink: 0;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-sm-caption);
+  line-height: var(--line-height-body-sm-caption);
+  letter-spacing: var(--letter-spacing-body-sm-caption);
+}
+
+.slider__label {
+  color: var(--text-colour-text-primary);
+}
+
+.slider__value {
+  color: var(--text-colour-text-secondary);
+  text-align: right;
+}
+
+/* 10px track height is unbound in Figma. */
+.slider__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 10px;
+  border-radius: var(--radius-button);
+  background: color-mix(in srgb, var(--slider-track-teal) 20%, var(--surface-colour-surface-primary));
+}
+
+.slider__fill {
+  width: var(--slider-fill, 0%);
+  height: 10px;
+  border-radius: var(--radius-button);
+  background: var(--colour-blue-900);
+}
+
+/* Centred on the end of the fill. Figma positions each handle by hand and
+   drifts up to 3px off that centre between instances — treated as hand
+   placement, not intent. 20px is unbound. */
+.slider__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--slider-fill, 0%);
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-button);
+  background: var(--surface-colour-surface-primary);
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+}
+
+/* Pink handle — Making Choice Simple's first card only (13020:15480 and
+   siblings). The other card's handles are white. */
+.slider__handle--pink {
+  background: var(--colour-pink-50);
+}
+
+
+/* ---------- Tier row ----------
+   A radio row naming a package and its price. Selected state is a brand
+   border plus a teal glow. Static — no JS, the selected row is marked in
+   the markup.
+
+   Distinct from the hero's .hero__input radio rows, which are a different
+   size and layout and stay section-scoped.
+
+   Markup:
+     <div class="tier tier--selected">
+       <span class="tier__radio"></span>
+       <span class="tier__label">Silver</span>
+       <span class="tier__value">$15,000</span>
+     </div>
+*/
+
+.tier {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-150);
+  overflow: hidden;
+  width: 100%;
+  padding: var(--spacing-200);
+  border-radius: var(--radius-sm-card);
+  background: color-mix(in srgb, var(--surface-colour-surface-primary) 25%, transparent);
+  /* The 1px outline is an inset shadow rather than a border. Figma's stroke
+     sits outside the auto-layout box and leaves the row at 16+20+16 = 52; a
+     real border with border-box would make it 54. Inset shadow draws the
+     same hairline and keeps the height honest. */
+  box-shadow: inset 0 0 0 1px var(--colour-grey-100);
+}
+
+.tier--selected {
+  background: var(--surface-colour-surface-primary);
+  box-shadow:
+    inset 0 0 0 1px var(--colour-blue-500-brand),
+    0 3px 10.8px color-mix(in srgb, var(--shadow-teal-glow) 40%, transparent);
+}
+
+/* Unselected is a ring; selected fills the centre. Figma ships the selected
+   state as a flattened SVG, but it is two concentric circles — drawn here so
+   the two states share one box and cannot drift apart. */
+.tier__radio {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--colour-blue-500-brand);
+  border-radius: var(--radius-round);
+}
+
+.tier--selected .tier__radio {
+  border-width: 3px;
+  background: var(--colour-blue-500-brand);
+  box-shadow: inset 0 0 0 2px var(--surface-colour-surface-primary);
+}
+
+.tier__label,
+.tier__value {
+  font-family: var(--typography-body-font-family);
+  font-size: var(--size-body-caption);
+  line-height: var(--line-height-body-caption);
+  letter-spacing: var(--letter-spacing-body-caption);
+}
+
+.tier__label {
+  flex: 1 0 0;
+  min-width: 0;
+  font-weight: var(--typography-body-weight);
+  color: var(--text-colour-text-primary);
+}
+
+/* Figma parks a 5x6 spacer between label and value. Omitted — the label is
+   flex:1, so the value lands in the same place either way. */
+.tier__value {
+  flex-shrink: 0;
+  font-weight: var(--typography-body-weight-strong);
+  color: var(--text-colour-text-secondary);
+  white-space: nowrap;
+}
+
+.tier--selected .tier__value {
+  color: var(--text-colour-text-primary);
+}
+
+
+/* ==========================================================================
+   Added for Image Left Right (13086:9414)
+
+   Three colour-only modifiers on components that already exist above.
+   Appended rather than folded into their parent blocks so this merges
+   cleanly alongside the other section worktrees.
+   ========================================================================== */
+
+/* Pink brand button — pink surface with a DARK label.
+
+   NAMING: this wanted to be .btn--brand, but Making Choice Simple got
+   there first and bound that name to blue/500-brand (see above). Both
+   are real: the kit's primary is pink-with-WHITE-label, so neither of
+   these is it. Left asymmetric (--brand blue, --brand-pink pink) rather
+   than renaming a variant another section already ships. Worth tidying
+   to --brand-blue / --brand-pink in one pass later.
+
+   Figma binds colour/pink/400-brand and text-colour/text-primary on
+   13086:9443 — an instance-level override, same as .btn--quiet on the
+   USP cards. Geometry comes from .btn--default, unchanged. */
+.btn--brand-pink {
+  background: var(--colour-pink-400-brand);
+}
+.btn--brand-pink .btn__label {
+  color: var(--text-colour-text-primary);
+}
+
+/* Pink sticker — the badge in Image Left Right's eyebrow (13086:9427)
+   swaps the default yellow/200 fill for pink/300. Glyph is the same
+   paw asset at the same 21.583px. */
+.sticker--pink {
+  background: var(--colour-pink-300);
+}
+
+/* Pink lift — the .eyebrow--raised counterpart for pink sections.
+   Figma: 0,4 blur 6.45 in pink/800 at 14%.
+
+   Left at Figma's stated 14%, unlike .eyebrow--raised above, which was
+   deliberately pushed to 27% on request. If this one also reads too
+   faint against the pink/50 card, raise it here rather than reaching
+   for the yellow variant. */
+.eyebrow--raised-pink {
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-pink-800) 14%, transparent);
+}
+
+
+/* Accent pink — Page Cards' card CTAs (13020:3145, 13020:14041).
+
+   NAMING: renders identically to .btn--brand-pink above — both are
+   #f926f9 with a dark label. They are kept apart because Figma binds
+   them to DIFFERENT tokens: the CTA banner uses colour/pink/400-brand,
+   Page Cards uses surface-colour/surface-accent-dark. Same value today,
+   but collapsing them would hardcode that coincidence. Fold together in
+   the same pass that tidies --brand / --brand-pink, and only if the
+   design system confirms the two tokens are meant to move as one.
+
+   Geometry comes from .btn--default, unchanged. */
+.btn--accent {
+  background: var(--surface-colour-surface-accent-dark);
+}
+.btn--accent .btn__label {
+  color: var(--text-colour-text-primary);
 }

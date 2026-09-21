@@ -89,6 +89,26 @@
    contain the rotated pill without clipping) plus an inner pill that
    auto-sizes to its own padding + content and carries the rotation.
    The outer box is what left/top position — not the pill itself.
+
+   Anchoring: Figma gives these as offsets from the LEFT edge of the
+   1312 container. Ported literally that only holds at exactly 1440 —
+   the headline is a centred 884px block, so below 1440 the container
+   keeps its left edge while the text recentres, and the stickers slide
+   out from under the letterforms they are placed against (the paw ends
+   up sitting on "hell" instead of beside it).
+
+   So each sticker is anchored to the container CENTRE instead, which is
+   also the text centre (the headline is text-align:center, so every line
+   centres on it regardless of box width). margin-left is the sticker's
+   own centre offset from that axis, minus half its width:
+
+     paw     centre 400.76 - 656 = -255.24  ->  -255.24 - 53.760 = -309
+     WOOF    centre 666.47 - 656 =  +10.47  ->   +10.47 - 55.474 =  -45
+     rosette centre 909.07 - 656 = +253.07  ->  +253.07 - 59.071 = +194
+
+   These resolve to the original 347 / 611 / 850 at 1440 exactly, so the
+   1440 baseline is unchanged — the stickers now just travel with the
+   words instead of with the viewport edge.
 */
 
 .hero__sticker {
@@ -106,7 +126,8 @@
 }
 
 .hero__sticker--paw {
-  left: 347px;
+  left: 50%;
+  margin-left: -309px;
   top: 92px;
   width: 107.521px;
   height: 107.521px;
@@ -125,7 +146,8 @@
 }
 
 .hero__sticker--woof {
-  left: 611px;
+  left: 50%;
+  margin-left: -45px;
   top: 131px;
   width: 110.947px;
   height: 72.76px;
@@ -149,31 +171,56 @@
 }
 
 /* Rosette + bone — a container with the bone nested inside it, not a
-   flattened asset. Rotation applies to the whole composite; the shape
-   and bone keep their own positions in the frame's local (pre-rotation)
-   space, matching how Figma stores it. */
+   flattened asset, so the two stay separately animatable later.
+   Rotation applies to the whole composite.
+
+   Sizes: Figma's metadata reports the rotated child vector/instance
+   sizes already inflated by the rotation's own axis-aligned bounding
+   box (a factor of |cos54.45°|+|sin54.45°| ≈ 1.395) — using those
+   numbers directly and then also rotating the container double-counted
+   the rotation, rendering the badge ~40% too big. Divided back out.
+
+   Positions: the same AABB inflation corrupts the x/y Figma reports for
+   these children, so porting them literally put the bone 12.95px left
+   and 1.76px below centre (and the blob 2.48px off). Figma composes
+   this as a single centred glyph — get_design_context resolves it to
+   one 84.689px asset with `items-center justify-center` — so both
+   layers are simply centred on the container axis instead. No magic
+   offsets to drift. */
 .hero__rosette {
   position: absolute;
-  left: 850px;
+  left: 50%;
+  margin-left: 194px;
   top: 57px;
   width: 118.142px;
   height: 118.142px;
   color: var(--text-colour-text-primary);
   transform: rotate(54.45deg);
 }
-.hero__rosette-shape {
-  position: absolute;
-  left: 6.39px;
-  top: 6.39px;
-  width: 98.44px;
-  height: 98.44px;
-}
+.hero__rosette-shape,
 .hero__rosette-bone {
   position: absolute;
-  left: 14.6px;
-  top: 36.26px;
-  width: 52.82px;
-  height: 50.53px;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+}
+.hero__rosette-shape {
+  width: 70.57px;
+  height: 70.57px;
+}
+/* Measured against Figma's flattened 84.6888 composite, where the blob's
+   bbox is 70.565 (so our 70.57 shape is 1:1 with it) and the bone's is
+   43.081 x 36.404.
+
+   Those are the bone's *visible* bounds, but bone-glyph.svg pads its glyph
+   inside a 60x58 viewBox — the path itself only spans 47.204 x 39.888. Sizing
+   the box straight to the Figma numbers therefore rendered the bone ~14%
+   small. Box is scaled by 60/47.204 to put the visible glyph on 43.081 wide:
+     60 x (43.081/47.204) = 54.76    58 x (36.404/39.888) = 52.93
+   Ratio is the natural 60:58, so the glyph scales uniformly — no distortion. */
+.hero__rosette-bone {
+  width: 54.76px;
+  height: 52.93px;
 }
 
 /* ---------- Image container ---------- */

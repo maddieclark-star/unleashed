@@ -1,0 +1,282 @@
+/* ==========================================================================
+   Unleashed — Image Left Right (default state only)
+   Figma: node 13020:15604 (1440 x 924)
+
+   Structure: a full-bleed gradient band with one decorative blob bleeding
+   off the left edge, holding a 1280x684 clipped container. Inside that, a
+   dark pink panel carries two absolutely-positioned decorations (a swoosh
+   and the dog cut-out) with the light card sitting on top of both.
+
+   Everything absolute inside the panel is measured from the panel's own
+   top-left, exactly as Figma measures it from the "Content" frame.
+   ========================================================================== */
+
+.image-lr {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--padding-component-vertical-lg);
+  padding-inline: var(--grid-margin);
+  /* Figma clips the frame — the blob below runs off the left edge. */
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    var(--colour-pink-50),
+    var(--colour-pink-100)
+  );
+}
+
+/* ---------- Background blob (13020:15902) ----------
+   A boolean "Subtract" sitting behind the container and bleeding off the
+   left edge of the frame. Figma holds it as a 487.36 x 478.561 shape
+   rotated 7.27deg; the wrapper is its resulting bounding box. All six
+   numbers are geometry read off the node, not values from the spacing
+   scale.
+
+   WATCH OUT for rotated nodes: get_metadata reports x = -182.414 here,
+   which is the UN-rotated rect's origin. The rotated bounding box starts
+   60.6px further left (478.561 * sin 7.27deg), and -243 is what
+   get_design_context gives. Rasterising the path against Figma's own
+   render confirms -243 matches to within 1px on every scanline, where
+   -182.414 is out by a constant 61px. Trust get_design_context for
+   anything rotated; get_metadata's width/height stay correct either way. */
+
+.image-lr__blob {
+  position: absolute;
+  left: -243px;
+  top: 435px;
+  display: grid;
+  place-items: center;
+  width: 544.025px;
+  height: 536.41px;
+  pointer-events: none;
+}
+
+.image-lr__blob img {
+  width: 487.36px;
+  height: 478.561px;
+  max-width: none;  /* base.css caps images at 100% — these bleed */
+  transform: rotate(7.27deg);
+}
+
+/* ---------- Container (13020:15605) ---------- */
+
+.image-lr__container {
+  position: relative;
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  min-width: 0;
+  max-width: var(--grid-max-container-size);
+  /* Unbound in Figma. Note this is 20, not radius/card (16) — the outer
+     container and the card inside it use different corner radii. */
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* ---------- Panel (13020:15611, "Content") ---------- */
+
+.image-lr__panel {
+  position: relative;
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 350px;
+  padding: var(--spacing-300);
+  overflow: hidden;
+  background: var(--colour-pink-900);
+}
+
+/* ---------- Swoosh (13020:15861) ----------
+   1072.614 x 794.875 rotated -134.93deg and flipped vertically. As with
+   the blob, the wrapper is the rotated bounding box Figma reports. */
+
+.image-lr__swoosh {
+  position: absolute;
+  left: 352px;
+  top: -220px;
+  display: grid;
+  place-items: center;
+  width: 1320.288px;
+  height: 1320.738px;
+  pointer-events: none;
+}
+
+.image-lr__swoosh img {
+  width: 1072.614px;
+  height: 794.875px;
+  max-width: none;
+  transform: rotate(-134.93deg) scaleY(-1);
+}
+
+/* ---------- Dog cut-out (13020:15846) ----------
+   A 1258 x 699 rect whose image fill is scaled to 106.5% / 129.64% and
+   offset upwards, so the frame crops the top of the photo. The rect
+   itself overhangs the panel on three sides and is clipped by it. */
+
+.image-lr__photo {
+  position: absolute;
+  left: -21px;
+  top: 56px;
+  width: 1258px;
+  height: 699px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.image-lr__photo img {
+  position: absolute;
+  left: 0.01%;
+  top: -29.63%;
+  width: 106.5%;
+  height: 129.64%;
+  max-width: none;
+}
+
+/* ---------- Card (13020:15802) ----------
+   Fixed 636 height in Figma, which is exactly the panel less its 24px
+   padding, so it fills the panel vertically. Asymmetric inline padding
+   (32 leading, 48 trailing) is what Figma specifies. */
+
+.image-lr__card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: var(--spacing-400);
+  height: 636px;
+  padding-block: var(--spacing-400);
+  padding-left: var(--spacing-400);
+  padding-right: var(--spacing-600);
+  background: var(--colour-pink-50);
+  border-radius: var(--radius-card);
+}
+
+/* ---------- Headline (13020:15612) ----------
+   Not the shared Global/Headline component: this one drops the CTA out
+   of the group and adds a bullet list, so neither the centred nor the
+   split variant fits. Kept section-local rather than bent to fit. */
+
+.image-lr__headline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-200);
+  /* Explicit in Figma and unbound — it is what sets the card's width. */
+  width: 575px;
+}
+
+.image-lr__eyebrow-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-250);
+  width: 100%;
+}
+
+/* Body + bullet list, grouped so they hold a tighter rhythm than the
+   16px separating them from the eyebrow group above. Figma leaves this
+   gap as a raw 24 rather than binding it, but 24 is exactly spacing/300
+   so the token is used here instead of a literal. */
+.image-lr__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  width: 100%;
+}
+
+.image-lr__heading {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h2);
+  line-height: var(--line-height-heading-h2);
+  letter-spacing: var(--letter-spacing-heading-h2);
+  color: var(--text-colour-text-primary);
+}
+
+/* Body/Body - Bold here, against Body/Body on the bullets below. */
+.image-lr__body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-secondary);
+}
+
+/* ---------- Bullet list (13020:15616) ---------- */
+
+.image-lr__bullets {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-150);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Single-line rows centre their paw against the 28px line box, which is
+   the 6px offset Figma reports. The wrapping row is handled below. */
+.image-lr__bullet {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-200);
+  width: 100%;
+}
+
+/* First row wraps to two lines, so Figma tops the paw out instead,
+   4px down from the first line's box. */
+.image-lr__bullet--top {
+  align-items: flex-start;
+}
+
+.image-lr__bullet--top .image-lr__bullet-icon {
+  margin-top: var(--spacing-50);
+}
+
+.image-lr__bullet-icon {
+  flex-shrink: 0;
+  width: var(--spacing-200);
+  height: var(--spacing-200);
+}
+
+.image-lr__bullet-text {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-secondary);
+}
+
+/* The wrapping row's text is held at 524 in Figma rather than filling
+   the 543 the other two get — that narrower measure is what puts the
+   line break after "up front,". Unbound. */
+.image-lr__bullet--top .image-lr__bullet-text {
+  flex: 0 0 auto;
+  width: 524px;
+}
+
+/* ---------- CTA (13020:15629) ---------- */
+
+.image-lr__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  /* Explicit in Figma, unbound. Never binds at 1440 — the card is
+     narrower than this — but kept so the frame matches. */
+  max-width: 600px;
+}
