@@ -100,15 +100,19 @@
    1072.614 x 794.875 rotated -134.93deg and flipped vertically. As with
    the blob, the wrapper is the rotated bounding box Figma reports.
 
-   SCALES WITH THE PANEL. Figma's numbers are px against a 1280 panel,
-   but the container is flex: 1 up to 1920, so fixed px made the shape
-   shrink in relative terms as the panel grew: it stopped reaching under
-   the card, and read as undersized rather than as an overflowing
-   graphic. Every value below is the Figma px restated as a percentage
-   of the panel width (cqw), so the composition is identical at 1440 and
-   grows with the panel above it:
+   SIZE scales with the panel, POSITION does not. Figma's numbers are px
+   against a 1280 panel; left at fixed px made the shape read as
+   undersized as the panel grew, but scaling left too (27.5cqw) walked
+   its tail out from behind the card — 221px of overlap at 1440 fell to
+   118px at 1728 and the tail escaped entirely by 2080.
 
-     left    352      / 1280 =  27.5000cqw
+   The asymmetry is the point: the card is a FIXED 655 wide sitting at a
+   fixed 24 from the panel's left edge, so the thing the tail has to
+   hide behind never moves. Pinning left at Figma's literal 352px keeps
+   the tail tucked by ~200px at every width, while the cqw size keeps
+   the shape growing with the panel and overflowing the right edge.
+
+     left    352                        px, fixed — see above
      top    -220      / 1280 = -17.1875cqw
      width  1320.288  / 1280 = 103.1475cqw
      height 1320.738  / 1280 = 103.1827cqw
@@ -120,7 +124,7 @@
 
 .image-lr__swoosh {
   position: absolute;
-  left: 27.5cqw;
+  left: 352px;
   top: -17.1875cqw;
   display: grid;
   place-items: center;
