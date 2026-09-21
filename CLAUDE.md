@@ -197,6 +197,26 @@ Rules that follow from it:
   probably is — your worktree branched before the fix was committed. Merge `main`
   in rather than rebuilding it.
 
+### Previewing your section alone
+
+Because `index.html` is shared, every preview shows the whole page, which makes
+it hard to see just the section you are working on. Add `?only=<section-class>`
+to the preview URL to render one section by itself:
+
+```
+localhost:PORT/?only=usps
+localhost:PORT/?only=hero
+localhost:PORT/?only=page-cards
+```
+
+**Always use your own section's URL when previewing.** No parameter, or
+`?only=all`, gives the full page — use that only when checking integration.
+
+A typo falls back to the full page and logs the valid names to the console, so
+a blank screen means something is actually broken, not mistyped. The isolator
+is a dev aid living at the foot of `index.html`; it is not part of the site and
+comes out before handover.
+
 ---
 
 ## Shared components

@@ -269,5 +269,41 @@
     </div>
   </section>
 
+  <!-- ==========================================================================
+       DEV PREVIEW ISOLATOR — not part of the site, remove before handover.
+
+       Every worktree shares this one index.html, so every preview shows the
+       whole page. Add ?only=<section-class> to the URL to render a single
+       section on its own:
+
+         localhost:PORT/?only=usps
+         localhost:PORT/?only=hero
+         localhost:PORT/?only=page-cards
+
+       ?only=all or no parameter renders the full page as normal.
+       ========================================================================== -->
+  <script>
+    (() => {
+      const only = new URLSearchParams(location.search).get('only');
+      if (!only || only === 'all') return;
+
+      const blocks = document.querySelectorAll('body > header, body > section, body > footer');
+      const match = [...blocks].filter((el) => el.classList.contains(only));
+
+      if (!match.length) {
+        console.warn(
+          `[dev-isolator] no section with class "${only}". Available: ` +
+            [...blocks].map((el) => el.className.split(' ')[0]).join(', ')
+        );
+        return;
+      }
+
+      blocks.forEach((el) => {
+        if (!el.classList.contains(only)) el.style.display = 'none';
+      });
+      document.title = `${only} — ${document.title}`;
+    })();
+  </script>
+
 </body>
 </html>
