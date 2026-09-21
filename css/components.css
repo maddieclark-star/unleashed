@@ -69,6 +69,26 @@
   color: var(--text-colour-text-primary-invert);
 }
 
+/* Accent — pink surface with a DARK label. Distinct from btn--primary,
+   which is the same pink with a white label. Page Cards binds this pair
+   to surface-accent-dark + text-primary rather than the cta/primary-*
+   tokens, so it gets its own variant rather than an override. */
+.btn--accent {
+  background: var(--surface-colour-surface-accent-dark);
+}
+.btn--accent .btn__label {
+  color: var(--text-colour-text-primary);
+}
+
+/* Size modifier — the mid size sitting between default (44px tall) and
+   btn--lg (52px, 18px label). 52px tall, 16px label. Seen on Page Cards. */
+.btn--md {
+  height: auto;
+  /* 26px / 14px — unbound in Figma, no spacing token matches either. */
+  padding-inline: 26px;
+  padding-block: 14px;
+}
+
 /* Size modifier — canonical "Large" size from the UI Kit (default .btn
    matches the header's compact size). Seen on the hero quote widget CTA. */
 .btn--lg {
@@ -84,8 +104,9 @@
 
 /* ---------- Eyebrow ----------
    Markup: <span class="eyebrow"><span class="eyebrow__label">Label</span></span>
-   A "Sticker" icon can precede the label (not needed yet — no section
-   built so far uses it) — gap is already in place for when one does.
+   A "Sticker" can precede the label — when one is present the left
+   padding tightens to spacing/50 so the pill still reads as 44px tall.
+   "eyebrow--shadow" adds the pink drop shadow seen on Page Cards.
 */
 
 .eyebrow {
@@ -99,6 +120,22 @@
   border-radius: var(--radius-button);
 }
 
+/* With a sticker the pill keeps a fixed 44px height and the sticker
+   sits flush against a spacing/50 left inset. */
+.eyebrow:has(.sticker) {
+  height: var(--spacing-900);
+  padding-block: var(--spacing-50);
+  padding-left: var(--spacing-50);
+  padding-right: var(--grid-gutter);
+}
+
+.eyebrow--shadow {
+  /* unbound in Figma — pink/800 at 14%, 0 4px 6.45px */
+  filter: drop-shadow(
+    0 4px 6.45px color-mix(in srgb, var(--colour-pink-800) 14%, transparent)
+  );
+}
+
 .eyebrow__label {
   font-family: var(--typography-heading-font-family);
   font-weight: var(--typography-heading-weight);
@@ -107,4 +144,112 @@
   color: var(--text-colour-text-primary);
   text-align: center;
   white-space: nowrap;
+}
+
+
+/* ---------- Sticker ----------
+   Circular icon badge. Markup:
+     <span class="sticker">
+       <span class="sticker__icon sticker__icon--paw"></span>
+     </span>
+   Size and surface are driven by custom properties so a section can
+   scale the badge without restyling it. The glyph is the exported SVG
+   used as a mask, which keeps the vector authoritative while letting
+   the fill come from a token.
+*/
+
+.sticker {
+  --sticker-size: 37px;
+  --sticker-surface: var(--colour-pink-300);
+  --sticker-glyph: var(--surface-colour-surface-invert-primary);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: var(--sticker-size);
+  block-size: var(--sticker-size);
+  border-radius: var(--radius-round);
+  background: var(--sticker-surface);
+}
+
+.sticker__icon {
+  /* Figma keeps the glyph at 58.33% of the badge at every size. */
+  inline-size: 58.33%;
+  block-size: 58.33%;
+  background: var(--sticker-glyph);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.sticker__icon--paw {
+  -webkit-mask-image: url("../assets/icons/paw-glyph.svg");
+  mask-image: url("../assets/icons/paw-glyph.svg");
+}
+
+
+/* ---------- Global / Headline ----------
+   Eyebrow + heading + body + CTA, centred. Same markup in USPs,
+   Page Cards and Making Choice Simple. The measure of the text column
+   varies by section, so it is exposed as --headline-measure.
+*/
+
+.headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-400);
+  inline-size: 100%;
+  max-inline-size: var(--grid-max-container-size);
+  /* unbound in Figma — 902px, does not land on the 12-col grid */
+  --headline-measure: 902px;
+}
+
+.headline__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--grid-gutter);
+  inline-size: var(--headline-measure);
+  max-inline-size: 100%;
+}
+
+.headline__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-200);
+  inline-size: 100%;
+  text-align: center;
+}
+
+.headline__heading {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h2);
+  line-height: var(--line-height-heading-h2);
+  letter-spacing: var(--letter-spacing-heading-h2);
+  color: var(--text-colour-text-primary);
+}
+
+.headline__body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-secondary);
+}
+
+.headline__cta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--spacing-200);
 }

@@ -1,0 +1,210 @@
+/* ==========================================================================
+   Unleashed — Page Cards
+   Figma: 13020:1522 (1440 x 1163). Container 1280 / 80px margins.
+
+   The media panel is a four-layer composite: a pale rect, the photograph,
+   two brand swooshes, and a cut-out of the same dog laid back over the top
+   so it reads above the swooshes. A second copy of that cut-out sits behind
+   the panels at card level, which is what lets the dog's legs and tail
+   bleed out over the purple and clip to the card instead of the panel.
+   ========================================================================== */
+
+.page-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-800);
+  padding-block: var(--padding-component-vertical-lg);
+  padding-inline: var(--grid-margin);
+  background: linear-gradient(
+    to bottom,
+    var(--colour-yellow-light-50-brand) 0%,
+    var(--colour-pink-100) 34.308%
+  );
+}
+
+
+/* ---------- Card shell ---------- */
+
+.page-cards__card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  block-size: 619px;
+  padding: var(--spacing-300);
+  border-radius: var(--radius-100);
+  background: var(--colour-pink-800);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.page-cards__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--grid-gutter);
+  flex: 1 0 0;
+  min-inline-size: 0;
+  block-size: 100%;
+  overflow: hidden;
+}
+
+
+/* ---------- Copy panel ---------- */
+
+.page-cards__copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--spacing-400);
+  flex: none;
+  inline-size: 567px;
+  block-size: 100%;
+  /* 36px left inset is unbound in Figma — no spacing token matches. */
+  padding: var(--spacing-400) var(--spacing-600) var(--spacing-400) 36px;
+  border-radius: var(--radius-card);
+  background: var(--colour-pink-900);
+}
+
+.page-cards__sticker {
+  position: absolute;
+  /* unbound in Figma — decorative badge, placed off the panel corner */
+  left: 37.217px;
+  top: 30.217px;
+  --sticker-size: 71.006px;
+  --sticker-surface: var(--colour-pink-800);
+}
+
+.page-cards__copy-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--spacing-200);
+  inline-size: 483px;
+}
+
+.page-cards__title {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h2);
+  line-height: var(--line-height-heading-h2);
+  letter-spacing: var(--letter-spacing-heading-h2);
+  color: var(--text-colour-text-primary-invert);
+  white-space: nowrap;
+}
+
+.page-cards__desc {
+  inline-size: 386px;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-lg-body);
+  line-height: var(--line-height-body-lg-body);
+  letter-spacing: var(--letter-spacing-body-lg-body);
+  color: color-mix(in srgb, var(--text-colour-text-primary-invert) 80%, transparent);
+}
+
+.page-cards__cta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--spacing-200);
+}
+
+
+/* ---------- Media panel ---------- */
+
+.page-cards__media {
+  position: relative;
+  flex: 1 0 0;
+  min-inline-size: 0;
+  block-size: 100%;
+  border-radius: var(--radius-image);
+  background: var(--colour-pink-50);
+  overflow: hidden;
+}
+
+/* Photograph. Sized off the panel height so it keeps the 1993:3000
+   crop Figma places it at, and hangs well past top and bottom. */
+.page-cards__photo {
+  position: absolute;
+  top: -35.9%;
+  bottom: -72.15%;
+  left: calc(50% + 3px);
+  transform: translateX(-50%);
+  /* 1188 tall at the 1993:3000 crop Figma places it at */
+  inline-size: 789.19px;
+  max-inline-size: none;
+  object-fit: cover;
+}
+
+/* Brand swoosh, twice, at the rotations Figma uses. The fill is baked
+   into the SVG as colour/pink/300. */
+.page-cards__swoosh {
+  position: absolute;
+  inline-size: 701.105px;
+  block-size: 584.233px;
+  max-inline-size: none;
+}
+
+.page-cards__swoosh--1 {
+  left: 232.147px;
+  top: 377.556px;
+  transform: translate(-50%, -50%) rotate(136.1deg);
+}
+
+.page-cards__swoosh--2 {
+  left: 716.836px;
+  top: 3.057px;
+  transform: translate(-50%, -50%) rotate(-52.1deg);
+}
+
+/* Cut-out of the same dog, re-laid above the swooshes and in register
+   with the photograph beneath. Figma crops it to 635 of its 789px
+   width, so it lives in a window with the image offset inside. */
+.page-cards__cutout {
+  position: absolute;
+  top: -35.9%;
+  bottom: -72.15%;
+  left: calc(50% - 74px);
+  transform: translateX(-50%);
+  aspect-ratio: 635 / 1188;
+  overflow: hidden;
+}
+
+.page-cards__cutout img {
+  position: absolute;
+  top: 0;
+  left: -0.04%;
+  inline-size: 124.33%;
+  block-size: 100%;
+  max-inline-size: none;
+}
+
+/* The same cut-out again, this time a child of the card and behind the
+   panels, so the parts of the dog that fall outside the media panel
+   still draw — clipped to the card rather than to the panel. */
+.page-cards__bleed {
+  position: absolute;
+  z-index: 1;
+  top: -29.24%;
+  bottom: -62.68%;
+  left: calc(50% + 253.5px);
+  transform: translateX(-50%);
+  aspect-ratio: 573 / 1188;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-cards__bleed img {
+  position: absolute;
+  top: 0;
+  left: -11.72%;
+  inline-size: 137.76%;
+  block-size: 99.99%;
+  max-inline-size: none;
+}
