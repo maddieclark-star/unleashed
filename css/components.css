@@ -17,19 +17,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-100);
   height: var(--spacing-900);
   padding-inline: var(--spacing-300);
   padding-block: var(--spacing-150);
   border-radius: var(--radius-button);
   border: none;
-}
-
-/* Trailing icon, e.g. the arrow on a "Read more" link. */
-.btn__icon {
-  flex: none;
-  inline-size: 20px;
-  block-size: 20px;
 }
 
 .btn__label {
@@ -88,28 +80,6 @@
   color: var(--text-colour-text-primary);
 }
 
-/* Outline — 1px grey/200 hairline with a dark label. Distinct from
-   btn--secondary, which outlines in text-primary black. Seen on the
-   USP card's "Read more". Figma draws the stroke inside the 44px box,
-   which .btn's explicit height reproduces. */
-.btn--outline {
-  background: transparent;
-  border: 1px solid var(--colour-grey-200);
-}
-.btn--outline .btn__label {
-  color: var(--cta-colour-secondary-text);
-}
-
-/* Size modifier — compact. Keeps .btn's 44px height, tightens the
-   inline padding and drops the label to sm-button. */
-.btn--sm {
-  gap: var(--spacing-50);
-  padding-inline: var(--spacing-200);
-}
-.btn--sm .btn__label {
-  font-size: var(--size-button-sm-button);
-}
-
 /* Size modifier — the mid size sitting between default (44px tall) and
    btn--lg (52px, 18px label). 52px tall, 16px label. Seen on Page Cards. */
 .btn--md {
@@ -159,20 +129,10 @@
   padding-right: var(--grid-gutter);
 }
 
-/* Offset and blur are unbound in Figma (0 4px 6.45px); the colour is
-   always the section's own dark accent at 14%, so it is a variable. */
-/* Offset and blur are unbound in Figma (0 4px 6.45px); the colour is
-   always the section's own dark accent at 14%. Defaults live in the
-   var() fallback, not as a declaration here, so a section can set
-   --eyebrow-shadow-colour on an ancestor and have it inherit. */
 .eyebrow--shadow {
+  /* unbound in Figma — pink/800 at 14%, 0 4px 6.45px */
   filter: drop-shadow(
-    0 4px 6.45px
-      color-mix(
-        in srgb,
-        var(--eyebrow-shadow-colour, var(--colour-pink-800)) 14%,
-        transparent
-      )
+    0 4px 6.45px color-mix(in srgb, var(--colour-pink-800) 14%, transparent)
   );
 }
 
@@ -199,21 +159,25 @@
 */
 
 .sticker {
+  --sticker-size: 37px;
+  --sticker-surface: var(--colour-pink-300);
+  --sticker-glyph: var(--surface-colour-surface-invert-primary);
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  inline-size: var(--sticker-size, 37px);
-  block-size: var(--sticker-size, 37px);
+  inline-size: var(--sticker-size);
+  block-size: var(--sticker-size);
   border-radius: var(--radius-round);
-  background: var(--sticker-surface, var(--colour-pink-300));
+  background: var(--sticker-surface);
 }
 
 .sticker__icon {
   /* Figma keeps the glyph at 58.33% of the badge at every size. */
   inline-size: 58.33%;
   block-size: 58.33%;
-  background: var(--sticker-glyph, var(--surface-colour-surface-invert-primary));
+  background: var(--sticker-glyph);
   -webkit-mask-position: center;
   mask-position: center;
   -webkit-mask-repeat: no-repeat;
@@ -229,14 +193,9 @@
 
 
 /* ---------- Global / Headline ----------
-   Eyebrow + heading + body + CTA. Same markup in USPs, Page Cards and
-   Making Choice Simple. Two layouts:
-
-     .headline            centred column, CTA underneath  (Page Cards)
-     .headline--split     text left, CTA bottom-right     (USPs)
-
-   The measure of the centred text column varies by section, so it is
-   exposed as --headline-measure.
+   Eyebrow + heading + body + CTA, centred. Same markup in USPs,
+   Page Cards and Making Choice Simple. The measure of the text column
+   varies by section, so it is exposed as --headline-measure.
 */
 
 .headline {
@@ -247,6 +206,8 @@
   gap: var(--spacing-400);
   inline-size: 100%;
   max-inline-size: var(--grid-max-container-size);
+  /* unbound in Figma — 902px, does not land on the 12-col grid */
+  --headline-measure: 902px;
 }
 
 .headline__group {
@@ -254,8 +215,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--grid-gutter);
-  /* unbound in Figma — 902px, does not land on the 12-col grid */
-  inline-size: var(--headline-measure, 902px);
+  inline-size: var(--headline-measure);
   max-inline-size: 100%;
 }
 
@@ -292,118 +252,4 @@
   align-items: flex-start;
   justify-content: flex-end;
   gap: var(--spacing-200);
-}
-
-/* Split — text column on the left, CTA pinned bottom-right. The row
-   gap only applies if the CTA wraps under the text. */
-.headline--split {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--spacing-800) 0;
-}
-
-.headline--split .headline__group {
-  flex: 1 0 0;
-  inline-size: auto;
-  max-inline-size: 580px;
-  min-inline-size: 320px;
-  align-items: flex-start;
-  gap: var(--spacing-300);
-}
-
-.headline--split .headline__text {
-  align-items: flex-start;
-  text-align: start;
-}
-
-
-/* ---------- USP card ----------
-   Icon tile, title, body, "Read more". Six instances in the USPs
-   section. Markup:
-     <article class="usp-card">
-       <span class="usp-card__icon"><img class="usp-card__glyph" ...></span>
-       <div class="usp-card__content">
-         <div class="usp-card__text"> h3 + p </div>
-         <a class="btn btn--outline btn--sm"> ... </a>
-       </div>
-     </article>
-*/
-
-.usp-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-500);
-  flex: 1 0 0;
-  min-inline-size: 0;
-  padding: var(--spacing-300);
-  border-radius: var(--radius-image);
-  background: var(--surface-colour-surface-primary);
-}
-
-.usp-card__icon {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  flex: none;
-  inline-size: 64px;
-  block-size: 64px;
-  /* 14px pad and 12.8px radius are both unbound in Figma */
-  padding: 14px;
-  border-radius: 12.8px;
-  background: var(--colour-pink-100);
-}
-
-/* The glyph is a text layer in Figma, not artwork — an emoji character
-   set at Heading/H4. Rendered as text here for the same reason: it
-   picks up the platform colour-emoji font, which is what Figma renders
-   too. (The .svg exports of these in assets/ are a failed flatten —
-   every one is a plain black rectangle.) */
-.usp-card__glyph {
-  display: block;
-  inline-size: 28px;
-  block-size: 36px;
-  font-family: var(--typography-heading-font-family);
-  font-weight: var(--typography-heading-weight);
-  font-size: var(--size-heading-h4);
-  line-height: var(--line-height-heading-h4);
-  letter-spacing: var(--letter-spacing-heading-h4);
-  color: var(--surface-colour-surface-invert-primary);
-  text-align: center;
-}
-
-.usp-card__content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-300);
-  inline-size: 100%;
-}
-
-.usp-card__text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-50);
-  inline-size: 100%;
-}
-
-.usp-card__title {
-  font-family: var(--typography-heading-font-family);
-  font-weight: var(--typography-heading-weight);
-  font-size: var(--size-heading-h5);
-  line-height: var(--line-height-heading-h5);
-  letter-spacing: var(--letter-spacing-heading-h5);
-  color: var(--text-colour-text-primary);
-}
-
-.usp-card__body {
-  font-family: var(--typography-body-font-family);
-  font-weight: var(--typography-body-weight);
-  font-size: var(--size-body-body);
-  line-height: var(--line-height-body-body);
-  letter-spacing: var(--letter-spacing-body-body);
-  color: var(--text-colour-text-secondary);
 }
