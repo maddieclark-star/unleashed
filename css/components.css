@@ -5,21 +5,20 @@
    ========================================================================== */
 
 /* ---------- Button ----------
-   Markup: <a/button class="btn btn--{primary|secondary|dark}">
+   Markup: <a/button class="btn btn--{size} btn--{primary|secondary|dark}">
              <span class="btn__label">Label</span>
            </a>
    "btn--reverse" is an additional modifier (combine with btn--primary or
    btn--secondary) for placing that variant on an inverted surface —
    seen on the header's "Log in" button. Default state only, no hover yet.
+
+   A size modifier is required — .btn on its own carries no geometry.
 */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--spacing-900);
-  padding-inline: var(--spacing-300);
-  padding-block: var(--spacing-150);
   border-radius: var(--radius-button);
   border: none;
 }
@@ -61,6 +60,14 @@
   color: var(--cta-colour-secondary-invert-text);
 }
 
+/* Quiet — secondary dropped to a grey hairline instead of the
+   full-contrast border. An instance-level override in Figma, not a kit
+   variant: the USP cards' "Read more" rebinds the border to
+   colour/grey/200 while keeping the secondary text colour. */
+.btn--secondary.btn--quiet {
+  border-color: var(--colour-grey-200);
+}
+
 /* Dark — solid invert surface, e.g. header CTA on a light bar */
 .btn--dark {
   background: var(--surface-colour-surface-invert-primary);
@@ -69,17 +76,63 @@
   color: var(--text-colour-text-primary-invert);
 }
 
-/* Size modifier — canonical "Large" size from the UI Kit (default .btn
-   matches the header's compact size). Seen on the hero quote widget CTA. */
+/* ---------- Button sizes ----------
+   The UI Kit's Button component set (13052:17120 → 1103:1217) exposes a
+   "Size" property with three desktop steps. These mirror it exactly:
+
+     Small    44px   16 / 10   Sm Button (14px)
+     Default  52px   26 / 14   Button    (16px)
+     Large    60px   30 / 18   Lg Button (18px)
+
+   Only the horizontal paddings and the 44px height land on the token
+   scale. The vertical paddings and the 52/60 heights are unbound in
+   Figma — no value on the spacing scale matches any of them.
+*/
+
+.btn--sm {
+  height: var(--spacing-900);
+  padding-inline: var(--spacing-200);
+  padding-block: 10px;
+  gap: var(--spacing-50);
+}
+.btn--sm .btn__label {
+  font-size: var(--size-button-sm-button);
+}
+
+.btn--default {
+  height: 52px;
+  padding-inline: 26px;
+  padding-block: 14px;
+  gap: var(--spacing-100);
+}
+
 .btn--lg {
-  height: auto;
-  /* 30px / 18px — Figma's own "Large" button spec, unbound to any
-     token (no value in the spacing scale matches either number). */
+  height: 60px;
   padding-inline: 30px;
   padding-block: 18px;
+  gap: var(--spacing-100);
 }
 .btn--lg .btn__label {
   font-size: var(--size-button-lg-button);
+}
+
+/* Nav pill — deliberately outside the kit's size scale. The header's
+   "Log in" and "Get a quote" (13051:16950, 13051:16952) are not Button
+   instances in Figma at all, but bespoke 44px pills carrying a 16px
+   Sm Body label where the kit's Small carries a 14px one. Kept separate
+   so the kit sizes above stay a faithful mirror of the component set. */
+.btn--nav {
+  height: var(--spacing-900);
+  padding-inline: var(--spacing-300);
+  padding-block: var(--spacing-150);
+}
+
+/* Trailing icon, e.g. Icon/Arrow/Right on a "Read more".
+   20px square, unbound in Figma. */
+.btn__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
 }
 
 /* ---------- Eyebrow ----------
@@ -107,4 +160,195 @@
   color: var(--text-colour-text-primary);
   text-align: center;
   white-space: nowrap;
+}
+
+/* Sticker variant — tightens the leading edge so the 37px badge seats
+   inside the pill, and pins the height, since the badge is taller than
+   the block padding the label-only eyebrow is built around. Figma holds
+   the frame at 44 and lets the badge centre itself (4px padding, badge
+   overhanging it by 0.5px top and bottom). Trailing padding unchanged. */
+.eyebrow--sticker {
+  height: var(--spacing-900);
+  padding-block: 0;
+  padding-left: var(--spacing-50);
+}
+
+/* Raised — soft yellow lift. USPs only so far; the hero's eyebrow
+   (13013:13426) is flat, so this is opt-in rather than baked in. */
+.eyebrow--raised {
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-yellow-500) 14%, transparent);
+}
+
+
+/* ---------- Sticker ----------
+   Circular icon badge. Markup:
+     <span class="sticker"><img class="sticker__icon" src="…" alt="" /></span>
+   The 37px badge and 21.583px glyph are unbound in Figma — neither
+   lands on the spacing scale.
+*/
+
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
+  border-radius: var(--radius-round);
+  background: var(--colour-yellow-200);
+}
+
+.sticker__icon {
+  width: 21.583px;
+  height: 21.583px;
+}
+
+
+/* ---------- Global / Headline ----------
+   Eyebrow + heading + body on the left, CTA pinned bottom-right.
+   Same frame in USPs (13013:13704), Page Cards and Making Choice Simple.
+   Markup:
+     <div class="headline">
+       <div class="headline__lhs">
+         <span class="eyebrow">…</span>
+         <div class="headline__text">
+           <h2 class="headline__heading">…</h2>
+           <p class="headline__body">…</p>
+         </div>
+       </div>
+       <div class="headline__cta">…</div>
+     </div>
+*/
+
+.headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  row-gap: var(--spacing-800);
+  width: 100%;
+  max-width: var(--grid-max-container-size);
+}
+
+/* 580 / 320 are explicit in Figma and unbound to any token. */
+.headline__lhs {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  max-width: 580px;
+  min-width: 320px;
+}
+
+.headline__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-200);
+  width: 100%;
+}
+
+.headline__heading {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h2);
+  line-height: var(--line-height-heading-h2);
+  letter-spacing: var(--letter-spacing-heading-h2);
+  color: var(--text-colour-text-primary);
+}
+
+.headline__body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-secondary);
+}
+
+.headline__cta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--spacing-200);
+  flex-shrink: 0;
+}
+
+
+/* ---------- USP card ----------
+   Emoji badge, title, body, "Read more". Six instances in the USPs
+   section (13015:13925 and siblings).
+*/
+
+.usp-card {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-500);
+  min-width: 0;
+  padding: var(--spacing-300);
+  background: var(--surface-colour-surface-primary);
+  border-radius: var(--radius-card);
+}
+
+/* 14px inset and the 12.8px radius are both unbound in Figma — the
+   radius in particular matches no step on the radius scale. */
+.usp-card__icon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--spacing-800);
+  height: var(--spacing-800);
+  padding: 14px;
+  background: var(--colour-pink-100);
+  border-radius: 12.8px;
+}
+
+/* The badge glyphs are emoji text layers in Figma, not vectors, set in
+   Heading/H4 — so they stay text here and render from the system emoji
+   font exactly as Figma renders them. */
+.usp-card__emoji {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h4);
+  line-height: var(--line-height-heading-h4);
+  letter-spacing: var(--letter-spacing-heading-h4);
+  color: var(--surface-colour-surface-invert-primary);
+}
+
+.usp-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  width: 100%;
+}
+
+.usp-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-50);
+  width: 100%;
+}
+
+.usp-card__title {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h5);
+  line-height: var(--line-height-heading-h5);
+  letter-spacing: var(--letter-spacing-heading-h5);
+  color: var(--text-colour-text-primary);
+}
+
+.usp-card__body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-secondary);
 }

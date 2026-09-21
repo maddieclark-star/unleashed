@@ -1,0 +1,39 @@
+/* ==========================================================================
+   Unleashed — USPs (default state only)
+   Figma: node 13013:13624 (1440 x 1060)
+
+   Structure note: Figma nests Collection > USPs > Row twice, but each
+   "USPs" wrapper holds exactly one Row, so the wrapper carries no
+   geometry of its own. Flattened here to Collection > Row x 2 — the
+   16px gap between the rows is identical either way.
+   ========================================================================== */
+
+.usps {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-800);
+  padding-top: var(--padding-component-vertical-lg);
+  padding-inline: var(--grid-margin);
+  /* No bottom padding in Figma — the last row of cards sits flush with
+     the frame's bottom edge at y=1060. */
+  background: var(--colour-yellow-light-100);
+}
+
+.usps__collection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-200);
+  width: 100%;
+  max-width: var(--grid-max-container-size);
+}
+
+/* Figma pins the row to items-start, but every card in it is the same
+   312px tall. Stretching instead keeps the bottom edges aligned if a
+   body string wraps to a different line count at render. */
+.usps__row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-200);
+  width: 100%;
+}
