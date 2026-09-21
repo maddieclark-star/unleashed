@@ -731,3 +731,49 @@
 .tier--selected .tier__value {
   color: var(--text-colour-text-primary);
 }
+
+
+/* ==========================================================================
+   Added for Image Left Right (13086:9414)
+
+   Three colour-only modifiers on components that already exist above.
+   Appended rather than folded into their parent blocks so this merges
+   cleanly alongside the other section worktrees.
+   ========================================================================== */
+
+/* Pink brand button — pink surface with a DARK label.
+
+   NAMING: this wanted to be .btn--brand, but Making Choice Simple got
+   there first and bound that name to blue/500-brand (see above). Both
+   are real: the kit's primary is pink-with-WHITE-label, so neither of
+   these is it. Left asymmetric (--brand blue, --brand-pink pink) rather
+   than renaming a variant another section already ships. Worth tidying
+   to --brand-blue / --brand-pink in one pass later.
+
+   Figma binds colour/pink/400-brand and text-colour/text-primary on
+   13086:9443 — an instance-level override, same as .btn--quiet on the
+   USP cards. Geometry comes from .btn--default, unchanged. */
+.btn--brand-pink {
+  background: var(--colour-pink-400-brand);
+}
+.btn--brand-pink .btn__label {
+  color: var(--text-colour-text-primary);
+}
+
+/* Pink sticker — the badge in Image Left Right's eyebrow (13086:9427)
+   swaps the default yellow/200 fill for pink/300. Glyph is the same
+   paw asset at the same 21.583px. */
+.sticker--pink {
+  background: var(--colour-pink-300);
+}
+
+/* Pink lift — the .eyebrow--raised counterpart for pink sections.
+   Figma: 0,4 blur 6.45 in pink/800 at 14%.
+
+   Left at Figma's stated 14%, unlike .eyebrow--raised above, which was
+   deliberately pushed to 27% on request. If this one also reads too
+   faint against the pink/50 card, raise it here rather than reaching
+   for the yellow variant. */
+.eyebrow--raised-pink {
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-pink-800) 14%, transparent);
+}
