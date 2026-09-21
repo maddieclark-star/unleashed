@@ -18,7 +18,6 @@ npm-debug.log*
 assets/originals/
 
 # Claude Code worktrees live inside .claude/ — never commit them into the repo.
-# .claude/launch.json is intentionally still tracked.
 .claude/worktrees/
 
 # Per-worktree scope instructions. Each worktree owns one section and this file
