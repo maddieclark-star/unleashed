@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Unleashed — USPs
+   Figma: 13013:13624 (1440 x 1060). Container 1280 / 80px margins.
+
+   Note there is no bottom padding in Figma: the section is 120 top +
+   236 headline + 64 + 640 of cards = 1060, so the last row of cards sits
+   flush against the section's bottom edge. Built as drawn.
+   ========================================================================== */
+
+.usps {
+  /* The eyebrow's sticker and shadow follow the section accent rather
+     than the component default. Both are documented custom properties,
+     set here on the ancestor so they inherit. */
+  --sticker-surface: var(--colour-yellow-200);
+  --eyebrow-shadow-colour: var(--colour-yellow-500);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-800);
+  padding-top: var(--padding-component-vertical-lg);
+  padding-inline: var(--grid-margin);
+  background: var(--colour-yellow-light-100);
+}
+
+
+/* ---------- Card grid ----------
+   Figma nests each row inside a single-child "USPs" wrapper; the
+   wrappers carry no layout of their own so they are flattened here.
+   The 16px row gap comes from the Collection. */
+
+.usps__collection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-200);
+  inline-size: 100%;
+}
+
+.usps__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-200);
+  inline-size: 100%;
+}
