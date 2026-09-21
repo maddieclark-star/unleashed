@@ -54,7 +54,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-200);
+  gap: var(--spacing-300);
   width: 100%;
 }
 
@@ -67,11 +67,8 @@
   font-weight: var(--typography-heading-weight);
   color: var(--text-colour-text-primary);
   letter-spacing: var(--letter-spacing-heading-display);
-  /* 100px / 100px — bigger than the "Display" token (80/80). No H1
-     variable exists in Figma for this page (CLAUDE.md known issue) —
-     flagging rather than shrinking it to fit an existing token. */
-  font-size: 100px;
-  line-height: 100px;
+  font-size: var(--size-heading-lg-display);
+  line-height: var(--line-height-heading-lg-display);
 }
 
 .hero__body {
@@ -87,25 +84,38 @@
   color: var(--text-colour-text-secondary);
 }
 
-/* ---------- Stickers (paw / WOOF / rosette+bone) ---------- */
+/* ---------- Stickers (paw / WOOF / rosette+bone) ----------
+   Figma wraps each sticker in an outer bounding box (sized to fully
+   contain the rotated pill without clipping) plus an inner pill that
+   auto-sizes to its own padding + content and carries the rotation.
+   The outer box is what left/top position — not the pill itself.
+*/
 
 .hero__sticker {
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.hero__sticker__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 2px solid var(--border-colour-border-invert);
-  border-radius: var(--radius-round);
 }
 
 .hero__sticker--paw {
-  left: 206px;
-  top: 2px;
-  width: 107.52px;
-  height: 107.52px;
+  left: 347px;
+  top: 92px;
+  width: 107.521px;
+  height: 107.521px;
+}
+.hero__sticker--paw .hero__sticker__pill {
   padding: var(--spacing-200);
   /* unbound in Figma — decorative only */
   background: #84f0e3;
+  border-radius: var(--radius-round);
   transform: rotate(-34.12deg);
   color: var(--text-colour-text-primary);
 }
@@ -115,46 +125,55 @@
 }
 
 .hero__sticker--woof {
-  left: 613px;
-  top: 77px;
+  left: 611px;
+  top: 131px;
+  width: 110.947px;
+  height: 72.76px;
+}
+.hero__sticker--woof .hero__sticker__pill {
   padding-inline: var(--spacing-200);
   padding-block: var(--spacing-100);
   background: var(--colour-yellow-300);
   border-radius: var(--radius-button);
-  transform: rotate(11.07deg);
+  transform: rotate(15deg);
 }
 .hero__sticker--woof span {
   font-family: var(--typography-heading-font-family);
   font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h6);
+  line-height: var(--line-height-heading-h6);
+  letter-spacing: var(--letter-spacing-heading-h6);
   color: var(--text-colour-text-primary);
   white-space: nowrap;
   text-align: center;
-  /* 22.358px / 31.301px in Figma — an unbound, scaled sticker instance
-     (no matching token). Rounded to whole px. */
-  font-size: 22px;
-  line-height: 31px;
 }
 
+/* Rosette + bone — a container with the bone nested inside it, not a
+   flattened asset. Rotation applies to the whole composite; the shape
+   and bone keep their own positions in the frame's local (pre-rotation)
+   space, matching how Figma stores it. */
 .hero__rosette {
   position: absolute;
-  left: 826px;
-  top: 129px;
-  width: 92.795px;
-  height: 92.795px;
+  left: 850px;
+  top: 57px;
+  width: 118.142px;
+  height: 118.142px;
   color: var(--text-colour-text-primary);
+  transform: rotate(54.45deg);
 }
 .hero__rosette-shape {
   position: absolute;
-  inset: 7px;
-  width: 77.32px;
-  height: 77.32px;
+  left: 6.39px;
+  top: 6.39px;
+  width: 98.44px;
+  height: 98.44px;
 }
 .hero__rosette-bone {
   position: absolute;
-  left: 16px;
-  top: 39.73px;
-  width: 59.39px;
-  height: 57.56px;
+  left: 14.6px;
+  top: 36.26px;
+  width: 52.82px;
+  height: 50.53px;
 }
 
 /* ---------- Image container ---------- */

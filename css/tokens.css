@@ -89,12 +89,14 @@
   --typography-body-weight-strong: 500; /* Medium */
 
   /* Heading sizes */
+  --size-heading-lg-display: 100px;
   --size-heading-display: 80px;
   --size-heading-h2: 44px;
   --size-heading-h4: 28px;
   --size-heading-h5: 24px;
   --size-heading-h6: 20px;
 
+  --line-height-heading-lg-display: 100px;
   --line-height-heading-display: 80px;
   --line-height-heading-h2: 48px;
   --line-height-heading-h4: 36px;
@@ -188,6 +190,14 @@
    Composite type styles
    Apply these rather than setting font properties individually.
    ========================================================================== */
+
+.type-lg-display {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-lg-display);
+  line-height: var(--line-height-heading-lg-display);
+  letter-spacing: var(--letter-spacing-heading-display);
+}
 
 .type-display {
   font-family: var(--typography-heading-font-family);

@@ -70,6 +70,7 @@ body strong Medium (500).
 
 | Style | Size / line-height | Letter-spacing |
 |---|---|---|
+| Large Display | 100 / 100 | -2 |
 | Display | 80 / 80 | -2 |
 | H2 | 44 / 48 | -1 |
 | H4 | 28 / 36 | -1 |
@@ -82,6 +83,9 @@ body strong Medium (500).
 | Sm Caption | 12 / 18 | 0 |
 | Button | 16 / 24 | 0 |
 | Lg Button | 18 / 24 | 0 |
+
+Large Display is used only for the hero headline. The Final CTA headline stays
+at Display (80/80) — don't conflate the two.
 
 **Radius** — button and round `1000` (pill), card and image `16`, sm-card and form `8`
 
@@ -223,7 +227,6 @@ Flag these rather than silently deciding:
 - **`spacing/1400` is 64**, identical to `spacing/800`. Also looks like an error.
 - **`surface-accent-light` `#eaff00`** does not match any step in the yellow ramp
   (closest is `yellow/100` `#e0f504`).
-- **H1 and H3 have no variables** on this page. If a heading needs them, ask.
 - **Making Choice Simple sliders** — undecided whether they are functional
   (draggable, values update) or static visual. Ask before building that section.
 - **Hero image container** has deliberate bleed: image rects sit at negative offsets
