@@ -1,0 +1,159 @@
+/* ==========================================================================
+   Making Choice Simple — 13020:14688 (1440 x 1024)
+
+   Dark band, centred Global/Headline, three equal cards. Each card is two
+   stacked blocks: a white "Heading" block carrying the controls, and a
+   blue/100 "Infographic" block below it.
+
+   Container is 1312 with 64px margins (the header/hero width, not the
+   1280/80 the USPs use). Both widths are intentional — see CLAUDE.md.
+
+   Shared pieces (headline, eyebrow, sticker, slider, tier, button) live in
+   components.css. This file only positions them.
+   ========================================================================== */
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-800);
+  padding-block: var(--spacing-1000);
+  padding-inline: var(--spacing-800);
+  background: var(--colour-blue-950);
+}
+
+
+/* ---------- Cards ----------
+   align-items: stretch so the three match the tallest, which is card 1.
+   Figma expresses this the long way round — the wrap is items-start and
+   cards 2 and 3 carry self-stretch — but card 1 is the tallest of the three
+   at its natural height, so the result is identical and this survives a
+   copy change that reorders which card is tallest. */
+
+.choice__cards {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-200);
+  width: 100%;
+}
+
+.choice__card {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-card);
+}
+
+
+/* ---------- Card: heading block ----------
+   The negative bottom margin is the whole trick: the white block overlaps
+   the infographic by 40px, and the infographic's 40px top radius curves up
+   into the gap, so the infographic reads as a tab tucked underneath.
+
+   Bottom-left is 4px rather than square — Figma rounds that one corner only,
+   and bottom-right not at all. Both are under the overlap and invisible in
+   the default state, but they will show the moment anything animates the
+   two blocks apart, so they are kept.
+
+   overflow: hidden clips the content against those corners. */
+
+/* flex-basis auto, not 0: the block has to contribute its content height to
+   the card's intrinsic height, or every card collapses to the infographic
+   and there is nothing for the wrap to stretch to. Grow is what absorbs the
+   slack in cards 2 and 3; justify-content then centres their controls in it. */
+.choice__heading {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--spacing-300);
+  width: 100%;
+  margin-bottom: calc(var(--spacing-500) * -1);
+  padding-inline: var(--spacing-400);
+  overflow: hidden;
+  border-radius: var(--radius-card) var(--radius-card) 0 var(--spacing-50);
+  background: var(--surface-colour-surface-primary);
+}
+
+/* Vertical padding differs per card and is not derivable — each is set in
+   Figma by hand. Card 1 carries the deepest bottom inset (grid/margin, 80)
+   because its three sliders need the clearance; cards 2 and 3 share 24/64. */
+.choice__heading--deep {
+  padding-top: var(--spacing-500);
+  padding-bottom: var(--grid-margin);
+}
+
+.choice__heading--shallow {
+  padding-top: var(--spacing-300);
+  padding-bottom: var(--spacing-800);
+}
+
+
+/* ---------- Card: infographic block ---------- */
+
+.choice__infographic {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  width: 100%;
+  padding: var(--spacing-400);
+  overflow: hidden;
+  border-radius: var(--spacing-500) var(--spacing-500) var(--radius-card) var(--radius-card);
+  background: var(--colour-blue-100);
+}
+
+/* Card 3's infographic is pinned to 220 in Figma. Cards 1 and 2 reach the
+   same height from their content, so this only matters if the copy changes. */
+.choice__infographic--fixed {
+  height: 220px;
+}
+
+.choice__infographic-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-100);
+  width: 100%;
+}
+
+.choice__infographic-title {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h5);
+  line-height: var(--line-height-heading-h5);
+  letter-spacing: var(--letter-spacing-heading-h5);
+  color: var(--text-colour-text-primary);
+}
+
+.choice__infographic-body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+  letter-spacing: var(--letter-spacing-body-sm-body);
+  color: var(--text-colour-text-secondary);
+}
+
+
+/* ---------- Card: control stacks ----------
+   Three different gaps across the three cards, all explicit in Figma:
+   sliders 24, tiers 20, and card 3's tier-plus-sliders 32. */
+
+.choice__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+  width: 100%;
+}
+
+.choice__controls--tiers {
+  gap: var(--grid-gutter);
+}
+
+.choice__controls--mixed {
+  gap: var(--spacing-400);
+}

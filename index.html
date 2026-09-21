@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/sections/header.css" />
   <link rel="stylesheet" href="css/sections/hero.css" />
   <link rel="stylesheet" href="css/sections/usps.css" />
+  <link rel="stylesheet" href="css/sections/choice.css" />
   <link rel="stylesheet" href="css/sections/image-lr.css" />
 </head>
 <body>
@@ -270,6 +271,185 @@
     </div>
   </section>
 
+  <section class="choice">
+    <div class="headline headline--centred headline--invert">
+      <div class="headline__group">
+        <span class="eyebrow eyebrow--sticker eyebrow--invert">
+          <span class="sticker sticker--blue">
+            <img class="sticker__icon" src="assets/icons/paw-sticker.svg" alt="" />
+          </span>
+          <span class="eyebrow__label">It&rsquo;s all about choice</span>
+        </span>
+
+        <div class="headline__text">
+          <h2 class="headline__heading">One cover, three ways to make it yours.</h2>
+          <p class="headline__body headline__body--lg">Every policy shares the same core cover for accident and illness.<br />You choose how much you shape it, from a ready-made package to building it yourself.</p>
+        </div>
+      </div>
+
+      <div class="headline__cta">
+        <a class="btn btn--default btn--brand" href="#">
+          <span class="btn__label">Get a Free Quote</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="choice__cards">
+
+      <!-- Card 1 — Build Your Own.
+           Slider fills are the Figma pixel widths as a share of the 363px
+           column: 145, 89 and 289. -->
+      <article class="choice__card">
+        <div class="choice__heading choice__heading--deep">
+          <span class="eyebrow eyebrow--bar">
+            <span class="sticker sticker--brand">
+              <img class="sticker__icon" src="assets/icons/arrow-right.svg" alt="" />
+            </span>
+            <span class="eyebrow__caption">Annual cover</span>
+            <span class="eyebrow__value">$15,000</span>
+          </span>
+
+          <div class="choice__controls">
+            <div class="slider" style="--slider-fill: 39.9%">
+              <div class="slider__row">
+                <span class="slider__label">Annual limit</span>
+                <span class="slider__value">$8,000</span>
+              </div>
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__handle slider__handle--pink"></div>
+              </div>
+            </div>
+
+            <div class="slider" style="--slider-fill: 24.5%">
+              <div class="slider__row">
+                <span class="slider__label">Accident excess</span>
+                <span class="slider__value">$250</span>
+              </div>
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__handle slider__handle--pink"></div>
+              </div>
+            </div>
+
+            <div class="slider" style="--slider-fill: 79.6%">
+              <div class="slider__row">
+                <span class="slider__label">Reimbursement</span>
+                <span class="slider__value">80%</span>
+              </div>
+              <div class="slider__track">
+                <div class="slider__fill"></div>
+                <div class="slider__handle slider__handle--pink"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="choice__infographic">
+          <span class="eyebrow eyebrow--sticker eyebrow--teal">
+            <span class="sticker sticker--blue">
+              <img class="sticker__icon" src="assets/icons/lightning-glyph.svg" alt="" />
+            </span>
+            <span class="eyebrow__label">Empower me</span>
+          </span>
+          <div class="choice__infographic-text">
+            <h3 class="choice__infographic-title">Build Your Own</h3>
+            <p class="choice__infographic-body">Set your annual cover, excess and reimbursement. Total control.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 — Choose a package. -->
+      <article class="choice__card">
+        <div class="choice__heading choice__heading--shallow">
+          <div class="choice__controls choice__controls--tiers">
+            <div class="tier">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Bronze</span>
+              <span class="tier__value">$5,000</span>
+            </div>
+            <div class="tier tier--selected">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Silver</span>
+              <span class="tier__value">$15,000</span>
+            </div>
+            <div class="tier">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Gold</span>
+              <span class="tier__value">$35,000</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="choice__infographic">
+          <span class="eyebrow eyebrow--sticker eyebrow--teal">
+            <span class="sticker sticker--blue">
+              <img class="sticker__icon" src="assets/icons/lightning-glyph.svg" alt="" />
+            </span>
+            <span class="eyebrow__label">Guide me</span>
+          </span>
+          <div class="choice__infographic-text">
+            <h3 class="choice__infographic-title">Choose a package</h3>
+            <p class="choice__infographic-body">Pick a ready-made tier, Bronze, Silver or Gold.<br />The fastest way to covered.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 — Package, then personalise.
+           The "Excess" slider has no value on its trailing edge. That is how
+           Figma has it (13020:15542 carries a label and nothing else) and it
+           is built as-is on instruction — flagged, not filled in. -->
+      <article class="choice__card">
+        <div class="choice__heading choice__heading--shallow">
+          <div class="choice__controls choice__controls--mixed">
+            <div class="tier tier--selected">
+              <span class="tier__radio"></span>
+              <span class="tier__label">Silver</span>
+              <span class="tier__value">$15,000</span>
+            </div>
+
+            <div class="choice__controls">
+              <div class="slider" style="--slider-fill: 8%">
+                <div class="slider__row">
+                  <span class="slider__label">Excess</span>
+                </div>
+                <div class="slider__track">
+                  <div class="slider__fill"></div>
+                  <div class="slider__handle"></div>
+                </div>
+              </div>
+
+              <div class="slider" style="--slider-fill: 13.2%">
+                <div class="slider__row">
+                  <span class="slider__label">Accident excess</span>
+                  <span class="slider__value">$250</span>
+                </div>
+                <div class="slider__track">
+                  <div class="slider__fill"></div>
+                  <div class="slider__handle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="choice__infographic choice__infographic--fixed">
+          <span class="eyebrow eyebrow--sticker eyebrow--teal">
+            <span class="sticker sticker--blue">
+              <img class="sticker__icon" src="assets/icons/lightning-glyph.svg" alt="" />
+            </span>
+            <span class="eyebrow__label">A bit of both</span>
+          </span>
+          <div class="choice__infographic-text">
+            <h3 class="choice__infographic-title">Package, then personalise</h3>
+            <p class="choice__infographic-body">Start from a tier, then adjust the few things that matter to you.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
   <section class="image-lr">
     <div class="image-lr__blob" aria-hidden="true">
       <img src="assets/shapes/image-lr-blob.svg" alt="" />
@@ -319,7 +499,7 @@
           </div>
 
           <div class="image-lr__cta">
-            <a class="btn btn--default btn--brand" href="#">
+            <a class="btn btn--default btn--brand-pink" href="#">
               <span class="btn__label">See what&rsquo;s covered</span>
             </a>
           </div>
