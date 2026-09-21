@@ -207,15 +207,18 @@ These repeat across sections. Build them once in `components.css`, then reuse.
 - **Eyebrow** — pill containing an optional sticker icon plus caption text.
   Appears in almost every section.
 - **Global / Headline** — eyebrow + heading + body + CTA. Two layouts, not one.
-  This file previously claimed it was identical everywhere; checking the frames
-  in Figma shows it is not, and that error caused two worktrees to build
+  This file previously claimed it was identical everywhere; checking all three
+  frames in Figma shows it is not, and that error caused two worktrees to build
   conflicting versions.
-  - **Split** (`.headline__lhs`) — eyebrow, heading and body left-aligned, CTA
-    pushed to the right. Used by USPs (`13013:13624`).
-  - **Centred** (`.headline__group`) — everything centred in a 902px column,
-    CTA below. Used by Page Cards (`13020:1522`).
 
-    Check the frame before assuming which one Making Choice Simple uses.
+  **Centred (`.headline__group`) is the default** — eyebrow, heading, body and
+  CTA all centred in a 902px column, CTA below the body. Used by Page Cards
+  (`13020:1522`) and Making Choice Simple (`13020:14688`).
+
+  **Split (`.headline__lhs`) is the exception, USPs only** (`13013:13624`) —
+  eyebrow, heading and body left-aligned, CTA pushed right onto the same row.
+
+  Both variants are correct and both are needed. Do not "unify" them.
 - **USP card** — icon, title, body, "Read more" link. Six instances.
 - **Sticker** — circular icon badge.
 - **Form input** — radio rows and text inputs in the quote widget.
