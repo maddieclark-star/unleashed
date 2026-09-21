@@ -127,11 +127,22 @@
 /* ---------- Dog cut-out (13020:15846) ----------
    A 1258 x 699 rect whose image fill is scaled to 106.5% / 129.64% and
    offset upwards, so the frame crops the top of the photo. The rect
-   itself overhangs the panel on three sides and is clipped by it. */
+   itself overhangs the panel on three sides and is clipped by it.
+
+   ANCHORED RIGHT for the same reason as the swoosh above. Figma has
+   this at left: -21 on a 1280 panel, which puts its trailing edge 43px
+   short of the panel's right edge:
+
+     1280 (panel) - (-21 + 1258) = 43
+
+   Expressing it as right: 43 is pixel-identical at the 1440 baseline
+   but keeps the dog tight to the right edge as the container grows,
+   rather than drifting toward the middle. The 21px left bleed stops
+   mattering above 1280 — that edge of the bitmap is transparent. */
 
 .image-lr__photo {
   position: absolute;
-  left: -21px;
+  right: 43px;
   top: 56px;
   width: 1258px;
   height: 699px;
