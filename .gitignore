@@ -16,3 +16,11 @@ npm-debug.log*
 
 # Full-resolution source photos — kept out of the repo, see assets/originals/
 assets/originals/
+
+# Claude Code worktrees live inside .claude/ — never commit them into the repo.
+# .claude/launch.json is intentionally still tracked.
+.claude/worktrees/
+
+# Per-worktree scope instructions. Each worktree owns one section and this file
+# says which. Local to the checkout, so it never conflicts on merge.
+CLAUDE.local.md
