@@ -68,3 +68,43 @@
 .btn--dark .btn__label {
   color: var(--text-colour-text-primary-invert);
 }
+
+/* Size modifier — canonical "Large" size from the UI Kit (default .btn
+   matches the header's compact size). Seen on the hero quote widget CTA. */
+.btn--lg {
+  height: auto;
+  /* 30px / 18px — Figma's own "Large" button spec, unbound to any
+     token (no value in the spacing scale matches either number). */
+  padding-inline: 30px;
+  padding-block: 18px;
+}
+.btn--lg .btn__label {
+  font-size: var(--size-button-lg-button);
+}
+
+/* ---------- Eyebrow ----------
+   Markup: <span class="eyebrow"><span class="eyebrow__label">Label</span></span>
+   A "Sticker" icon can precede the label (not needed yet — no section
+   built so far uses it) — gap is already in place for when one does.
+*/
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-150);
+  background: var(--surface-colour-surface-primary);
+  padding-inline: var(--grid-gutter);
+  padding-block: var(--spacing-150);
+  border-radius: var(--radius-button);
+}
+
+.eyebrow__label {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-body-caption);
+  line-height: var(--line-height-heading-eyebrow);
+  color: var(--text-colour-text-primary);
+  text-align: center;
+  white-space: nowrap;
+}

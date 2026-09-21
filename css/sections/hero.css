@@ -1,0 +1,416 @@
+/* ==========================================================================
+   Unleashed — Hero (default state only)
+   Figma: node 13051:17119 (copy: 13013:13422, image: 13013:13440)
+
+   Investigation note: the two "AdobeStock_189301040" rects (one outside
+   the clipped Image frame at 107,-265, one inside it at 81.6,-330) are
+   confirmed to be the SAME image fill (identical asset hash) at
+   matching positions — a deliberate bleed effect, not a duplicate. The
+   outer copy sits behind the inner clipped frame so a few px of the
+   same photo peek out into the surrounding padding. Both are kept.
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------- Copy block ---------- */
+
+.hero__copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: var(--padding-component-horizontal-xxl);
+  padding-bottom: var(--spacing-800);
+  padding-inline: var(--spacing-800);
+  /* #fffffc is unbound in Figma — decorative gradient stop only */
+  background: linear-gradient(to bottom, #fffffc 0%, var(--colour-yellow-light-100) 100%);
+}
+
+.hero__copy-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero__copy-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-150);
+  width: 100%;
+}
+
+.hero__heading-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-200);
+  width: 100%;
+}
+
+.hero__heading {
+  width: 884px;
+  max-width: 100%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  color: var(--text-colour-text-primary);
+  letter-spacing: var(--letter-spacing-heading-display);
+  /* 100px / 100px — bigger than the "Display" token (80/80). No H1
+     variable exists in Figma for this page (CLAUDE.md known issue) —
+     flagging rather than shrinking it to fit an existing token. */
+  font-size: 100px;
+  line-height: 100px;
+}
+
+.hero__body {
+  width: 595px;
+  max-width: 100%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-lg-body);
+  line-height: var(--line-height-body-lg-body);
+  letter-spacing: var(--letter-spacing-body-lg-body);
+  color: var(--text-colour-text-secondary);
+}
+
+/* ---------- Stickers (paw / WOOF / rosette+bone) ---------- */
+
+.hero__sticker {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-colour-border-invert);
+  border-radius: var(--radius-round);
+}
+
+.hero__sticker--paw {
+  left: 206px;
+  top: 2px;
+  width: 107.52px;
+  height: 107.52px;
+  padding: var(--spacing-200);
+  /* unbound in Figma — decorative only */
+  background: #84f0e3;
+  transform: rotate(-34.12deg);
+  color: var(--text-colour-text-primary);
+}
+.hero__sticker--paw svg {
+  width: 41.42px;
+  height: 41.42px;
+}
+
+.hero__sticker--woof {
+  left: 613px;
+  top: 77px;
+  padding-inline: var(--spacing-200);
+  padding-block: var(--spacing-100);
+  background: var(--colour-yellow-300);
+  border-radius: var(--radius-button);
+  transform: rotate(11.07deg);
+}
+.hero__sticker--woof span {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  color: var(--text-colour-text-primary);
+  white-space: nowrap;
+  text-align: center;
+  /* 22.358px / 31.301px in Figma — an unbound, scaled sticker instance
+     (no matching token). Rounded to whole px. */
+  font-size: 22px;
+  line-height: 31px;
+}
+
+.hero__rosette {
+  position: absolute;
+  left: 826px;
+  top: 129px;
+  width: 92.795px;
+  height: 92.795px;
+  color: var(--text-colour-text-primary);
+}
+.hero__rosette-shape {
+  position: absolute;
+  inset: 7px;
+  width: 77.32px;
+  height: 77.32px;
+}
+.hero__rosette-bone {
+  position: absolute;
+  left: 16px;
+  top: 39.73px;
+  width: 59.39px;
+  height: 57.56px;
+}
+
+/* ---------- Image container ---------- */
+
+.hero__image-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 869px;
+  padding-top: var(--spacing-800);
+  padding-inline: var(--spacing-300);
+  padding-bottom: var(--spacing-300);
+  background: var(--colour-yellow-light-100);
+}
+
+/* The unclipped bleed copy of the hero photo — sits behind the rounded
+   "Image" card and peeks out a few px into this container's padding. */
+.hero__bleed {
+  position: absolute;
+  left: 107px;
+  top: -265px;
+  width: 1226.811px;
+  height: 1110px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.hero__image {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 781px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: var(--grid-gutter);
+  background: var(--surface-colour-surface-primary);
+}
+
+.hero__image-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--colour-yellow-light-200);
+}
+
+.hero__swoosh {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.hero__swoosh--1 {
+  left: 373px;
+  top: -704px;
+  width: 1568.688px;
+  height: 1558.544px;
+}
+.hero__swoosh--1 img {
+  width: 1205.166px;
+  height: 1007.579px;
+  transform: rotate(-137.08deg);
+}
+.hero__swoosh--2 {
+  left: -803px;
+  top: -793px;
+  width: 1528.824px;
+  height: 1548.837px;
+}
+.hero__swoosh--2 img {
+  width: 1188.419px;
+  height: 993.578px;
+  transform: rotate(49.17deg) scaleY(-1);
+}
+
+/* The clipped, crisp copy of the hero photo — same asset as .hero__bleed */
+.hero__photo {
+  position: absolute;
+  left: 81.59px;
+  top: -330px;
+  width: 1226.811px;
+  height: 1110px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* ---------- Quote widget ---------- */
+
+.hero__widget-outer {
+  position: relative;
+  width: 100%;
+  padding: var(--spacing-300);
+}
+
+.hero__widget {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-400);
+  width: 100%;
+  padding: var(--spacing-300);
+  background: var(--surface-colour-surface-primary);
+  /* 12px in Figma, unbound to a radius token — closest exact spacing
+     match (--spacing-150) used instead of a raw value. */
+  border-radius: var(--spacing-150);
+  /* unbound in Figma — decorative shadow only */
+  box-shadow: 1px 4px 6.8px rgba(165, 180, 0, 0.2);
+}
+
+.hero__widget-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-200);
+  width: 100%;
+}
+
+.hero__widget-title {
+  margin: 0;
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h4);
+  line-height: var(--line-height-heading-h4);
+  letter-spacing: var(--letter-spacing-heading-h4);
+  color: var(--surface-colour-surface-invert-primary);
+  white-space: nowrap;
+}
+
+.hero__widget-disclaimer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-50);
+}
+
+.hero__widget-disclaimer-flame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: var(--size-body-caption);
+  line-height: var(--line-height-body-caption);
+}
+
+.hero__widget-disclaimer-text {
+  margin: 0;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-caption);
+  line-height: var(--line-height-body-caption);
+  letter-spacing: var(--letter-spacing-body-caption);
+  color: var(--text-colour-text-secondary);
+  white-space: nowrap;
+}
+
+.hero__widget-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-300);
+  width: 100%;
+}
+
+.hero__widget-fields {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  gap: var(--spacing-150);
+  min-width: 0;
+}
+
+.hero__input {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  /* 54px explicit in Figma — no matching token */
+  height: 54px;
+  padding: var(--grid-gutter);
+  border-radius: var(--radius-button);
+  border: 1px solid color-mix(in srgb, var(--colour-yellow-100) 50%, transparent);
+  background: var(--surface-colour-surface-primary);
+  overflow: hidden;
+}
+
+.hero__input--selected {
+  /* unbound in Figma — decorative selected-state border only */
+  border-color: #8f9c00;
+  box-shadow: 0px 1px 11.4px color-mix(in srgb, var(--colour-yellow-300) 50%, transparent);
+}
+
+.hero__input-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+}
+
+.hero__input-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.hero__input-label {
+  margin: 0;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--surface-colour-surface-invert-primary);
+  white-space: nowrap;
+}
+
+.hero__radio {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-round);
+  border: 2px solid var(--colour-yellow-500);
+  flex-shrink: 0;
+}
+
+.hero__radio--selected {
+  border: none;
+  background: var(--colour-yellow-500);
+}
+
+.hero__input--text {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border-color: color-mix(in srgb, var(--colour-yellow-100) 50%, transparent);
+}
+
+.hero__input-caption {
+  margin: 0 0 -2px;
+  width: 100%;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-sm-caption);
+  line-height: var(--line-height-body-sm-caption);
+  letter-spacing: var(--letter-spacing-body-sm-caption);
+  color: var(--colour-yellow-900);
+}
+
+.hero__input-value {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+  letter-spacing: var(--letter-spacing-body-sm-body);
+  color: var(--colour-grey-600);
+}
