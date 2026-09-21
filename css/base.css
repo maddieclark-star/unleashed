@@ -1,0 +1,42 @@
+/* ==========================================================================
+   Unleashed — Base
+   Minimal reset. Everything sizing/type/colour-related still comes
+   from tokens.css — nothing here hardcodes a value that has a token.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1, h2, h3, h4, h5, h6,
+p {
+  margin: 0;
+}
+
+body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  color: var(--text-colour-text-primary);
+  background: var(--surface-colour-surface-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

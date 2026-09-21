@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Unleashed — Shared components
+   Built once here, reused across sections. Section CSS must never
+   style these directly.
+   ========================================================================== */
+
+/* ---------- Button ----------
+   Markup: <a/button class="btn btn--{primary|secondary|dark}">
+             <span class="btn__label">Label</span>
+           </a>
+   "btn--reverse" is an additional modifier (combine with btn--primary or
+   btn--secondary) for placing that variant on an inverted surface —
+   seen on the header's "Log in" button. Default state only, no hover yet.
+*/
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--spacing-900);
+  padding-inline: var(--spacing-300);
+  padding-block: var(--spacing-150);
+  border-radius: var(--radius-button);
+  border: none;
+}
+
+.btn__label {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-button-button);
+  line-height: var(--line-height-button-default);
+  letter-spacing: var(--letter-spacing-button-default);
+}
+
+/* Primary — pink surface, white label */
+.btn--primary {
+  background: var(--cta-colour-primary-surface);
+}
+.btn--primary .btn__label {
+  color: var(--cta-colour-primary-text);
+}
+.btn--primary.btn--reverse {
+  background: var(--cta-colour-primary-invert-surface);
+}
+.btn--primary.btn--reverse .btn__label {
+  color: var(--cta-colour-primary-invert-text);
+}
+
+/* Secondary — outline only */
+.btn--secondary {
+  background: transparent;
+  border: 1px solid var(--cta-colour-secondary-border);
+}
+.btn--secondary .btn__label {
+  color: var(--cta-colour-secondary-text);
+}
+.btn--secondary.btn--reverse {
+  border-color: var(--cta-colour-secondary-invert-border);
+}
+.btn--secondary.btn--reverse .btn__label {
+  color: var(--cta-colour-secondary-invert-text);
+}
+
+/* Dark — solid invert surface, e.g. header CTA on a light bar */
+.btn--dark {
+  background: var(--surface-colour-surface-invert-primary);
+}
+.btn--dark .btn__label {
+  color: var(--text-colour-text-primary-invert);
+}

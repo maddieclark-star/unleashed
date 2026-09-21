@@ -1,0 +1,307 @@
+/* ==========================================================================
+   Unleashed — Design Tokens
+   Generated from Figma variables.
+   File: JzejwyXBuPraJIwQD2ayT9 (Unleashed - Website Design)
+
+   Do not hardcode values anywhere else. If a value you need is missing,
+   add it to Figma first, then regenerate this file.
+   ========================================================================== */
+
+:root {
+
+  /* ---------- Colour ramps ---------- */
+
+  /* Blue — brand anchored at 500 */
+  --colour-blue-100: #d7fef9;
+  --colour-blue-200: #b0fdf4;
+  --colour-blue-300: #74fbeb;
+  --colour-blue-500-brand: #08f4d7;
+  --colour-blue-800: #048676;
+  --colour-blue-900: #02312c;
+  --colour-blue-950: #01201d;
+
+  /* Pink — brand anchored at 400 */
+  --colour-pink-50: #fff8fe;
+  --colour-pink-100: #ffe9fd;
+  --colour-pink-200: #ffcafc;
+  --colour-pink-300: #ff90fb;
+  --colour-pink-400-brand: #f926f9;
+  --colour-pink-800: #950095;
+  --colour-pink-900: #580058;
+  --colour-pink-950: #310031;
+
+  /* Yellow */
+  --colour-yellow-100: #e0f504;
+  --colour-yellow-200: #cee105;
+  --colour-yellow-300: #b1c107;
+  --colour-yellow-500: #758004;
+  --colour-yellow-600: #6b7506;
+  --colour-yellow-700: #667005;
+  --colour-yellow-900: #2a2e00;
+
+  /* Yellow light — brand anchored at 50 */
+  --colour-yellow-light-50-brand: #fefff2;
+  --colour-yellow-light-100: #fdffe5;
+  --colour-yellow-light-200: #f9ffb2;
+
+  /* Grey */
+  --colour-grey-50: #f2f2f2;
+  --colour-grey-100: #e5e5e5;
+  --colour-grey-200: #cccccc;
+  --colour-grey-600: #5c5c5c;
+
+
+  /* ---------- Semantic colour ---------- */
+
+  --text-colour-text-primary: #0b0b07;
+  --text-colour-text-secondary: #5f5f57;
+  --text-colour-text-primary-invert: #ffffff;
+  --text-colour-text-secondary-invert: #c7c7c4;
+  --text-colour-text-link-invert: #ffffff;
+
+  --surface-colour-surface-primary: #ffffff;
+  --surface-colour-surface-accent-light: #eaff00;
+  --surface-colour-surface-accent-dark: #f926f9;
+  --surface-colour-surface-invert-primary: #22221d;
+  --surface-colour-surface-invert-secondary: #000000;
+
+  --border-colour-border-secondary: #cccccc;
+  --border-colour-border-invert: #ffffff;
+  --border-colour-border-invert-secondary: #ffffff33;
+
+  --cta-colour-primary-text: #ffffff;
+  --cta-colour-primary-surface: #f926f9;
+  --cta-colour-primary-invert-text: #0b0b07;
+  --cta-colour-primary-invert-surface: #eaff00;
+  --cta-colour-secondary-text: #0b0b07;
+  --cta-colour-secondary-border: #0b0b07;
+  --cta-colour-secondary-invert-text: #ffffff;
+  --cta-colour-secondary-invert-border: #ffffff;
+
+
+  /* ---------- Typography ---------- */
+
+  --typography-heading-font-family: "Geologica", sans-serif;
+  --typography-body-font-family: "Geologica", sans-serif;
+
+  --typography-heading-weight: 700;   /* Bold */
+  --typography-body-weight: 300;      /* Light */
+  --typography-body-weight-strong: 500; /* Medium */
+
+  /* Heading sizes */
+  --size-heading-display: 80px;
+  --size-heading-h2: 44px;
+  --size-heading-h4: 28px;
+  --size-heading-h5: 24px;
+  --size-heading-h6: 20px;
+
+  --line-height-heading-display: 80px;
+  --line-height-heading-h2: 48px;
+  --line-height-heading-h4: 36px;
+  --line-height-heading-h5: 32px;
+  --line-height-heading-h6: 28px;
+  --line-height-heading-eyebrow: 20px;
+
+  --letter-spacing-heading-display: -2px;
+  --letter-spacing-heading-h2: -1px;
+  --letter-spacing-heading-h4: -1px;
+  --letter-spacing-heading-h5: 0;
+  --letter-spacing-heading-h6: 0;
+
+  /* Body sizes */
+  --size-body-lg-body: 20px;
+  --size-body-body: 18px;
+  --size-body-sm-body: 16px;
+  --size-body-caption: 14px;
+  --size-body-sm-caption: 12px;
+
+  --line-height-body-lg-body: 28px;
+  --line-height-body-body: 28px;
+  --line-height-body-sm-body: 24px;
+  --line-height-body-caption: 20px;
+  --line-height-body-sm-caption: 18px;
+
+  --letter-spacing-body-lg-body: 0;
+  --letter-spacing-body-body: 0;
+  --letter-spacing-body-sm-body: 0;
+  --letter-spacing-body-caption: 0;
+  --letter-spacing-body-sm-caption: 0;
+
+  /* Button text */
+  --size-button-lg-button: 18px;
+  --size-button-button: 16px;
+  --size-button-sm-button: 14px;
+  --line-height-button-default: 24px;
+  --letter-spacing-button-default: 0;
+
+  /* Form */
+  --letter-spacing-form-input: 0;
+
+
+  /* ---------- Spacing ---------- */
+
+  --spacing-25: 2px;
+  --spacing-50: 4px;
+  --spacing-100: 8px;
+  --spacing-150: 12px;
+  --spacing-200: 16px;
+  --spacing-300: 24px;
+  --spacing-400: 32px;
+  --spacing-500: 40px;
+  --spacing-600: 48px;
+  --spacing-800: 64px;
+  --spacing-900: 44px;   /* NOTE: out of sequence, verify in Figma */
+  --spacing-1000: 80px;
+  --spacing-1400: 64px;  /* NOTE: duplicates spacing-800, verify in Figma */
+  --spacing-1500: 120px;
+
+  --padding-component-horizontal-xxl: 180px;
+  --padding-component-vertical-lg: 120px;
+
+
+  /* ---------- Radius ---------- */
+
+  --radius-round: 1000px;
+  --radius-button: 1000px;
+  --radius-card: 16px;
+  --radius-image: 16px;
+  --radius-sm-card: 8px;
+  --radius-form: 8px;
+  --radius-100: 8px;
+
+
+  /* ---------- Grid ---------- */
+
+  --grid-columns: 12;
+  --grid-gutter: 20px;
+  --grid-margin: 80px;
+  --grid-screen-size: 1440px;
+  --grid-max-container-size: 1920px;
+
+  /* Two container widths are in use across the design. Both intentional. */
+  --container-1280: 1280px;  /* 80px margins  — USPs, Page Cards, Image L/R */
+  --container-1312: 1312px;  /* 64px margins  — Header, Hero, Making Choice Simple */
+}
+
+
+/* ==========================================================================
+   Composite type styles
+   Apply these rather than setting font properties individually.
+   ========================================================================== */
+
+.type-display {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-display);
+  line-height: var(--line-height-heading-display);
+  letter-spacing: var(--letter-spacing-heading-display);
+}
+
+.type-h2 {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h2);
+  line-height: var(--line-height-heading-h2);
+  letter-spacing: var(--letter-spacing-heading-h2);
+}
+
+.type-h4 {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h4);
+  line-height: var(--line-height-heading-h4);
+  letter-spacing: var(--letter-spacing-heading-h4);
+}
+
+.type-h5 {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h5);
+  line-height: var(--line-height-heading-h5);
+  letter-spacing: var(--letter-spacing-heading-h5);
+}
+
+.type-h6 {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h6);
+  line-height: var(--line-height-heading-h6);
+  letter-spacing: var(--letter-spacing-heading-h6);
+}
+
+.type-lg-body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-lg-body);
+  line-height: var(--line-height-body-lg-body);
+}
+
+.type-body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+}
+
+.type-body-bold {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+}
+
+.type-sm-body {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+}
+
+.type-caption {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-caption);
+  line-height: var(--line-height-body-caption);
+}
+
+.type-caption-bold {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-caption);
+  line-height: var(--line-height-body-caption);
+}
+
+.type-sm-caption {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-caption);
+  line-height: var(--line-height-body-sm-caption);
+}
+
+.type-sm-caption-bold {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-sm-caption);
+  line-height: var(--line-height-body-sm-caption);
+}
+
+.type-button {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-button-button);
+  line-height: var(--line-height-button-default);
+}
+
+.type-lg-button {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-button-lg-button);
+  line-height: var(--line-height-button-default);
+}
+
+.type-sm-button {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-button-sm-button);
+  line-height: var(--line-height-button-default);
+}

@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Unleashed — Header (default state only)
+   Figma: node 13052:17120
+   ========================================================================== */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-900);
+  padding-inline: var(--spacing-1400);
+  padding-block: var(--spacing-300);
+  border-radius: var(--radius-button);
+}
+
+.header__logo {
+  flex: 1 0 0;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.header__contents {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-300);
+  flex-shrink: 0;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-25);
+}
+
+.header__nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-50);
+  padding-inline: var(--spacing-200);
+  padding-block: var(--spacing-150);
+  border-radius: var(--radius-form);
+  color: var(--surface-colour-surface-invert-primary);
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+  letter-spacing: var(--letter-spacing-body-sm-body);
+}
+
+.header__nav-icon {
+  flex-shrink: 0;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+}
