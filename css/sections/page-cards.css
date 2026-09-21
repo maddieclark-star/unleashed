@@ -1,0 +1,321 @@
+/* ==========================================================================
+   Unleashed — Page Cards
+   Figma: 13020:1522 (1440 x 1846). Container 1280 / 80px margins.
+   Dog card 13020:13016, cat card 13101:9916.
+
+   Two cards, identical shells, stacked with a 64px gap. Each is a copy
+   panel plus a media panel.
+
+   The copy panel carries two brand shapes behind the text — the same
+   glyph as the swooshes, in pink/950 at 24%, clipped to the panel.
+
+   The media panel is a layered composite: a pale rect, the photograph,
+   brand swooshes, and a cut-out of the same animal laid back over the
+   top so it reads above the swooshes. On the dog card a second copy of
+   that cut-out sits behind the panels at card level, which is what lets
+   the legs and tail bleed out over the purple and clip to the card
+   rather than the panel. The cat card has no bleed layer.
+
+   Every vector here — swooshes and brand shapes alike — is the same
+   exported glyph at different scales and rotations.
+   ========================================================================== */
+
+.page-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-800);
+  padding-block: var(--padding-component-vertical-lg);
+  padding-inline: var(--grid-margin);
+  background: linear-gradient(
+    to bottom,
+    var(--colour-yellow-light-50-brand) 0%,
+    var(--colour-pink-100) 34.308%
+  );
+}
+
+/* Holds the two cards. Becomes the pinned element when the scroll-driven
+   card swap lands at build step 13 — the cards themselves won't need to
+   change, so this stays a plain flow container for now. */
+.page-cards__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-800);
+  inline-size: 100%;
+}
+
+
+/* ---------- Card shell ---------- */
+
+.page-cards__card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  block-size: 619px;
+  padding: var(--spacing-300);
+  border-radius: var(--radius-100);
+  background: var(--colour-pink-800);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.page-cards__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--grid-gutter);
+  flex: 1 0 0;
+  min-inline-size: 0;
+  block-size: 100%;
+  overflow: hidden;
+}
+
+
+/* ---------- Copy panel ---------- */
+
+.page-cards__copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-400);
+  flex: none;
+  inline-size: 567px;
+  block-size: 100%;
+  /* 36px left inset is unbound in Figma — no spacing token matches. */
+  padding: var(--spacing-400) var(--spacing-600) var(--spacing-400) 36px;
+  border-radius: var(--radius-card);
+  background: var(--colour-pink-900);
+  overflow: hidden;
+}
+
+/* Brand shapes behind the text. Same glyph as the swooshes, used as a
+   mask so the fill can stay a token with an opacity override rather
+   than a resolved hex. Sizes and rotations are unbound in Figma. */
+.page-cards__brand-shape {
+  position: absolute;
+  z-index: 0;
+  background: color-mix(in srgb, var(--colour-pink-950) 24%, transparent);
+  -webkit-mask-image: url("../../assets/shapes/page-card-swoosh.svg");
+  mask-image: url("../../assets/shapes/page-card-swoosh.svg");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.page-cards__brand-shape--1 {
+  left: 206.801px;
+  top: 653.192px;
+  inline-size: 780.999px;
+  block-size: 650.808px;
+  transform: translate(-50%, -50%) rotate(-46.97deg);
+}
+
+.page-cards__brand-shape--2 {
+  left: 56.138px;
+  top: -116.194px;
+  inline-size: 649.936px;
+  block-size: 541.593px;
+  transform: translate(-50%, -50%) rotate(151.95deg);
+}
+
+/* Text and CTA are positioned so they paint above the absolutely
+   positioned shapes rather than under them. */
+.page-cards__copy-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-200);
+  inline-size: 483px;
+  text-align: center;
+}
+
+.page-cards__title {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h2);
+  line-height: var(--line-height-heading-h2);
+  letter-spacing: var(--letter-spacing-heading-h2);
+  color: var(--text-colour-text-primary-invert);
+  white-space: nowrap;
+}
+
+.page-cards__desc {
+  inline-size: 386px;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-lg-body);
+  line-height: var(--line-height-body-lg-body);
+  letter-spacing: var(--letter-spacing-body-lg-body);
+  color: color-mix(in srgb, var(--text-colour-text-primary-invert) 80%, transparent);
+}
+
+.page-cards__cta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--spacing-200);
+}
+
+
+/* ---------- Media panel ---------- */
+
+.page-cards__media {
+  position: relative;
+  flex: 1 0 0;
+  min-inline-size: 0;
+  block-size: 100%;
+  border-radius: var(--radius-image);
+  background: var(--colour-pink-50);
+  overflow: hidden;
+}
+
+.page-cards__swoosh {
+  position: absolute;
+  max-inline-size: none;
+}
+
+/* Photo and cut-out both hang well past the panel on every side, so each
+   is a fixed-size window with the image offset inside it. */
+.page-cards__frame {
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-cards__frame img {
+  position: absolute;
+  max-inline-size: none;
+}
+
+
+/* ---------- Dog card ---------- */
+
+.page-cards__card--dog .page-cards__photo {
+  position: absolute;
+  top: -35.9%;
+  bottom: -72.15%;
+  left: calc(50% + 3px);
+  transform: translateX(-50%);
+  /* 1188 tall at the 1993:3000 crop Figma places it at */
+  inline-size: 789.19px;
+  max-inline-size: none;
+  object-fit: cover;
+}
+
+.page-cards__card--dog .page-cards__swoosh--1 {
+  left: 232.147px;
+  top: 377.556px;
+  inline-size: 701.105px;
+  block-size: 584.233px;
+  transform: translate(-50%, -50%) rotate(136.1deg);
+}
+
+.page-cards__card--dog .page-cards__swoosh--2 {
+  left: 716.836px;
+  top: 3.057px;
+  inline-size: 701.105px;
+  block-size: 584.233px;
+  transform: translate(-50%, -50%) rotate(-52.1deg);
+}
+
+/* Cut-out re-laid above the swooshes, in register with the photograph
+   beneath. Figma crops it to 635 of its 789px width. */
+.page-cards__card--dog .page-cards__cutout {
+  top: -35.9%;
+  bottom: -72.15%;
+  left: calc(50% - 74px);
+  transform: translateX(-50%);
+  aspect-ratio: 635 / 1188;
+}
+
+.page-cards__card--dog .page-cards__cutout img {
+  top: 0;
+  left: -0.04%;
+  inline-size: 124.33%;
+  block-size: 100%;
+}
+
+/* The same cut-out again, behind the panels at card level, so the parts
+   of the dog outside the media panel still draw. */
+.page-cards__bleed {
+  position: absolute;
+  z-index: 1;
+  top: -29.24%;
+  bottom: -62.68%;
+  left: calc(50% + 253.5px);
+  transform: translateX(-50%);
+  aspect-ratio: 573 / 1188;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-cards__bleed img {
+  position: absolute;
+  top: 0;
+  left: -11.72%;
+  inline-size: 137.76%;
+  block-size: 99.99%;
+  max-inline-size: none;
+}
+
+
+/* ---------- Cat card ----------
+   Photo and cut-out share one framing: both windows sit at the same x,
+   and both hold the image at 951.6 x 740 offset (-71, +151), so the
+   cut-out lands exactly over the cat in the photograph beneath. */
+
+.page-cards__card--cat .page-cards__photo {
+  top: -35.9%;
+  bottom: -72.15%;
+  left: 50%;
+  transform: translateX(-50%);
+  inline-size: 789.19px;
+}
+
+.page-cards__card--cat .page-cards__photo img {
+  top: 12.71%;
+  left: -9%;
+  inline-size: 120.62%;
+  block-size: 62.29%;
+}
+
+.page-cards__card--cat .page-cards__swoosh--1 {
+  left: 665.411px;
+  top: -96.055px;
+  inline-size: 928.457px;
+  block-size: 773.686px;
+  transform: translate(-50%, -50%) rotate(-52.1deg);
+}
+
+.page-cards__card--cat .page-cards__cutout {
+  top: -35.9%;
+  bottom: 0;
+  left: calc(50% - 71px);
+  transform: translateX(-50%);
+  inline-size: 647px;
+}
+
+.page-cards__card--cat .page-cards__cutout img {
+  top: 19.46%;
+  left: -10.98%;
+  inline-size: 147.09%;
+  block-size: 95.36%;
+}
+
+/* This one sits above the cut-out in Figma, not below it. */
+.page-cards__card--cat .page-cards__swoosh--2 {
+  left: 0.375px;
+  top: 424.385px;
+  inline-size: 728.735px;
+  block-size: 607.257px;
+  transform: translate(-50%, -50%) rotate(162deg);
+}

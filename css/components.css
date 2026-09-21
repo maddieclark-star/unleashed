@@ -777,3 +777,22 @@
 .eyebrow--raised-pink {
   box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-pink-800) 14%, transparent);
 }
+
+
+/* Accent pink — Page Cards' card CTAs (13020:3145, 13020:14041).
+
+   NAMING: renders identically to .btn--brand-pink above — both are
+   #f926f9 with a dark label. They are kept apart because Figma binds
+   them to DIFFERENT tokens: the CTA banner uses colour/pink/400-brand,
+   Page Cards uses surface-colour/surface-accent-dark. Same value today,
+   but collapsing them would hardcode that coincidence. Fold together in
+   the same pass that tidies --brand / --brand-pink, and only if the
+   design system confirms the two tokens are meant to move as one.
+
+   Geometry comes from .btn--default, unchanged. */
+.btn--accent {
+  background: var(--surface-colour-surface-accent-dark);
+}
+.btn--accent .btn__label {
+  color: var(--text-colour-text-primary);
+}
