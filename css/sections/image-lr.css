@@ -92,11 +92,23 @@
 
 /* ---------- Swoosh (13020:15861) ----------
    1072.614 x 794.875 rotated -134.93deg and flipped vertically. As with
-   the blob, the wrapper is the rotated bounding box Figma reports. */
+   the blob, the wrapper is the rotated bounding box Figma reports.
+
+   ANCHORED RIGHT, not left. Figma measures this from the panel's left
+   edge (left: 352 at a 1280 panel), but the container is flex: 1 and
+   only caps at 1920 — so on any viewport wider than 1440 a left anchor
+   walks the shape away from the right edge and leaves bare purple
+   behind it. The design intent is the opposite: the swoosh overshoots
+   the right edge and is clipped by it.
+
+   -392.288 is the overhang that reproduces Figma exactly at 1280:
+     352 (Figma left) + 1320.288 (width) - 1280 (panel) = 392.288
+   so at the 1440 baseline this is pixel-identical to the left anchor,
+   and it holds the shape against the edge at every width above it. */
 
 .image-lr__swoosh {
   position: absolute;
-  left: 352px;
+  right: -392.288px;
   top: -220px;
   display: grid;
   place-items: center;
