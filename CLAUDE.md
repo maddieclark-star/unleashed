@@ -172,6 +172,33 @@ When editing, touch only the files named in the request.
 
 ---
 
+## Worktree scoping
+
+Sections are built in parallel, one git worktree per section, each with its own
+chat. Worktrees cannot see each other's uncommitted work, so without discipline
+two of them will build the same section twice and collide on merge. This has
+already happened once with the USPs.
+
+**Every worktree has a `CLAUDE.local.md` naming the one section it owns.** Read it
+before doing anything. If it is missing, stop and ask which section this worktree
+is for — do not infer it from whatever looks unfinished.
+
+Rules that follow from it:
+
+- **Build only your own section.** If your section needs a component that does not
+  exist yet, build it — but say so in your summary, because another worktree may be
+  building it too.
+- **`components.css` and `index.html` are shared.** Every section touches both, so
+  they are where merges break. Append your block; never reorder, reformat or
+  "tidy" rules that were already there. A diff that only adds is a diff that merges.
+- **Never edit files outside your own checkout.** Sibling worktrees live under
+  `.claude/worktrees/`. Editing into one from another writes onto the wrong branch.
+- **Rebase, don't guess.** If the hero or a shared component looks out of date, it
+  probably is — your worktree branched before the fix was committed. Merge `main`
+  in rather than rebuilding it.
+
+---
+
 ## Shared components
 
 These repeat across sections. Build them once in `components.css`, then reuse.
