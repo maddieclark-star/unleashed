@@ -16,3 +16,6 @@ npm-debug.log*
 
 # Full-resolution source photos — kept out of the repo, see assets/originals/
 assets/originals/
+
+# Per-worktree scope instructions — local to this checkout.
+CLAUDE.local.md
