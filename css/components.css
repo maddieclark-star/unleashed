@@ -731,3 +731,37 @@
 .tier--selected .tier__value {
   color: var(--text-colour-text-primary);
 }
+
+
+/* ==========================================================================
+   Added for the CTA banner (13086:9444).
+   Everything below is additive — no rule above this line was touched.
+   ========================================================================== */
+
+
+/* ---------- Paw sticker teal ----------
+   #84f0e3 is unbound in Figma and matches no step on the blue ramp
+   (blue/300 is #74fbeb). It backs the paw sticker's pill in both the hero
+   (13051:17119) and this CTA banner, so per CLAUDE.md's colour rules it is
+   no longer a one-off decorative hardcode.
+
+   Lives here rather than in tokens.css for the same reason as the teal
+   shadow family above: no Figma variable backs it, and inventing a token
+   name would create the drift those rules warn about.
+
+   hero.css still carries its own literal. Left alone deliberately — that
+   section wasn't in scope. Worth pointing both at this on the next pass. */
+:root {
+  --sticker-paw-teal: #84f0e3;
+}
+
+
+/* ---------- Button: accent outline ----------
+   The CTA banner's "Get a Free Quote" (13086:9459) is a secondary Button
+   with its border rebound to colour/yellow/300, keeping the secondary text
+   colour. Same shape of instance-level override as .btn--quiet above, so it
+   follows the same pattern rather than becoming a new colour variant. */
+
+.btn--secondary.btn--accent {
+  border-color: var(--colour-yellow-300);
+}

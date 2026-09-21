@@ -111,18 +111,26 @@
   --letter-spacing-heading-h6: 0;
 
   /* Body sizes */
+  /* Intro (24/32) is a real Figma style — Body/Intro, bound to
+     size/body/intro, line-height/body/intro and letter-spacing/body/intro.
+     It was simply missing from this file, which predates it. It shares its
+     metrics with Heading/H5 but is set Light, not Bold, so it is a body
+     style and belongs here. First used by the CTA banner (13086:9444). */
+  --size-body-intro: 24px;
   --size-body-lg-body: 20px;
   --size-body-body: 18px;
   --size-body-sm-body: 16px;
   --size-body-caption: 14px;
   --size-body-sm-caption: 12px;
 
+  --line-height-body-intro: 32px;
   --line-height-body-lg-body: 28px;
   --line-height-body-body: 28px;
   --line-height-body-sm-body: 24px;
   --line-height-body-caption: 20px;
   --line-height-body-sm-caption: 18px;
 
+  --letter-spacing-body-intro: 0;
   --letter-spacing-body-lg-body: 0;
   --letter-spacing-body-body: 0;
   --letter-spacing-body-sm-body: 0;
@@ -237,6 +245,14 @@
   font-size: var(--size-heading-h6);
   line-height: var(--line-height-heading-h6);
   letter-spacing: var(--letter-spacing-heading-h6);
+}
+
+.type-intro {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-intro);
+  line-height: var(--line-height-body-intro);
+  letter-spacing: var(--letter-spacing-body-intro);
 }
 
 .type-lg-body {
