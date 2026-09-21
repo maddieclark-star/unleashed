@@ -32,17 +32,23 @@ These are non-negotiable. Do not deviate without asking.
 
 File: https://www.figma.com/design/JzejwyXBuPraJIwQD2ayT9/Unleashed---Website-Design
 
-Page frame: `13013:13421` (1440 x 6108)
+Page frame: `13013:13421`
 
 | # | Section | Node ID | Height |
 |---|---------|---------|--------|
 | 1 | Header / primary nav | `13052:17120` | 96 |
-| 2 | Hero (copy + image) | `13051:17119` | 1441 |
+| 2 | Hero (copy + image) | `13051:17119` | 1451 |
 | 3 | USPs (6 cards) | `13013:13624` | 1060 |
-| 4 | Page Cards (dog / cat) | `13020:1522` | 1163 |
+| 4 | Page Cards (dog / cat) | `13020:1522` | 1846 |
 | 5 | Making Choice Simple | `13020:14688` | 1024 |
 | 6 | Image Left Right | `13020:15604` | 924 |
-| 7 | Final CTA | `13020:15903` | 496 |
+| 7 | Final CTA | `13020:15903` | 500 |
+
+Heights re-read from Figma 2026-09-22. The earlier figures in this table
+(hero 1441, page cards 1163, CTA 496) were stale — the design had moved on,
+and page cards in particular had grown by nearly 700px. **Re-read the node
+before treating any height here as truth**; do not "fix" a section to match
+this table without checking Figma first.
 
 Always read the design via the Figma MCP before building. Screenshots alone are not
 enough for pixel accuracy.
