@@ -116,6 +116,32 @@
    These resolve to the original 347 / 611 / 850 at 1440 exactly, so the
    1440 baseline is unchanged — the stickers now just travel with the
    words instead of with the viewport edge.
+
+   A caution on where 347 / 611 / 850 come from, because it looks wrong.
+   Figma's metadata reports x = 347 / 623.421 / 918.905 for these three
+   nodes, i.e. WOOF and the rosette appear to be 12.4px and 68.9px out.
+   They are not. For a ROTATED node Figma reports the translated top-left
+   CORNER of the rotated box, not the left edge of its axis-aligned
+   bounding box — and the AABB left is what an unrotated CSS wrapper
+   needs. Rotating each box's own top-left corner about its centre
+   reproduces Figma's number to within 0.002px:
+
+     paw     400.76 + rot(-38.710, -38.710, -34.12°).x = 347.000  (reports 347)
+     WOOF    666.47 + rot(-51.000, -24.000,  15.00°).x = 623.422  (reports 623.421)
+     rosette 909.07 + rot(-42.344, -42.344,  54.45°).x = 918.903  (reports 918.905)
+
+   The paw agrees with its AABB left only by coincidence: for a square at
+   a negative rotation that corner IS the leftmost point, so the two
+   collapse to the same value. It is not evidence the other two are wrong.
+
+   Inverting the AABBs confirms it from the other direction — 110.947 x
+   72.76 at 15° is a 102 x 48 pill, which is exactly what our padding
+   tokens plus H6 line-height render, and 118.142 at 54.45° is the 84.689
+   asset noted below. Porting Figma's x verbatim drops WOOF onto the "y"
+   descender of "healthy," and floats the rosette off the comma.
+
+   Verified in-browser at 1440: box left in container = 347 / 611 / 850.
+   Do not "fix" these against Figma's reported x.
 */
 
 .hero__sticker {
