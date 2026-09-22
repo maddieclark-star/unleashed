@@ -136,13 +136,20 @@ Never resolve a token to its hex "for clarity". If a token exists, use the token
 
 ## Layout
 
-Two container widths are in use:
+**One container width: 1280, with 80px page margins.** Every section uses it.
+Set it with `padding-inline: var(--grid-margin)` on the section root — never a
+raw 64 or 80, and never `spacing/800` / `spacing/1400`, which happen to equal
+64 and will drift back.
 
-- **1280** with 80px margins: USPs, Page Cards, Image Left Right
-- **1312** with 64px margins: Header, Hero, Making Choice Simple
+Figma is NOT the source of truth here. The file has two widths — 1280/80 on
+USPs, Page Cards and Image Left Right, but 1312/64 on Header, Hero and Making
+Choice Simple — and this used to say both were intentional. They are not: the
+64s were normalised to 80 on request, because the step between sections was
+visible on the built page. If a Figma frame shows 64, it is out of date.
 
-Both are intentional until stated otherwise. Use whichever the section's Figma frame
-uses. Do not normalise them without asking.
+Applies to the section's horizontal page margin only. Vertical padding and
+inner component padding still come from their own Figma values, and several of
+those legitimately use `spacing/800` — check the axis before changing one.
 
 The **Footer is on neither**. It is a card inset 24px left, right and bottom from
 the 1440 edge, so its inner width is 1392 and its own 80px padding is measured from

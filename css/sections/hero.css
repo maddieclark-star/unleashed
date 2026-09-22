@@ -33,7 +33,9 @@
      top and bottom, 240 total vs Figma's 244 — a 4px difference, not a
      shrink. Don't "correct" this back to 180/64 at pixel QA. */
   padding-block: var(--padding-component-vertical-lg);
-  padding-inline: var(--spacing-800);
+  /* 80px page margin, normalised across all sections on request.
+     Figma has this frame at 64 (spacing/800) on a 1312 container. */
+  padding-inline: var(--grid-margin);
   /* #fffffc is unbound in Figma — decorative gradient stop only */
   background: linear-gradient(to bottom, #fffffc 0%, var(--colour-yellow-light-100) 100%);
 }

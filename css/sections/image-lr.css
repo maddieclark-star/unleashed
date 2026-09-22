@@ -73,6 +73,12 @@
      container and the card inside it use different corner radii. */
   border-radius: 20px;
   overflow: hidden;
+  /* Reference for the swoosh's cqw units. Deliberately here and not on
+     the panel: cqw resolves against the container's CONTENT box, and the
+     panel carries 24px of padding, which would make 100cqw = 1232 rather
+     than the 1280 Figma measures against. This element has no padding
+     and the panel fills it, so its content box IS the panel's box. */
+  container-type: inline-size;
 }
 
 /* ---------- Panel (13020:15611, "Content") ---------- */
@@ -92,22 +98,44 @@
 
 /* ---------- Swoosh (13020:15861) ----------
    1072.614 x 794.875 rotated -134.93deg and flipped vertically. As with
-   the blob, the wrapper is the rotated bounding box Figma reports. */
+   the blob, the wrapper is the rotated bounding box Figma reports.
+
+   SIZE scales with the panel, POSITION does not. Figma's numbers are px
+   against a 1280 panel; left at fixed px made the shape read as
+   undersized as the panel grew, but scaling left too (27.5cqw) walked
+   its tail out from behind the card — 221px of overlap at 1440 fell to
+   118px at 1728 and the tail escaped entirely by 2080.
+
+   The asymmetry is the point: the card is a FIXED 655 wide sitting at a
+   fixed 24 from the panel's left edge, so the thing the tail has to
+   hide behind never moves. Pinning left at Figma's literal 352px keeps
+   the tail tucked by ~200px at every width, while the cqw size keeps
+   the shape growing with the panel and overflowing the right edge.
+
+     left    352                        px, fixed — see above
+     top    -220      / 1280 = -17.1875cqw
+     width  1320.288  / 1280 = 103.1475cqw
+     height 1320.738  / 1280 = 103.1827cqw
+     img w  1072.614  / 1280 =  83.7980cqw
+     img h   794.875  / 1280 =  62.0996cqw
+
+   The inner img has to scale too — leaving it in px would resize the
+   wrapper box and nothing else. */
 
 .image-lr__swoosh {
   position: absolute;
   left: 352px;
-  top: -220px;
+  top: -17.1875cqw;
   display: grid;
   place-items: center;
-  width: 1320.288px;
-  height: 1320.738px;
+  width: 103.1475cqw;
+  height: 103.1827cqw;
   pointer-events: none;
 }
 
 .image-lr__swoosh img {
-  width: 1072.614px;
-  height: 794.875px;
+  width: 83.798cqw;
+  height: 62.0996cqw;
   max-width: none;
   transform: rotate(-134.93deg) scaleY(-1);
 }
@@ -115,11 +143,25 @@
 /* ---------- Dog cut-out (13020:15846) ----------
    A 1258 x 699 rect whose image fill is scaled to 106.5% / 129.64% and
    offset upwards, so the frame crops the top of the photo. The rect
-   itself overhangs the panel on three sides and is clipped by it. */
+   itself overhangs the panel on three sides and is clipped by it.
+
+   CENTRED IN THE PANEL, and deliberately NOT scaled with it the way
+   the swoosh is — the dog holds its 1258 size at every width and only
+   its position changes. Right-anchoring it (the previous attempt) shoved
+   it against the edge and clipped the near ear; centring keeps it
+   sitting in the purple.
+
+   Figma's left: -21 on a 1280 panel is already all but centred — the
+   rect's midpoint lands 32px left of the panel's. Centring exactly is
+   therefore a 32px shift at the 1440 baseline, the one place this
+   section knowingly departs from the node. On a 1258px image it is not
+   a visible difference; swap to calc(50% - 32px) if pixel-parity with
+   Figma at 1440 ever matters more than being centred. */
 
 .image-lr__photo {
   position: absolute;
-  left: -21px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 56px;
   width: 1258px;
   height: 699px;
