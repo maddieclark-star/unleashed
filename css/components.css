@@ -838,3 +838,14 @@
 .btn--accent-fill .btn__label {
   color: var(--text-colour-text-primary);
 }
+
+
+/* Accent fill, light — Page Cards' dog card CTA only (13137:12328), added
+   when the dog card moved onto the yellow colourway. Same shape as
+   --accent-fill above, bound to surface-accent-light instead of -dark. */
+.btn--accent-fill-light {
+  background: var(--surface-colour-surface-accent-light);
+}
+.btn--accent-fill-light .btn__label {
+  color: var(--text-colour-text-primary);
+}
