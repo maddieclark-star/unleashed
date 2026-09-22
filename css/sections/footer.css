@@ -1,0 +1,261 @@
+/* ==========================================================================
+   Footer — 13102:9975 (1440 x 767.403)
+
+   A white rounded card floating on a yellow gradient. Three stacked bands
+   inside the card: the fur wordmark, three link columns, and a legal bar
+   separated by a yellow hairline.
+
+   Not one of the seven page sections in CLAUDE.md — it sits below the Final
+   CTA and has its own Figma frame outside the 13013:13421 page frame.
+
+   The card is inset 24px left, right and bottom, and sits flush to the top
+   so it meets whatever section precedes it. Its inner width is therefore
+   1392, not 1280 or 1312 — the footer is not on either container width,
+   because the card edge is the margin.
+
+   Shared pieces (eyebrow, sticker) live in components.css. This file only
+   positions them and adds the footer-owned link and wordmark.
+   ========================================================================== */
+
+.footer {
+  padding-inline: var(--spacing-300);
+  padding-bottom: var(--spacing-300);
+  /* Figma: linear, bottom to top, yellow-light/200 stopping at 38.543%
+     into yellow-light/100. The odd stop is Figma's, not a rounding of ours. */
+  background: linear-gradient(
+    to top,
+    var(--colour-yellow-light-200) 38.543%,
+    var(--colour-yellow-light-100)
+  );
+}
+
+/* 24px radius is unbound in Figma — it is not radius/card (16) or any other
+   step on the radius scale. Hardcoded here rather than added to tokens.css,
+   since nothing else in the design uses it. */
+.footer__card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--surface-colour-surface-primary);
+}
+
+
+/* ---------- Wordmark band ---------- */
+
+.footer__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-block: var(--spacing-800);
+  padding-inline: var(--spacing-1000);
+}
+
+/* The lockup box Figma reports (13102:9978). 890 x 163.403 are both unbound. */
+.footer__wordmark {
+  position: relative;
+  flex-shrink: 0;
+  width: 890px;
+  height: 163.403px;
+}
+
+/* The fur texture (13102:9997) is a separate raster sitting on top of the
+   black letterforms and deliberately overhanging the lockup box — 86px to
+   the left and 27.619px above it. So the exported asset is 976 x 227.619,
+   not 890 x 163.403, and is pulled back by exactly that overhang to put the
+   letterforms where Figma has them.
+
+   Shipped as one flattened 2x PNG rather than 7 letter SVGs plus the fur,
+   because the fur is raster regardless and the lockup is decorative.
+
+   max-width overrides the global img rule in base.css, which would otherwise
+   cap the asset at the 890px box and shrink the whole lockup. */
+.footer__wordmark-img {
+  position: absolute;
+  left: -86px;
+  top: -27.619px;
+  width: 976px;
+  height: 227.619px;
+  max-width: none;
+}
+
+
+/* ---------- Link columns ---------- */
+
+.footer__links {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-400);
+  padding-inline: var(--spacing-1000);
+  padding-bottom: var(--spacing-800);
+  background: var(--surface-colour-surface-primary);
+}
+
+.footer__column {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--grid-gutter);
+  min-width: 0;
+}
+
+.footer__column-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-50);
+  width: 100%;
+}
+
+
+/* ---------- Footer link ----------
+   Footer-only, so it stays here rather than in components.css — nothing
+   outside this section uses it, and components.css is the file every
+   worktree collides on.
+
+   Figma's Footer Link instance is 38px tall: 4 + 24 + 6 + 0 + 4. The last
+   two come from a zero-height "Underline" child, which draws nothing but is
+   load-bearing for the height, so it is reproduced rather than dropped. It
+   is also the hook the hover state will need at build step 12 — growing its
+   width is the whole interaction. No transition on it yet, by design.
+
+   The 6px gap is unbound in Figma; the spacing scale jumps 4 -> 8.
+
+   Weight: the Figma component is set in Geologica Regular (400), which is
+   not a weight this site loads or tokenises. Set in body-weight (Light 300)
+   on instruction — that is what the Body/Sm Body style token it carries
+   actually resolves to. See the section notes; do not "correct" to 400. */
+
+.footer__link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding-block: var(--spacing-50);
+}
+
+.footer__link-label {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+  letter-spacing: var(--letter-spacing-body-sm-body);
+  color: var(--text-colour-text-primary);
+  white-space: nowrap;
+}
+
+.footer__link-underline {
+  width: 1px;
+  height: 0;
+}
+
+/* The two legal-bar links are Medium where the column links are Light. */
+.footer__link--strong .footer__link-label {
+  font-weight: var(--typography-body-weight-strong);
+}
+
+
+/* ---------- Eyebrow glyphs ----------
+   Each column eyebrow is a standard .eyebrow--sticker pill, so the 44px
+   frame, 37px badge and 12px gap all come from components.css untouched.
+   Only the glyph inside the badge differs per column, and .sticker centres
+   whatever it is given — so these set size alone.
+
+   Column 2's paw is the stock 21.583px .sticker__icon and needs nothing.  */
+
+/* The "Un" brandmark is two separate vectors in Figma (13102:10003 and
+   13102:10005) inside a 24.292 x 15.269 box, not one glyph. Positioned
+   rather than merged into a single file so the exported paths stay as
+   exported. All six numbers are Figma's. */
+.footer__brandmark {
+  position: relative;
+  flex-shrink: 0;
+  width: 24.292px;
+  height: 15.269px;
+}
+
+.footer__brandmark-part {
+  position: absolute;
+  max-width: none;
+}
+
+.footer__brandmark-part--u {
+  left: 0;
+  top: 0;
+  width: 11.904px;
+  height: 12.242px;
+}
+
+.footer__brandmark-part--n {
+  left: 11.139px;
+  top: 2.871px;
+  width: 13.199px;
+  height: 11.034px;
+}
+
+/* Figma nests the home glyph in a 21.583px square like the paw, but the
+   glyph's own bounds inside it are 14.389 x 15.738 and centred. Sized to
+   the glyph and left to .sticker's centring, which lands in the same place. */
+.footer__sticker-home {
+  flex-shrink: 0;
+  width: 14.389px;
+  height: 15.738px;
+}
+
+
+/* ---------- Legal bar ---------- */
+
+/* Figma draws the hairline as an inside stroke, so its 118px frame includes
+   the 1px. Here the border adds to the 40 + 38 + 40 content box, making the
+   band 119. Left as-is: honouring the stroke is worth 1px. */
+.footer__legal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  padding-block: var(--spacing-500);
+  padding-inline: var(--spacing-1000);
+  border-top: 1px solid var(--colour-yellow-100);
+  background: var(--surface-colour-surface-primary);
+}
+
+/* white-space: pre — the Figma string carries two spaces either side of each
+   middot, which HTML would otherwise collapse to one. */
+.footer__legal-copy {
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+  letter-spacing: var(--letter-spacing-body-sm-body);
+  color: var(--text-colour-text-primary);
+  white-space: pre;
+}
+
+/* 28px gap is unbound in Figma — the scale jumps 24 -> 32. */
+.footer__legal-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 28px;
+}
+
+/* The 16px box is Figma's (13102:10039); the paw inside it is 14.285 x
+   13.101 and centred. Kept as a box so the 28px gaps measure off the same
+   edges Figma measured from. */
+.footer__legal-paw {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--spacing-200);
+  height: var(--spacing-200);
+}
+
+.footer__legal-paw img {
+  width: 14.285px;
+  height: 13.101px;
+}

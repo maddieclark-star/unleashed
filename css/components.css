@@ -734,6 +734,40 @@
 
 
 /* ==========================================================================
+   Added for the CTA banner (13086:9444).
+   Everything below is additive — no rule above this line was touched.
+   ========================================================================== */
+
+
+/* ---------- Paw sticker teal ----------
+   #84f0e3 is unbound in Figma and matches no step on the blue ramp
+   (blue/300 is #74fbeb). It backs the paw sticker's pill in both the hero
+   (13051:17119) and this CTA banner, so per CLAUDE.md's colour rules it is
+   no longer a one-off decorative hardcode.
+
+   Lives here rather than in tokens.css for the same reason as the teal
+   shadow family above: no Figma variable backs it, and inventing a token
+   name would create the drift those rules warn about.
+
+   hero.css still carries its own literal. Left alone deliberately — that
+   section wasn't in scope. Worth pointing both at this on the next pass. */
+:root {
+  --sticker-paw-teal: #84f0e3;
+}
+
+
+/* ---------- Button: accent outline ----------
+   The CTA banner's "Get a Free Quote" (13086:9459) is a secondary Button
+   with its border rebound to colour/yellow/300, keeping the secondary text
+   colour. Same shape of instance-level override as .btn--quiet above, so it
+   follows the same pattern rather than becoming a new colour variant. */
+
+.btn--secondary.btn--accent {
+  border-color: var(--colour-yellow-300);
+}
+
+
+/* ==========================================================================
    Added for Image Left Right (13086:9414)
 
    Three colour-only modifiers on components that already exist above.
@@ -779,20 +813,28 @@
 }
 
 
-/* Accent pink — Page Cards' card CTAs (13020:3145, 13020:14041).
+/* Accent fill — Page Cards' card CTAs (13020:3145, 13020:14041).
+   A solid pink fill, as opposed to .btn--secondary.btn--accent above,
+   which is the CTA banner's accent OUTLINE.
 
-   NAMING: renders identically to .btn--brand-pink above — both are
-   #f926f9 with a dark label. They are kept apart because Figma binds
-   them to DIFFERENT tokens: the CTA banner uses colour/pink/400-brand,
-   Page Cards uses surface-colour/surface-accent-dark. Same value today,
-   but collapsing them would hardcode that coincidence. Fold together in
-   the same pass that tidies --brand / --brand-pink, and only if the
-   design system confirms the two tokens are meant to move as one.
+   NAMING: this was briefly called .btn--accent and that was a bug. The
+   CTA banner's button carries .btn--secondary.btn--accent, so a bare
+   .btn--accent setting a background matched it too — same specificity as
+   .btn--secondary's transparent background but later in the file, so the
+   banner's outline button rendered pink-filled. Hence --accent-fill.
+   Don't reintroduce the shorter name.
+
+   Renders identically to .btn--brand-pink — both are #f926f9 with a dark
+   label — but they are bound to DIFFERENT Figma tokens: the banner uses
+   colour/pink/400-brand, Page Cards uses surface-colour/surface-accent-dark.
+   Same value today; collapsing them would hardcode that coincidence. Fold
+   together in the same pass that tidies --brand / --brand-pink, and only
+   if the design system confirms the two tokens move as one.
 
    Geometry comes from .btn--default, unchanged. */
-.btn--accent {
+.btn--accent-fill {
   background: var(--surface-colour-surface-accent-dark);
 }
-.btn--accent .btn__label {
+.btn--accent-fill .btn__label {
   color: var(--text-colour-text-primary);
 }

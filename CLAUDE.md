@@ -32,17 +32,28 @@ These are non-negotiable. Do not deviate without asking.
 
 File: https://www.figma.com/design/JzejwyXBuPraJIwQD2ayT9/Unleashed---Website-Design
 
-Page frame: `13013:13421` (1440 x 6108)
+Page frame: `13013:13421`
 
 | # | Section | Node ID | Height |
 |---|---------|---------|--------|
 | 1 | Header / primary nav | `13052:17120` | 96 |
-| 2 | Hero (copy + image) | `13051:17119` | 1441 |
+| 2 | Hero (copy + image) | `13051:17119` | 1451 |
 | 3 | USPs (6 cards) | `13013:13624` | 1060 |
-| 4 | Page Cards (dog / cat) | `13020:1522` | 1163 |
+| 4 | Page Cards (dog / cat) | `13020:1522` | 1846 |
 | 5 | Making Choice Simple | `13020:14688` | 1024 |
 | 6 | Image Left Right | `13020:15604` | 924 |
-| 7 | Final CTA | `13020:15903` | 496 |
+| 7 | Final CTA | `13020:15903` | 500 |
+| 8 | Footer | `13102:9975` | 767 |
+
+The Footer sits **outside** the `13013:13421` page frame — it has its own top-level
+frame, unlike sections 1-7. It was built after this file was first written, so
+anything that reads as "seven sections" elsewhere predates it.
+
+Heights re-read from Figma 2026-09-22. The earlier figures in this table
+(hero 1441, page cards 1163, CTA 496) were stale — the design had moved on,
+and page cards in particular had grown by nearly 700px. **Re-read the node
+before treating any height here as truth**; do not "fix" a section to match
+this table without checking Figma first.
 
 Always read the design via the Figma MCP before building. Screenshots alone are not
 enough for pixel accuracy.
@@ -133,6 +144,11 @@ Two container widths are in use:
 Both are intentional until stated otherwise. Use whichever the section's Figma frame
 uses. Do not normalise them without asking.
 
+The **Footer is on neither**. It is a card inset 24px left, right and bottom from
+the 1440 edge, so its inner width is 1392 and its own 80px padding is measured from
+the card edge, not the page. That is the design, not a mistake — do not pull it onto
+1280 or 1312.
+
 ---
 
 ## File structure
@@ -152,7 +168,8 @@ Unleashed/
 │       ├── page-cards.css
 │       ├── choice.css
 │       ├── image-lr.css
-│       └── cta.css
+│       ├── cta.css
+│       └── footer.css
 ├── js/
 │   ├── main.js
 │   ├── scroll.js
@@ -207,7 +224,11 @@ to the preview URL to render one section by itself:
 localhost:PORT/?only=usps
 localhost:PORT/?only=hero
 localhost:PORT/?only=page-cards
+localhost:PORT/?only=footer
 ```
+
+The isolator matches `body > header`, `body > section` and `body > footer`, so the
+footer works the same way as the sections despite not being a `<section>`.
 
 **Always use your own section's URL when previewing.** No parameter, or
 `?only=all`, gives the full page — use that only when checking integration.
@@ -244,6 +265,12 @@ These repeat across sections. Build them once in `components.css`, then reuse.
 - **Form input** — radio rows and text inputs in the quote widget.
 - **Slider control** — label row, track, fill, handle. Used in Making Choice Simple.
 
+**Footer Link is deliberately not here.** It is used fourteen times but only ever
+inside the footer, so it lives in `css/sections/footer.css`. Promoting it would add
+merge surface to `components.css` for no reuse. The footer's three eyebrows do reuse
+the shared `.eyebrow--sticker .eyebrow--raised` and `.sticker` untouched — Figma's
+footer shadow is already the existing yellow/500 at 14%.
+
 ---
 
 ## Build order
@@ -257,13 +284,14 @@ These repeat across sections. Build them once in `components.css`, then reuse.
 7. Making Choice Simple
 8. Image Left Right
 9. Final CTA
-10. Pixel QA pass, all sections
-11. Lenis smooth scroll
-12. Hover and micro-interactions
-13. Scroll-triggered section animations
-14. Motion polish, easing and reduced-motion fallback
+10. Footer ✅
+11. Pixel QA pass, all sections
+12. Lenis smooth scroll
+13. Hover and micro-interactions
+14. Scroll-triggered section animations
+15. Motion polish, easing and reduced-motion fallback
 
-No animation before step 11. Lenis goes in before scroll animations, not after.
+No animation before step 12. Lenis goes in before scroll animations, not after.
 
 ---
 
@@ -290,6 +318,19 @@ Flag these rather than silently deciding:
 - **Hero image container** has deliberate bleed: image rects sit at negative offsets
   and overflow the frame. Needs `overflow: hidden` on the section and careful
   z-index against the quote widget.
+- **Footer `Footer Link` is set in Geologica Regular (400)**, which is neither in
+  `tokens.css` nor loaded in the head. Built in Light (300) on instruction — that is
+  what the `Body/Sm Body` style token it carries actually resolves to. Do not
+  "correct" it to 400 at pixel QA without adding the weight properly.
+- **Footer carries three unbound values**: the card's 24px radius (the radius scale
+  has no 24 — `card` is 16), the legal bar's 28px gap, and the 6px gap inside a
+  footer link. All hardcoded in `footer.css` with comments, per the precedent set by
+  `12.8px` and the 52/60px button heights in `components.css`.
+- **Footer links carry an empty underline element.** Figma's Footer Link has a
+  zero-height `Underline` child that draws nothing but is load-bearing for the 38px
+  row height. It is reproduced, and it is the hook the hover state needs at build
+  step 13 — growing its width is the whole interaction. Do not delete it as dead
+  markup.
 
 ---
 

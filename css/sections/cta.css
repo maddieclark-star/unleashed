@@ -1,0 +1,222 @@
+/* ==========================================================================
+   Unleashed — CTA banner (13086:9444)
+   1440 x 500. Section 7, the page's closing call to action.
+
+   Supersedes the Final CTA node listed in CLAUDE.md (13020:15903, h496) —
+   same slot, revised frame. Confirmed before building.
+
+   Figma names this frame's children RHS / Hero Container / Hero Copy: it is
+   built from a copy of the hero's copy block, not from the Global/Headline
+   component. So it is scoped here rather than reusing .headline--centred,
+   whose heading is H2 and whose column is 902 wide. Only the Eyebrow and
+   Button components are shared.
+   ========================================================================== */
+
+.cta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-500);
+  padding-top: var(--spacing-400);
+  padding-bottom: var(--spacing-1500);
+  padding-inline: var(--spacing-800);
+  /* Pink/100 into yellow-light/100, the ramp finishing at 38.462% and
+     holding flat below it. Both ends are tokens. */
+  background: linear-gradient(
+    180deg,
+    var(--colour-pink-100) 0%,
+    var(--colour-yellow-light-100) 38.462%
+  );
+}
+
+/* Height is left to the content deliberately — it resolves to exactly 500:
+   32 top + (264 copy + 32 + 52 buttons) + 120 bottom. */
+.cta__rhs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-400);
+  width: 100%;
+}
+
+/* Figma's "Hero Container" — a full-width centring row that holds a single
+   flex:1 child. Kept so the node tree survives, but it carries no geometry
+   of its own beyond the 64px gap it would apply if a second column landed
+   here later. */
+.cta__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-800);
+  width: 100%;
+}
+
+/* The 12px gaps in this section are bound in Figma to grid/columns — the
+   column COUNT (12), not a length. A mis-binding, not a 12px grid token;
+   spacing/150 is the real 12. Same applies to .cta__actions below. */
+.cta__copy {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  gap: var(--spacing-150);
+}
+
+.cta__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-200);
+  width: 100%;
+  text-align: center;
+}
+
+/* 1220 and 595 are explicit in Figma and unbound to any token. */
+.cta__heading {
+  width: 1220px;
+  max-width: 100%;
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-display);
+  line-height: var(--line-height-heading-display);
+  letter-spacing: var(--letter-spacing-heading-display);
+  color: var(--text-colour-text-primary);
+}
+
+/* Body/Intro (24/32 Light) — the style this section added to tokens.css. */
+.cta__body {
+  width: 595px;
+  max-width: 100%;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-body-intro);
+  line-height: var(--line-height-body-intro);
+  letter-spacing: var(--letter-spacing-body-intro);
+  color: var(--text-colour-text-secondary);
+}
+
+.cta__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-150);
+}
+
+
+/* ---------- Stickers ----------
+   Same three archetypes the hero carries, at the same sizes, rotations and
+   fills — paw, a word pill, and the rosette. They are duplicated here rather
+   than promoted to components.css because hero.css was not in scope for this
+   worktree; see the summary. Structure mirrors hero.css: an outer box sized
+   to the rotated pill's axis-aligned bounding box, and an inner pill that
+   carries the rotation about its own centre.
+
+   Anchoring follows the hero's reasoning too. Figma gives these as offsets
+   from the frame's left edge, which only holds at exactly 1440 — below that
+   the centred copy recentres while a left-anchored sticker does not, and the
+   stickers slide out from under the words they are placed against. So each
+   is pinned to the centre axis instead, with margin-left carrying the Figma
+   offset minus the half-width of its containing block:
+
+     paw      264 - 720 = -456     (child of .cta, 50% of 1440)
+     MEOW     611 - 656 =  -45     (child of .cta__rhs, 50% of 1312)
+     rosette  944 - 720 = +224     (child of .cta, 50% of 1440)
+
+   All three resolve to their Figma x at 1440 exactly, so the baseline is
+   unchanged — they just travel with the copy now.
+
+   MEOW lands on -45, the same offset the hero's WOOF uses. The two pills sit
+   in the same place relative to the text; only the word differs. */
+
+.cta__sticker {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta__sticker-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-colour-border-invert);
+}
+
+/* Figma binds this pill's radius to grid/screen-size (1440) — a mis-binding.
+   It is a circle; radius/round is what it means. */
+.cta__sticker--paw {
+  left: 50%;
+  margin-left: -456px;
+  top: 147px;
+  width: 107.521px;
+  height: 107.521px;
+}
+.cta__sticker--paw .cta__sticker-pill {
+  padding: var(--spacing-200);
+  background: var(--sticker-paw-teal);
+  border-radius: var(--radius-round);
+  transform: rotate(-34.12deg);
+}
+/* 41.42px is unbound in Figma. paw-sticker.svg is the same f7:paw glyph the
+   hero inlines, already carrying the #22221D fill this needs, so it is
+   reused as an <img> rather than inlining the path a second time. */
+.cta__sticker-paw {
+  width: 41.42px;
+  height: 41.42px;
+}
+
+.cta__sticker--meow {
+  left: 50%;
+  margin-left: -45px;
+  top: 109px;
+  width: 113.845px;
+  height: 73.537px;
+}
+.cta__sticker--meow .cta__sticker-pill {
+  padding-inline: var(--spacing-200);
+  padding-block: var(--spacing-100);
+  background: var(--colour-yellow-300);
+  border-radius: var(--radius-button);
+  transform: rotate(15deg);
+}
+.cta__sticker--meow span {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h6);
+  line-height: var(--line-height-heading-h6);
+  letter-spacing: var(--letter-spacing-heading-h6);
+  color: var(--text-colour-text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Rosette — unlike the hero, Figma resolves this one to a single flattened
+   asset (pink/200 blob with the invert-primary bone already inside it), so
+   it is one <img> rather than the hero's two nested layers. If the bone ever
+   needs to animate independently, this is the thing to split.
+
+   118.142 is the axis-aligned bounding box of the 84.689 square rotated
+   54.45deg (x1.395), which is why the box and the glyph differ. Both unbound. */
+.cta__rosette {
+  position: absolute;
+  left: 50%;
+  margin-left: 224px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 118.142px;
+  height: 118.142px;
+  transform: rotate(54.45deg);
+}
+
+.cta__rosette img {
+  width: 84.689px;
+  height: 84.689px;
+}
