@@ -24,8 +24,15 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: var(--padding-component-horizontal-xxl);
-  padding-bottom: var(--spacing-800);
+  /* DELIBERATE DEVIATION: Figma has this block sitting in a 582-tall
+     frame at 180px top / 64px bottom (RHS content is 338 tall) — genuinely
+     unequal, not a rounding artefact (confirmed via get_metadata). Requested
+     on review to read as evenly spaced instead. --padding-component-vertical-lg
+     (120px, semantically "component vertical padding" — a better fit here
+     than the horizontal-xxl token this used to borrow) puts equal space
+     top and bottom, 240 total vs Figma's 244 — a 4px difference, not a
+     shrink. Don't "correct" this back to 180/64 at pixel QA. */
+  padding-block: var(--padding-component-vertical-lg);
   padding-inline: var(--spacing-800);
   /* #fffffc is unbound in Figma — decorative gradient stop only */
   background: linear-gradient(to bottom, #fffffc 0%, var(--colour-yellow-light-100) 100%);
@@ -237,10 +244,15 @@
 }
 
 /* The unclipped bleed copy of the hero photo — sits behind the rounded
-   "Image" card and peeks out a few px into this container's padding. */
+   "Image" card and peeks out a few px into this container's padding.
+
+   DELIBERATE DEVIATION: left nudged +11px (107 -> 118), same delta as
+   .hero__photo below and for the same reason — see that comment. Kept
+   in sync so the sliver that peeks out past the card still lines up
+   with the photo behind it. */
 .hero__bleed {
   position: absolute;
-  left: 107px;
+  left: 118px;
   top: -265px;
   width: 1226.811px;
   height: 1110px;
@@ -274,8 +286,22 @@
   justify-content: center;
   pointer-events: none;
 }
+/* DELIBERATE DEVIATION: both swoosh vectors shifted -353px left of
+   Figma's reported position (373 -> 20, -803 -> -1156). Ported literally
+   they match Figma exactly, but the pair is much larger than the card
+   (1568/1528 wide vs a 1392 card) and mostly hangs off past its right
+   edge — rendered as designed, the visible sliver reads noticeably
+   heavier top-right (measured: 36% coverage, but the visible-pixel
+   centroid sits at x=805 against a card centre of 696, i.e. 109px off).
+   -353px is the shift that brings that centroid back to the card centre
+   (measured by rasterising both vectors at their real transforms onto a
+   1392x781 canvas and computing the alpha-weighted centroid — not a
+   guess). Both moved by the same amount, as a rigid pair, so the two
+   shapes keep their relationship to each other; only where the pair
+   sits in the card changed. Don't "correct" this back to 373/-803 at
+   pixel QA. */
 .hero__swoosh--1 {
-  left: 373px;
+  left: 20px;
   top: -704px;
   width: 1568.688px;
   height: 1558.544px;
@@ -285,9 +311,25 @@
   height: 1007.579px;
   transform: rotate(-137.08deg);
 }
+/* DELIBERATE DEVIATION: top nudged another -79px (-793 -> -872), on
+   request, to clear a stray detail — the shape has a thin pointed tip
+   that landed isolated at card-local y=80 (16px below the card's top
+   edge), floating in open background with nothing connecting it to any
+   edge, which read as a stray mark rather than part of the design.
+
+   This tip is genuinely at the shape's narrowest point (2px wide) —
+   confirmed by rasterising at a range of vertical shifts and measuring
+   the width of whatever crosses the card's top edge at each. Below an
+   ~80px shift the tip just sits at a different height, still floating
+   with a visible gap above it; past ~85px the cut moves onto the tip's
+   flared base and widens fast (86px wide by +120px of shift, worse than
+   the original). -79px is the shift that lands the tip flush with y=0
+   at that same 2px minimum — not a coincidence: it's ~10% of -793, the
+   low end of the requested 10-15% range. 15% (-119) was tried and
+   measured worse, not better — don't push this further at pixel QA. */
 .hero__swoosh--2 {
-  left: -803px;
-  top: -793px;
+  left: -1156px;
+  top: -872px;
   width: 1528.824px;
   height: 1548.837px;
 }
@@ -297,10 +339,21 @@
   transform: rotate(49.17deg) scaleY(-1);
 }
 
-/* The clipped, crisp copy of the hero photo — same asset as .hero__bleed */
+/* The clipped, crisp copy of the hero photo — same asset as .hero__bleed.
+
+   DELIBERATE DEVIATION: left nudged +11px (81.59 -> 92.59). hero-dog-image.png
+   is a transparent cutout (~73% alpha=0), so "is the dog centred" isn't
+   readable from the crop box position alone. Measured directly: composited
+   the asset at its real box (81.59, -330, 1226.811x1110) onto a 1392x781
+   canvas (matching the card) and took the alpha-weighted centroid of the
+   opaque pixels — 685px against a card centre of 696, i.e. 11px left of
+   centre. This box is small relative to the source image (object-fit:cover
+   barely crops it), so unlike the swoosh above the shift is linear — +11px
+   on the box moves the dog +11px on screen, no more solving required.
+   Don't "correct" this back to 81.59 at pixel QA. */
 .hero__photo {
   position: absolute;
-  left: 81.59px;
+  left: 92.59px;
   top: -330px;
   width: 1226.811px;
   height: 1110px;
