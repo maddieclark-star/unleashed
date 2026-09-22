@@ -14,7 +14,9 @@
    top so it reads above the swooshes. On the dog card a second copy of
    that cut-out sits behind the panels at card level, which is what lets
    the legs and tail bleed out over the purple and clip to the card
-   rather than the panel. The cat card has no bleed layer.
+   rather than the panel. The cat card has no bleed layer, and its
+   second swoosh sits ABOVE the cut-out instead of below it — see the
+   brand swooshes section below.
 
    Every vector here — swooshes and brand shapes alike — is the same
    exported glyph at different scales and rotations.
@@ -209,29 +211,51 @@
 
 
 /* ---------- Brand swooshes ----------
-   Identical on both cards: same glyph, same two sizes, same rotations,
-   and on both cards they sit UNDER the cut-out. 701.105 x 584.233 in
-   Figma; left/top are the unrotated box, rotation about its centre. */
+   Not identical between cards. The dog card uses one glyph size at two
+   rotations, both sitting UNDER the cut-out. The cat card is a
+   different composition: two different scales, and the second one
+   re-laid ABOVE the cut-out — it's after .page-cards__cutout in the
+   markup, so it paints on top with no z-index needed — which is what
+   lets the loop cross back in front of the cat's shoulder. Left/top
+   below are each glyph's unrotated box, rotation about its centre. */
 
 .page-cards__swoosh {
   position: absolute;
   max-inline-size: none;
+}
+
+.page-cards__card--dog .page-cards__swoosh {
   inline-size: 108.69845cqw;
   block-size: 90.57876cqw;
 }
 
-.page-cards__swoosh--1 {
+.page-cards__card--dog .page-cards__swoosh--1 {
   left: -18.35744cqw;
   top: 13.24643cqw;
   transform: rotate(136.1deg);
 }
 
-.page-cards__swoosh--2 {
+.page-cards__card--dog .page-cards__swoosh--2 {
   left: 56.78814cqw;
   top: -44.81543cqw;
   transform: rotate(-52.1deg);
 }
 
+.page-cards__card--cat .page-cards__swoosh--cat-1 {
+  left: 32.58566cqw;
+  top: -67.63938cqw;
+  inline-size: 129.11085cqw;
+  block-size: 107.58791cqw;
+  transform: rotate(-52.1deg);
+}
+
+.page-cards__card--cat .page-cards__swoosh--cat-2 {
+  left: -45.71008cqw;
+  top: 22.85209cqw;
+  inline-size: 99.85147cqw;
+  block-size: 83.20651cqw;
+  transform: rotate(162deg);
+}
 
 /* ---------- Dog card ---------- */
 
