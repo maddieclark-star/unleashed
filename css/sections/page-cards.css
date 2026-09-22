@@ -48,6 +48,9 @@
 /* ---------- Card shell ---------- */
 
 .page-cards__card {
+  /* query container for the bleed layer, which sits outside the media
+     panel but has to scale with it */
+  container: pc-card / inline-size;
   position: relative;
   display: flex;
   align-items: center;
@@ -167,9 +170,22 @@
 }
 
 
-/* ---------- Media panel ---------- */
+/* ---------- Media panel ----------
+   The copy panel is a fixed 567, so every pixel of extra viewport width
+   lands on the media panel: 645 wide at the 1440 baseline, 933 at 1728.
+
+   The composite is therefore sized in cqw — 1cqw is 1% of the panel's
+   own width, so 1cqw = 6.45px at the baseline and every value below is
+   just its Figma measurement divided by 6.45. Sizes AND offsets scale
+   together, so the whole arrangement grows as one piece and the
+   photography keeps reaching the panel edges at any width. Pinning any
+   of it in px is what left pale gutters on widescreen.
+
+   Percentages on the images inside a frame stay percentages: they are
+   relative to the frame, which is already scaling. */
 
 .page-cards__media {
+  container: pc-media / inline-size;
   position: relative;
   flex: 1 0 0;
   min-inline-size: 0;
@@ -179,13 +195,8 @@
   overflow: hidden;
 }
 
-.page-cards__swoosh {
-  position: absolute;
-  max-inline-size: none;
-}
-
 /* Photo and cut-out both hang well past the panel on every side, so each
-   is a fixed-size window with the image offset inside it. */
+   is a window with the image offset inside it. */
 .page-cards__frame {
   position: absolute;
   overflow: hidden;
@@ -197,44 +208,50 @@
 }
 
 
+/* ---------- Brand swooshes ----------
+   Identical on both cards: same glyph, same two sizes, same rotations,
+   and on both cards they sit UNDER the cut-out. 701.105 x 584.233 in
+   Figma; left/top are the unrotated box, rotation about its centre. */
+
+.page-cards__swoosh {
+  position: absolute;
+  max-inline-size: none;
+  inline-size: 108.69845cqw;
+  block-size: 90.57876cqw;
+}
+
+.page-cards__swoosh--1 {
+  left: -18.35744cqw;
+  top: 13.24643cqw;
+  transform: rotate(136.1deg);
+}
+
+.page-cards__swoosh--2 {
+  left: 56.78814cqw;
+  top: -44.81543cqw;
+  transform: rotate(-52.1deg);
+}
+
+
 /* ---------- Dog card ---------- */
 
 .page-cards__card--dog .page-cards__photo {
   position: absolute;
-  top: -35.9%;
-  bottom: -72.15%;
-  left: calc(50% + 3px);
-  transform: translateX(-50%);
-  /* 1188 tall at the 1993:3000 crop Figma places it at */
-  inline-size: 789.19px;
+  left: -10.71240cqw;
+  top: -31.78140cqw;
+  inline-size: 122.35504cqw;
+  block-size: 184.18605cqw;
   max-inline-size: none;
   object-fit: cover;
-}
-
-.page-cards__card--dog .page-cards__swoosh--1 {
-  left: 232.147px;
-  top: 377.556px;
-  inline-size: 701.105px;
-  block-size: 584.233px;
-  transform: translate(-50%, -50%) rotate(136.1deg);
-}
-
-.page-cards__card--dog .page-cards__swoosh--2 {
-  left: 716.836px;
-  top: 3.057px;
-  inline-size: 701.105px;
-  block-size: 584.233px;
-  transform: translate(-50%, -50%) rotate(-52.1deg);
 }
 
 /* Cut-out re-laid above the swooshes, in register with the photograph
    beneath. Figma crops it to 635 of its 789px width. */
 .page-cards__card--dog .page-cards__cutout {
-  top: -35.9%;
-  bottom: -72.15%;
-  left: calc(50% - 74px);
-  transform: translateX(-50%);
-  aspect-ratio: 635 / 1188;
+  left: -10.69767cqw;
+  top: -31.78140cqw;
+  inline-size: 98.44961cqw;
+  block-size: 184.18605cqw;
 }
 
 .page-cards__card--dog .page-cards__cutout img {
@@ -244,16 +261,63 @@
   block-size: 100%;
 }
 
-/* The same cut-out again, behind the panels at card level, so the parts
-   of the dog outside the media panel still draw. */
+
+/* ---------- Cat card ----------
+   Photo and cut-out share one framing: both windows sit at the same x
+   and hold the image at the same offset, so the cut-out lands exactly
+   over the cat in the photograph beneath. */
+
+.page-cards__card--cat .page-cards__photo {
+  left: -11.17829cqw;
+  top: -31.78140cqw;
+  inline-size: 122.35504cqw;
+  block-size: 184.18605cqw;
+}
+
+.page-cards__card--cat .page-cards__photo img {
+  top: 12.71%;
+  left: -9%;
+  inline-size: 120.62%;
+  block-size: 62.29%;
+}
+
+.page-cards__card--cat .page-cards__cutout {
+  left: -11.16279cqw;
+  top: -31.78140cqw;
+  inline-size: 100.31008cqw;
+  block-size: 120.31008cqw;
+}
+
+.page-cards__card--cat .page-cards__cutout img {
+  top: 19.46%;
+  left: -10.98%;
+  inline-size: 147.09%;
+  block-size: 95.36%;
+}
+
+
+/* ---------- Dog bleed ----------
+   The cut-out once more, behind the panels at card level, so the legs
+   and tail that fall outside the media panel still draw and clip to the
+   card instead. It has to track the media panel, which is not its own
+   containing block, so the panel's width is reconstructed here: the
+   card's content box less the copy panel (567) and the gap (20). The
+   card is the query container.
+
+   Note cqw resolves against the CONTENT box, so the card's own 24px
+   padding is already excluded — don't subtract it again. Offsets below
+   are still measured from the padding edge, which is where an absolutely
+   positioned child's containing block starts, hence the 611. */
+
 .page-cards__bleed {
+  --pc-media-w: calc(100cqw - 587px);
+
   position: absolute;
   z-index: 1;
-  top: -29.24%;
-  bottom: -62.68%;
-  left: calc(50% + 253.5px);
-  transform: translateX(-50%);
-  aspect-ratio: 573 / 1188;
+  left: calc(611px - 0.00620 * var(--pc-media-w));
+  top: calc(-0.28062 * var(--pc-media-w));
+  inline-size: calc(0.88837 * var(--pc-media-w));
+  block-size: calc(1.84186 * var(--pc-media-w));
   overflow: hidden;
   pointer-events: none;
 }
@@ -265,57 +329,4 @@
   inline-size: 137.76%;
   block-size: 99.99%;
   max-inline-size: none;
-}
-
-
-/* ---------- Cat card ----------
-   Photo and cut-out share one framing: both windows sit at the same x,
-   and both hold the image at 951.6 x 740 offset (-71, +151), so the
-   cut-out lands exactly over the cat in the photograph beneath. */
-
-.page-cards__card--cat .page-cards__photo {
-  top: -35.9%;
-  bottom: -72.15%;
-  left: 50%;
-  transform: translateX(-50%);
-  inline-size: 789.19px;
-}
-
-.page-cards__card--cat .page-cards__photo img {
-  top: 12.71%;
-  left: -9%;
-  inline-size: 120.62%;
-  block-size: 62.29%;
-}
-
-.page-cards__card--cat .page-cards__swoosh--1 {
-  left: 665.411px;
-  top: -96.055px;
-  inline-size: 928.457px;
-  block-size: 773.686px;
-  transform: translate(-50%, -50%) rotate(-52.1deg);
-}
-
-.page-cards__card--cat .page-cards__cutout {
-  top: -35.9%;
-  bottom: 0;
-  left: calc(50% - 71px);
-  transform: translateX(-50%);
-  inline-size: 647px;
-}
-
-.page-cards__card--cat .page-cards__cutout img {
-  top: 19.46%;
-  left: -10.98%;
-  inline-size: 147.09%;
-  block-size: 95.36%;
-}
-
-/* This one sits above the cut-out in Figma, not below it. */
-.page-cards__card--cat .page-cards__swoosh--2 {
-  left: 0.375px;
-  top: 424.385px;
-  inline-size: 728.735px;
-  block-size: 607.257px;
-  transform: translate(-50%, -50%) rotate(162deg);
 }
