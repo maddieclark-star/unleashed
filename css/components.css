@@ -813,20 +813,28 @@
 }
 
 
-/* Accent pink — Page Cards' card CTAs (13020:3145, 13020:14041).
+/* Accent fill — Page Cards' card CTAs (13020:3145, 13020:14041).
+   A solid pink fill, as opposed to .btn--secondary.btn--accent above,
+   which is the CTA banner's accent OUTLINE.
 
-   NAMING: renders identically to .btn--brand-pink above — both are
-   #f926f9 with a dark label. They are kept apart because Figma binds
-   them to DIFFERENT tokens: the CTA banner uses colour/pink/400-brand,
-   Page Cards uses surface-colour/surface-accent-dark. Same value today,
-   but collapsing them would hardcode that coincidence. Fold together in
-   the same pass that tidies --brand / --brand-pink, and only if the
-   design system confirms the two tokens are meant to move as one.
+   NAMING: this was briefly called .btn--accent and that was a bug. The
+   CTA banner's button carries .btn--secondary.btn--accent, so a bare
+   .btn--accent setting a background matched it too — same specificity as
+   .btn--secondary's transparent background but later in the file, so the
+   banner's outline button rendered pink-filled. Hence --accent-fill.
+   Don't reintroduce the shorter name.
+
+   Renders identically to .btn--brand-pink — both are #f926f9 with a dark
+   label — but they are bound to DIFFERENT Figma tokens: the banner uses
+   colour/pink/400-brand, Page Cards uses surface-colour/surface-accent-dark.
+   Same value today; collapsing them would hardcode that coincidence. Fold
+   together in the same pass that tidies --brand / --brand-pink, and only
+   if the design system confirms the two tokens move as one.
 
    Geometry comes from .btn--default, unchanged. */
-.btn--accent {
+.btn--accent-fill {
   background: var(--surface-colour-surface-accent-dark);
 }
-.btn--accent .btn__label {
+.btn--accent-fill .btn__label {
   color: var(--text-colour-text-primary);
 }
