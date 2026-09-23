@@ -23,11 +23,17 @@ export function initPageCards() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const update = () => {
-    /* Read the geometry from CSS rather than duplicating it, so the two
-       can't drift apart: the cat's own sticky offset is where it comes to
-       rest, and the stack's gap is how far it rises to get there. */
+    /* Read the resting point from CSS rather than duplicating it, so the
+       two can't drift apart: the cat's own sticky offset is where it comes
+       to rest. */
     const restingTop = parseFloat(getComputedStyle(cat).top) || 0;
-    const travel = parseFloat(getComputedStyle(stack).rowGap) || 0;
+
+    /* The shrink runs across the rise the cat is actually visible for —
+       bottom edge of the viewport down to its resting offset — not across
+       the stack's gap. The gap is now viewport-derived and much smaller
+       than that rise, so measuring against it would hold the dog at full
+       size for most of the climb and then snap it at the end. */
+    const travel = window.innerHeight - restingTop;
 
     /* How far the cat still has to climb. 0 once it's stuck. */
     const remaining = cat.getBoundingClientRect().top - restingTop;

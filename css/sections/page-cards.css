@@ -24,6 +24,7 @@
    ========================================================================== */
 
 .page-cards {
+  --page-cards-card-h: 619px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,7 +56,10 @@
   display: flex;
   align-items: center;
   inline-size: 100%;
-  block-size: 619px;
+  /* Held in a variable because the stacking block below has to subtract it
+     from the viewport to work out the incoming card's travel — two copies
+     of 619 would drift apart the first time the card height changes. */
+  block-size: var(--page-cards-card-h);
   padding: var(--spacing-300);
   border-radius: var(--radius-100);
   background: var(--colour-pink-800);
@@ -278,23 +282,40 @@
    (plain flow stack, no JS needed) is what reduced-motion visitors get —
    motion enhances, it never gates content.
 
-   The three lengths below have no tokens — they aren't design
-   measurements. travel is how much scroll the incoming card rises over,
+   The lengths below have no tokens — they aren't design measurements.
    hold keeps the finished stack on screen instead of letting it unstick
    the instant it lands, and peek is how much of the card beneath stays
-   visible. All tuned by eye; same precedent as --pc-media-w above. */
+   visible. Both tuned by eye; same precedent as --pc-media-w above.
+   travel is not eye-tuned — see its own note. */
 @media (prefers-reduced-motion: no-preference) {
   .page-cards__stack {
     /* Where the stack comes to rest: the first card pins this far down
        rather than flush against the top of the viewport, so the pinned
        stack keeps a margin above it instead of butting into the header. */
     --page-cards-pin-top: var(--spacing-800);
-    --page-cards-peek: 64px;
-    --page-cards-travel: 620px;
+    /* 40 on request 2026-09-23, was 64. Left raw rather than swapped for
+       --spacing-500 (which is also 40): this is the visual depth of the
+       stack, not a layout measurement, same reasoning as the note above. */
+    --page-cards-peek: 40px;
     --page-cards-hold: 360px;
 
-    /* gap IS the scroll distance the incoming card travels — plain flow
-       spacing, and the sticky cards inside do the rest. */
+    /* The gap is what separates the cards in flow, so it decides where the
+       cat sits at the moment the dog finishes pinning. Exactly one value
+       puts the cat's top edge on the viewport's bottom edge at that
+       moment: viewport, less the dog's pinned offset, less its height.
+       Anything larger parks the cat below the fold and you scroll that
+       surplus as dead space — a pinned dog over empty gradient. At 620px
+       flat that surplus was ~400px on a 900-tall window.
+
+       Deriving it from 100vh rather than picking a number keeps it at
+       zero on any window height. The floor stops very short windows from
+       collapsing the gap to nothing; below roughly 850 tall the cat
+       starts partly on screen instead, which is the better trade. */
+    --page-cards-travel: max(
+      200px,
+      calc(100vh - var(--page-cards-pin-top) - var(--page-cards-card-h))
+    );
+
     gap: var(--page-cards-travel);
   }
 
