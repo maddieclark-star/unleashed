@@ -272,17 +272,17 @@
 /* Cut-out re-laid above the swooshes, in register with the photograph
    beneath. Figma crops it to 635 of its 789px width. */
 .page-cards__card--dog .page-cards__cutout {
-  left: -10.69767cqw;
-  top: -31.78140cqw;
-  inline-size: 98.44961cqw;
-  block-size: 184.18605cqw;
+  left: -10.71811cqw;
+  top: -31.83280cqw;
+  inline-size: 108.68167cqw;
+  block-size: 184.24437cqw;
 }
 
 .page-cards__card--dog .page-cards__cutout img {
-  top: 0;
-  left: -0.04%;
-  inline-size: 124.33%;
-  block-size: 100%;
+  top: 0.03%;
+  left: -0.02%;
+  inline-size: 112.62%;
+  block-size: 99.97%;
 }
 
 
