@@ -23,17 +23,21 @@
 .usps__collection {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-200);
+  gap: var(--spacing-300);
   width: 100%;
   max-width: var(--grid-max-container-size);
 }
 
 /* Figma pins the row to items-start, but every card in it is the same
    312px tall. Stretching instead keeps the bottom edges aligned if a
-   body string wraps to a different line count at render. */
+   body string wraps to a different line count at render.
+
+   Row and collection gap set to 24px (spacing-300) on request — Figma's
+   own frame currently measures 16px (spacing-200) here. Flagging the
+   mismatch rather than silently "fixing" the Figma reading. */
 .usps__row {
   display: flex;
   align-items: stretch;
-  gap: var(--spacing-200);
+  gap: var(--spacing-300);
   width: 100%;
 }
