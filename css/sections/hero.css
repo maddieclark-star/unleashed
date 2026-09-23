@@ -56,11 +56,14 @@
      top and bottom, 240 total vs Figma's 244 — a 4px difference, not a
      shrink. Don't "correct" this back to 180/64 at pixel QA.
 
-     Bottom (gap to the image band) reduced again on request 2026-09-22 —
-     was equal to the top at 120px, now 80px (--spacing-1000). No longer
-     symmetric; that's intentional, top is unchanged. */
+     Bottom (gap to the image band) reduced twice on request: 120px -> 80px
+     (2026-09-22), then 80px -> 40px (2026-09-23) so the image crests the
+     fold 40px under the callout row. This IS that 40px gap in full — the
+     band's own padding-top is 0 for exactly that reason, so don't reinstate
+     one without taking it back off here. No longer symmetric with the top;
+     that's intentional, top is unchanged. */
   padding-top: var(--padding-component-vertical-lg);
-  padding-bottom: var(--spacing-1000);
+  padding-bottom: var(--spacing-500);
   /* 80px page margin, normalised across all sections on request.
      Figma has this frame at 64 (spacing/800) on a 1312 container. */
   padding-inline: var(--grid-margin);
@@ -581,16 +584,24 @@
   height: var(--hero-reveal-distance);
 }
 
-/* The band fills the viewport and hangs the image off its BOTTOM edge, so
-   that once it sticks, the image's bottom sits one --spacing-300 above the
-   fold — level with the condensed pill, which is pinned at the same 24px.
-   That overlap is the point: Figma 13239:24004 draws the pill over the
-   photo's lower edge (image bottom 26.6px above the frame's, pill bottom
-   level with it), and with the image top-aligned in a content-height band
-   the two could never meet — the image bottomed out 93px above the pill at
-   every scroll position, leaving the pill floating on the pale band below
-   the photo. align-items:flex-end + min-height:100vh is what closes that
-   gap without resizing the image away from its Figma dimensions. */
+/* The band fills the viewport, and the image is hung off its BOTTOM edge in
+   the expanded state, so that once the band sticks the image's bottom sits
+   one --spacing-300 above the fold — level with the condensed pill, which is
+   pinned at the same 24px. That overlap is the point: Figma 13239:24004 draws
+   the pill over the photo's lower edge (image bottom 26.6px above the
+   frame's, pill bottom level with it), and with the image top-aligned in a
+   content-height band the two could never meet — the image bottomed out 93px
+   above the pill at every scroll position, leaving the pill floating on the
+   pale band below the photo. min-height:100vh is what closes that gap without
+   resizing the image away from its Figma dimensions.
+
+   flex-end is the EXPANDED alignment only, though — see the align-self pair
+   on .hero__image-container below. Applied to the collapsed state as well it
+   parked the 282-tall preview at the foot of a 900-tall band, i.e. 673px
+   below the fold: a full screen of empty yellow to scroll through before any
+   of the dog appeared (2026-09-23 feedback, "comes into viewport too late").
+   The image now starts at the band's top edge and travels down to the bottom
+   as it grows, which is a Flip delta like any other. */
 .hero__image-band {
   position: sticky;
   top: 0;
@@ -605,7 +616,11 @@
      overflow can constrain or break its stickiness; the sticky element
      having overflow set on ITSELF does not. */
   overflow-x: hidden;
-  padding-top: var(--spacing-300);
+  /* Zero, not --spacing-300: the whole gap between the callout row and the
+     top of the image is the 40px on .hero__copy's padding-bottom. Any
+     padding here stacks on top of it and the image drops below the fold
+     again. Nothing needs it — the expanded image hangs off the bottom. */
+  padding-top: 0;
   padding-inline: var(--spacing-300);
   /* Matches the condensed pill's own offset from the fold, so image bottom
      and pill bottom land on the same line. Was 48px (--spacing-600) when
@@ -630,6 +645,13 @@
    image ~7% oversize; do not reintroduce it. */
 .hero__image-container {
   position: relative;
+  /* Collapsed, the image sits at the TOP of the band so it crests the fold
+     40px under the callout row; expanded, it hangs off the bottom for the
+     pill overlap. Both ends of a single Flip delta — GSAP captures the
+     collapsed rect before adding --expanded, so the scrub carries the image
+     down the band as it grows, drifting slower than the page rather than
+     snapping between the two. */
+  align-self: flex-start;
   width: 518px;
   aspect-ratio: 3360 / 1562;
   flex-shrink: 0;
@@ -643,6 +665,7 @@
 }
 
 .hero__image-container--expanded {
+  align-self: flex-end;
   width: 100%;
 }
 

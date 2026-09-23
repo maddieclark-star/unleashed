@@ -54,7 +54,15 @@ export function initHeroImageFlip() {
     ease: 'none',
     scrollTrigger: {
       trigger: band,
-      start: 'top bottom',
+      // clamp() because the band's top is ALREADY above the fold at scroll 0
+      // (it crests the viewport by design, 40px under the callout row), so a
+      // bare 'top bottom' resolves to a negative scroll position and the page
+      // loads with ~8% of the grow already applied — the image renders
+      // oversize and 18px lower than the 40px gap it is supposed to sit at.
+      // clamp() pins the start to scroll 0 instead, so the collapsed state is
+      // the state you actually see on load. end is unaffected: the band top
+      // reaching the viewport top is a positive scroll position either way.
+      start: 'clamp(top bottom)',
       end: 'top top',
       scrub: true,
       invalidateOnRefresh: true,
