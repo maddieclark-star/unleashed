@@ -40,3 +40,28 @@ button {
   border: none;
   cursor: pointer;
 }
+
+/* Custom cursor — paw print, replaces the native pointer sitewide.
+   `html.custom-cursor-active *` outranks per-element `cursor` rules
+   (e.g. button's `cursor: pointer` above) so nothing shows the OS arrow. */
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 24px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-50%, -6.69%);
+}
+
+.custom-cursor img {
+  width: 100%;
+  height: 100%;
+}
