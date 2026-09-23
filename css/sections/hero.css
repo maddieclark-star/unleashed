@@ -1,18 +1,30 @@
 /* ==========================================================================
-   Unleashed — Hero (default state only)
-   Figma: node 13051:17119 (copy: 13013:13422, image: 13013:13440)
+   Unleashed — Hero
+   Figma: default 13190:13999, on-scroll (expanded image) 13204:21966.
 
-   Investigation note: the two "AdobeStock_189301040" rects (one outside
-   the clipped Image frame at 107,-265, one inside it at 81.6,-330) are
-   confirmed to be the SAME image fill (identical asset hash) at
-   matching positions — a deliberate bleed effect, not a duplicate. The
-   outer copy sits behind the inner clipped frame so a few px of the
-   same photo peek out into the surrounding padding. Both are kept.
+   Rebuilt 2026-09-22. The copy block (eyebrow/heading/body/stickers) below
+   is UNCHANGED from the previous iteration — it is pixel-identical between
+   the old node (13051:17119) and the new one, confirmed by comparing sticker
+   offsets against the old "rotated AABB" math, which reproduce exactly. Do
+   not re-derive it.
+
+   Everything below the heading group is new: the search widget and a new
+   callout row now sit in normal flow above the image (previously the widget
+   was absolutely positioned over the image), and the image is its own
+   full-bleed band that scales on scroll — see js/sections/hero.js.
+
+   FRAME WIDTH NOTE: this Figma frame is captured at 1728px (1568 content on
+   80px margins), not our 1440/1280 baseline — a drift like the 1312/64 one
+   already called out project-wide. Fixed-width elements (884 heading, 1244
+   body, sticker offsets) fit inside 1280 either way and are ported literally.
+   Elements that are full-bleed in Figma (search widget, expanded image) are
+   built as 100%-of-container here rather than porting 1568/1680 literally,
+   consistent with the project's "padding-inline: var(--grid-margin), never a
+   fixed container width" rule.
    ========================================================================== */
 
 .hero {
   position: relative;
-  overflow: hidden;
 }
 
 /* ---------- Copy block ---------- */
@@ -23,6 +35,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* Space between the heading block and the quote widget — 80px on
+     request 2026-09-22, was 120px (--spacing-1500). */
+  gap: var(--spacing-1000);
   width: 100%;
   /* DELIBERATE DEVIATION: Figma has this block sitting in a 582-tall
      frame at 180px top / 64px bottom (RHS content is 338 tall) — genuinely
@@ -31,8 +46,13 @@
      (120px, semantically "component vertical padding" — a better fit here
      than the horizontal-xxl token this used to borrow) puts equal space
      top and bottom, 240 total vs Figma's 244 — a 4px difference, not a
-     shrink. Don't "correct" this back to 180/64 at pixel QA. */
-  padding-block: var(--padding-component-vertical-lg);
+     shrink. Don't "correct" this back to 180/64 at pixel QA.
+
+     Bottom (gap to the image band) reduced again on request 2026-09-22 —
+     was equal to the top at 120px, now 80px (--spacing-1000). No longer
+     symmetric; that's intentional, top is unchanged. */
+  padding-top: var(--padding-component-vertical-lg);
+  padding-bottom: var(--spacing-1000);
   /* 80px page margin, normalised across all sections on request.
      Figma has this frame at 64 (spacing/800) on a 1312 container. */
   padding-inline: var(--grid-margin);
@@ -258,144 +278,17 @@
   height: 52.93px;
 }
 
-/* ---------- Image container ---------- */
+/* ---------- Lower content (widget + callouts) ---------- */
 
-.hero__image-container {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 869px;
-  padding-top: var(--spacing-800);
-  padding-inline: var(--spacing-300);
-  padding-bottom: var(--spacing-300);
-  background: var(--colour-yellow-light-100);
-}
-
-/* The unclipped bleed copy of the hero photo — sits behind the rounded
-   "Image" card and peeks out a few px into this container's padding.
-
-   DELIBERATE DEVIATION: left nudged +11px (107 -> 118), same delta as
-   .hero__photo below and for the same reason — see that comment. Kept
-   in sync so the sliver that peeks out past the card still lines up
-   with the photo behind it. */
-.hero__bleed {
-  position: absolute;
-  left: 118px;
-  top: -265px;
-  width: 1226.811px;
-  height: 1110px;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-.hero__image {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 781px;
+.hero__lower {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  border-radius: var(--grid-gutter);
-  background: var(--surface-colour-surface-primary);
-}
-
-.hero__image-bg {
-  position: absolute;
-  inset: 0;
-  background: var(--colour-yellow-light-200);
-}
-
-.hero__swoosh {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-/* DELIBERATE DEVIATION: both swoosh vectors shifted -353px left of
-   Figma's reported position (373 -> 20, -803 -> -1156). Ported literally
-   they match Figma exactly, but the pair is much larger than the card
-   (1568/1528 wide vs a 1392 card) and mostly hangs off past its right
-   edge — rendered as designed, the visible sliver reads noticeably
-   heavier top-right (measured: 36% coverage, but the visible-pixel
-   centroid sits at x=805 against a card centre of 696, i.e. 109px off).
-   -353px is the shift that brings that centroid back to the card centre
-   (measured by rasterising both vectors at their real transforms onto a
-   1392x781 canvas and computing the alpha-weighted centroid — not a
-   guess). Both moved by the same amount, as a rigid pair, so the two
-   shapes keep their relationship to each other; only where the pair
-   sits in the card changed. Don't "correct" this back to 373/-803 at
-   pixel QA. */
-.hero__swoosh--1 {
-  left: 20px;
-  top: -704px;
-  width: 1568.688px;
-  height: 1558.544px;
-}
-.hero__swoosh--1 img {
-  width: 1205.166px;
-  height: 1007.579px;
-  transform: rotate(-137.08deg);
-}
-/* DELIBERATE DEVIATION: top nudged another -79px (-793 -> -872), on
-   request, to clear a stray detail — the shape has a thin pointed tip
-   that landed isolated at card-local y=80 (16px below the card's top
-   edge), floating in open background with nothing connecting it to any
-   edge, which read as a stray mark rather than part of the design.
-
-   This tip is genuinely at the shape's narrowest point (2px wide) —
-   confirmed by rasterising at a range of vertical shifts and measuring
-   the width of whatever crosses the card's top edge at each. Below an
-   ~80px shift the tip just sits at a different height, still floating
-   with a visible gap above it; past ~85px the cut moves onto the tip's
-   flared base and widens fast (86px wide by +120px of shift, worse than
-   the original). -79px is the shift that lands the tip flush with y=0
-   at that same 2px minimum — not a coincidence: it's ~10% of -793, the
-   low end of the requested 10-15% range. 15% (-119) was tried and
-   measured worse, not better — don't push this further at pixel QA. */
-.hero__swoosh--2 {
-  left: -1156px;
-  top: -872px;
-  width: 1528.824px;
-  height: 1548.837px;
-}
-.hero__swoosh--2 img {
-  width: 1188.419px;
-  height: 993.578px;
-  transform: rotate(49.17deg) scaleY(-1);
-}
-
-/* The clipped, crisp copy of the hero photo — same asset as .hero__bleed.
-
-   DELIBERATE DEVIATION: left nudged +11px (81.59 -> 92.59). hero-dog-image.png
-   is a transparent cutout (~73% alpha=0), so "is the dog centred" isn't
-   readable from the crop box position alone. Measured directly: composited
-   the asset at its real box (81.59, -330, 1226.811x1110) onto a 1392x781
-   canvas (matching the card) and took the alpha-weighted centroid of the
-   opaque pixels — 685px against a card centre of 696, i.e. 11px left of
-   centre. This box is small relative to the source image (object-fit:cover
-   barely crops it), so unlike the swoosh above the shift is linear — +11px
-   on the box moves the dog +11px on screen, no more solving required.
-   Don't "correct" this back to 81.59 at pixel QA. */
-.hero__photo {
-  position: absolute;
-  left: 92.59px;
-  top: -330px;
-  width: 1226.811px;
-  height: 1110px;
-  object-fit: cover;
-  pointer-events: none;
+  gap: var(--spacing-500);
+  width: 100%;
 }
 
 /* ---------- Quote widget ---------- */
-
-.hero__widget-outer {
-  position: relative;
-  width: 100%;
-  padding: var(--spacing-300);
-}
 
 .hero__widget {
   display: flex;
@@ -409,7 +302,7 @@
      match (--spacing-150) used instead of a raw value. */
   border-radius: var(--spacing-150);
   /* unbound in Figma — decorative shadow only */
-  box-shadow: 1px 4px 6.8px rgba(165, 180, 0, 0.2);
+  box-shadow: 1px 4px 7.6px rgba(165, 180, 0, 0.2);
 }
 
 .hero__widget-header {
@@ -488,8 +381,10 @@
 }
 
 .hero__input--selected {
-  /* unbound in Figma — decorative selected-state border only */
-  border-color: #8f9c00;
+  /* unbound in Figma — decorative selected-state border only.
+     #c6d700 per the current node (13204:14630) — was #8f9c00 in the
+     previous hero iteration; the new Figma file moved it, ported literally. */
+  border-color: #c6d700;
   box-shadow: 0px 1px 11.4px color-mix(in srgb, var(--colour-yellow-300) 50%, transparent);
 }
 
@@ -560,4 +455,102 @@
   line-height: var(--line-height-body-sm-body);
   letter-spacing: var(--letter-spacing-body-sm-body);
   color: var(--colour-grey-600);
+}
+
+/* ---------- Callout row ---------- */
+
+.hero__callouts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-500);
+}
+
+.hero__callout {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+}
+
+/* Emoji glyphs, sized/weighted per Figma instance rather than uniformly —
+   the ambulance renders at Heading/H4 (bold) while the star and clock sit at
+   H6-size Light. Not a mistake: confirmed against both callout instances,
+   which use different text styles on the same 36px-tall row to visually
+   balance the different glyph shapes. */
+.hero__callout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight);
+  font-size: var(--size-heading-h6);
+  line-height: var(--line-height-heading-h6);
+}
+
+.hero__callout-icon--lg {
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-heading-h4);
+  line-height: var(--line-height-heading-h4);
+  letter-spacing: var(--letter-spacing-heading-h4);
+}
+
+.hero__callout-label {
+  color: var(--text-colour-text-primary);
+  white-space: nowrap;
+}
+
+/* ---------- Image band ---------- */
+
+.hero__image-band {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: var(--spacing-300);
+  padding-inline: var(--spacing-300);
+  /* Gap between the bottom of the (expanded) image and the USPs section
+     below it — was 24px, then 120px, then 80px, then 64px, now 48px
+     (--spacing-600) on request 2026-09-22 (a further 20% reduction from
+     64 = 51.2px exactly; no token matches, nearest is 48, off by 3.2px —
+     same "use nearest token" call made explicitly for the 120->96 step
+     earlier in this thread, applied consistently here without re-asking). */
+  padding-bottom: var(--spacing-600);
+  background: var(--colour-yellow-light-100);
+}
+
+/* Default: a small, centred 518x241 (~2.15:1) preview of the image.
+   Expanded (.hero__image-container--expanded, toggled by js/sections/hero.js
+   via GSAP Flip on scroll): grows to fill the band at a uniform scale — same
+   aspect ratio, no crop — leaving a 24px margin each side, not full bleed. */
+.hero__image-container {
+  position: relative;
+  width: 518px;
+  aspect-ratio: 3360 / 1562;
+  flex-shrink: 0;
+  overflow: hidden;
+  /* Figma specifies 20px radius here (both default and expanded nodes) —
+     no matching token (radius/image is 16, radius/round is 1000, the rest
+     are smaller still). Per instruction to reuse an existing token rather
+     than hardcode a new radius value, using radius/image. Flagging the 4px
+     difference from Figma rather than adding an unrequested token. */
+  border-radius: var(--radius-image);
+}
+
+.hero__image-container--expanded {
+  width: 100%;
+}
+
+.hero__image-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  /* js/sections/hero.js (initHeroParallax) drives a scale+translateY here on
+     scroll. will-change hints the browser to promote this to its own layer
+     ahead of time rather than on first transform write. */
+  will-change: transform;
 }

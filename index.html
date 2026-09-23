@@ -90,60 +90,66 @@
           </span>
         </span>
       </div>
-    </div>
 
-    <div class="hero__image-container">
-      <img class="hero__bleed" src="assets/img/hero-dog-image.png" alt="" aria-hidden="true" />
-
-      <div class="hero__image">
-        <div class="hero__image-bg"></div>
-        <div class="hero__swoosh hero__swoosh--1" aria-hidden="true">
-          <img src="assets/shapes/hero-swoosh-1.svg" alt="" />
-        </div>
-        <div class="hero__swoosh hero__swoosh--2" aria-hidden="true">
-          <img src="assets/shapes/hero-swoosh-2.svg" alt="" />
-        </div>
-        <img class="hero__photo" src="assets/img/hero-dog-image.png" alt="A dalmatian holding a tennis ball in its mouth" />
-
-        <div class="hero__widget-outer">
-          <div class="hero__widget">
-            <div class="hero__widget-header">
-              <h4 class="hero__widget-title">Start your free quote</h4>
-              <div class="hero__widget-disclaimer">
-                <span class="hero__widget-disclaimer-flame" aria-hidden="true">🔥</span>
-                <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
-              </div>
-            </div>
-
-            <div class="hero__widget-row">
-              <div class="hero__widget-fields">
-                <label class="hero__input hero__input--selected">
-                  <span class="hero__input-option">
-                    <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
-                    <span class="hero__input-label">Dog</span>
-                  </span>
-                  <input type="radio" name="pet-type" checked hidden />
-                  <span class="hero__radio hero__radio--selected"></span>
-                </label>
-                <label class="hero__input">
-                  <span class="hero__input-option">
-                    <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
-                    <span class="hero__input-label">Cat</span>
-                  </span>
-                  <input type="radio" name="pet-type" hidden />
-                  <span class="hero__radio"></span>
-                </label>
-                <label class="hero__input hero__input--text">
-                  <span class="hero__input-caption">Your pet&rsquo;s name</span>
-                  <input class="hero__input-value" type="text" value="Roxy" />
-                </label>
-              </div>
-              <a class="btn btn--dark btn--lg" href="#">
-                <span class="btn__label">Get a Free Quote</span>
-              </a>
+      <div class="hero__lower">
+        <div class="hero__widget">
+          <div class="hero__widget-header">
+            <h4 class="hero__widget-title">Start your free quote</h4>
+            <div class="hero__widget-disclaimer">
+              <span class="hero__widget-disclaimer-flame" aria-hidden="true">🔥</span>
+              <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
             </div>
           </div>
+
+          <div class="hero__widget-row">
+            <div class="hero__widget-fields">
+              <label class="hero__input hero__input--selected">
+                <span class="hero__input-option">
+                  <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
+                  <span class="hero__input-label">Dog</span>
+                </span>
+                <input type="radio" name="pet-type" checked hidden />
+                <span class="hero__radio hero__radio--selected"></span>
+              </label>
+              <label class="hero__input">
+                <span class="hero__input-option">
+                  <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
+                  <span class="hero__input-label">Cat</span>
+                </span>
+                <input type="radio" name="pet-type" hidden />
+                <span class="hero__radio"></span>
+              </label>
+              <label class="hero__input hero__input--text">
+                <span class="hero__input-caption">Your pet&rsquo;s name</span>
+                <input class="hero__input-value" type="text" value="Roxy" />
+              </label>
+            </div>
+            <a class="btn btn--dark btn--lg" href="#">
+              <span class="btn__label">Get a Free Quote</span>
+            </a>
+          </div>
         </div>
+
+        <div class="hero__callouts">
+          <div class="hero__callout">
+            <span class="hero__callout-icon hero__callout-icon--lg" aria-hidden="true">🚑</span>
+            <span class="hero__callout-label type-h6">Up to $45k cover</span>
+          </div>
+          <div class="hero__callout">
+            <span class="hero__callout-icon" aria-hidden="true">⭐</span>
+            <span class="hero__callout-label type-h6">Prevention &amp; wellness</span>
+          </div>
+          <div class="hero__callout">
+            <span class="hero__callout-icon" aria-hidden="true">⏰</span>
+            <span class="hero__callout-label type-h6">24/7 vet support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__image-band">
+      <div class="hero__image-container" data-hero-flip>
+        <img class="hero__image-photo" src="assets/img/hero-banner-photo.png" alt="A dalmatian holding a tennis ball in its mouth" />
       </div>
     </div>
   </section>
@@ -769,6 +775,11 @@
 
     </div>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+  <script type="module" src="js/main.js"></script>
 
   <!-- ==========================================================================
        DEV PREVIEW ISOLATOR — not part of the site, remove before handover.
