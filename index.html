@@ -90,60 +90,66 @@
           </span>
         </span>
       </div>
-    </div>
 
-    <div class="hero__image-container">
-      <img class="hero__bleed" src="assets/img/hero-dog-image.png" alt="" aria-hidden="true" />
-
-      <div class="hero__image">
-        <div class="hero__image-bg"></div>
-        <div class="hero__swoosh hero__swoosh--1" aria-hidden="true">
-          <img src="assets/shapes/hero-swoosh-1.svg" alt="" />
-        </div>
-        <div class="hero__swoosh hero__swoosh--2" aria-hidden="true">
-          <img src="assets/shapes/hero-swoosh-2.svg" alt="" />
-        </div>
-        <img class="hero__photo" src="assets/img/hero-dog-image.png" alt="A dalmatian holding a tennis ball in its mouth" />
-
-        <div class="hero__widget-outer">
-          <div class="hero__widget">
-            <div class="hero__widget-header">
-              <h4 class="hero__widget-title">Start your free quote</h4>
-              <div class="hero__widget-disclaimer">
-                <span class="hero__widget-disclaimer-flame" aria-hidden="true">🔥</span>
-                <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
-              </div>
-            </div>
-
-            <div class="hero__widget-row">
-              <div class="hero__widget-fields">
-                <label class="hero__input hero__input--selected">
-                  <span class="hero__input-option">
-                    <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
-                    <span class="hero__input-label">Dog</span>
-                  </span>
-                  <input type="radio" name="pet-type" checked hidden />
-                  <span class="hero__radio hero__radio--selected"></span>
-                </label>
-                <label class="hero__input">
-                  <span class="hero__input-option">
-                    <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
-                    <span class="hero__input-label">Cat</span>
-                  </span>
-                  <input type="radio" name="pet-type" hidden />
-                  <span class="hero__radio"></span>
-                </label>
-                <label class="hero__input hero__input--text">
-                  <span class="hero__input-caption">Your pet&rsquo;s name</span>
-                  <input class="hero__input-value" type="text" value="Roxy" />
-                </label>
-              </div>
-              <a class="btn btn--dark btn--lg" href="#">
-                <span class="btn__label">Get a Free Quote</span>
-              </a>
+      <div class="hero__lower">
+        <div class="hero__widget">
+          <div class="hero__widget-header">
+            <h4 class="hero__widget-title">Start your free quote</h4>
+            <div class="hero__widget-disclaimer">
+              <span class="hero__widget-disclaimer-flame" aria-hidden="true">🔥</span>
+              <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
             </div>
           </div>
+
+          <div class="hero__widget-row">
+            <div class="hero__widget-fields">
+              <label class="hero__input hero__input--selected">
+                <span class="hero__input-option">
+                  <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
+                  <span class="hero__input-label">Dog</span>
+                </span>
+                <input type="radio" name="pet-type" checked hidden />
+                <span class="hero__radio hero__radio--selected"></span>
+              </label>
+              <label class="hero__input">
+                <span class="hero__input-option">
+                  <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
+                  <span class="hero__input-label">Cat</span>
+                </span>
+                <input type="radio" name="pet-type" hidden />
+                <span class="hero__radio"></span>
+              </label>
+              <label class="hero__input hero__input--text">
+                <span class="hero__input-caption">Your pet&rsquo;s name</span>
+                <input class="hero__input-value" type="text" value="Roxy" />
+              </label>
+            </div>
+            <a class="btn btn--dark btn--lg" href="#">
+              <span class="btn__label">Get a Free Quote</span>
+            </a>
+          </div>
         </div>
+
+        <div class="hero__callouts">
+          <div class="hero__callout">
+            <span class="hero__callout-icon hero__callout-icon--lg" aria-hidden="true">🚑</span>
+            <span class="hero__callout-label type-h6">Up to $45k cover</span>
+          </div>
+          <div class="hero__callout">
+            <span class="hero__callout-icon" aria-hidden="true">⭐</span>
+            <span class="hero__callout-label type-h6">Prevention &amp; wellness</span>
+          </div>
+          <div class="hero__callout">
+            <span class="hero__callout-icon" aria-hidden="true">⏰</span>
+            <span class="hero__callout-label type-h6">24/7 vet support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__image-band">
+      <div class="hero__image-container" data-hero-flip>
+        <img class="hero__image-photo" src="assets/img/hero-banner-photo.png" alt="A dalmatian holding a tennis ball in its mouth" />
       </div>
     </div>
   </section>
@@ -299,10 +305,6 @@
 
     <div class="page-cards__stack">
       <article class="page-cards__card page-cards__card--dog">
-        <div class="page-cards__bleed" aria-hidden="true">
-          <img src="assets/img/dog-card-cutout.png" alt="" />
-        </div>
-
         <div class="page-cards__content">
           <div class="page-cards__copy">
             <span class="page-cards__brand-shape page-cards__brand-shape--1" aria-hidden="true"></span>
@@ -314,19 +316,14 @@
             </div>
 
             <div class="page-cards__cta">
-              <a class="btn btn--default btn--accent-fill" href="#">
+              <a class="btn btn--default btn--accent-fill-light" href="#">
                 <span class="btn__label">Explore dog cover</span>
               </a>
             </div>
           </div>
 
           <div class="page-cards__media">
-            <img class="page-cards__photo" src="assets/img/dog-insurance-image.jpg" alt="A black dog leaping across a grassy field" />
-            <img class="page-cards__swoosh page-cards__swoosh--1" src="assets/shapes/page-card-swoosh.svg" alt="" aria-hidden="true" />
-            <img class="page-cards__swoosh page-cards__swoosh--2" src="assets/shapes/page-card-swoosh.svg" alt="" aria-hidden="true" />
-            <div class="page-cards__frame page-cards__cutout" aria-hidden="true">
-              <img src="assets/img/dog-card-cutout.png" alt="" />
-            </div>
+            <img class="page-cards__photo" src="assets/img/dog-card-image.jpg" alt="A black dog leaping through the air, wearing a bright green collar" />
           </div>
         </div>
       </article>
@@ -335,7 +332,6 @@
         <div class="page-cards__content">
           <div class="page-cards__copy">
             <span class="page-cards__brand-shape page-cards__brand-shape--1" aria-hidden="true"></span>
-            <span class="page-cards__brand-shape page-cards__brand-shape--2" aria-hidden="true"></span>
 
             <div class="page-cards__copy-text">
               <h3 class="page-cards__title">Cat insurance</h3>
@@ -350,15 +346,10 @@
           </div>
 
           <div class="page-cards__media">
-            <div class="page-cards__frame page-cards__photo">
-              <img src="assets/img/cat-insurance-image.jpg" alt="A ginger cat in a black jacket against an orange backdrop" />
-            </div>
-            <img class="page-cards__swoosh page-cards__swoosh--cat-1" src="assets/shapes/page-card-swoosh.svg" alt="" aria-hidden="true" />
-            <div class="page-cards__frame page-cards__cutout" aria-hidden="true">
-              <img src="assets/img/cat-insurance-image-no-bg.png" alt="" />
-            </div>
-            <img class="page-cards__swoosh page-cards__swoosh--cat-2" src="assets/shapes/page-card-swoosh.svg" alt="" aria-hidden="true" />
+            <img class="page-cards__photo" src="assets/img/cat-insurance-image.jpg" alt="A ginger cat in a black jacket against an orange backdrop" />
           </div>
+
+          <span class="page-cards__brand-shape page-cards__brand-shape--cat" aria-hidden="true"></span>
         </div>
       </article>
     </div>
@@ -770,6 +761,9 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
   <script type="module" src="js/main.js"></script>
 
   <!-- ==========================================================================

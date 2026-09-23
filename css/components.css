@@ -305,7 +305,16 @@
   min-width: 0;
   padding: var(--spacing-300);
   background: var(--surface-colour-surface-primary);
+  border: 1px solid var(--border-colour-border-invert);
   border-radius: var(--radius-card);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover state (13252:27497) — background and border only; icon badge
+   swaps below. Copy, icon and "Read more" are unchanged, left as-is. */
+.usp-card:hover {
+  background: color-mix(in srgb, var(--colour-yellow-light-200) 50%, transparent);
+  border-color: var(--colour-yellow-200);
 }
 
 /* 14px inset and the 12.8px radius are both unbound in Figma — the
@@ -320,6 +329,11 @@
   padding: 14px;
   background: var(--colour-pink-100);
   border-radius: 12.8px;
+  transition: background-color 0.2s ease;
+}
+
+.usp-card:hover .usp-card__icon {
+  background: var(--colour-yellow-100);
 }
 
 /* The badge glyphs are emoji text layers in Figma, not vectors, set in
@@ -332,14 +346,40 @@
   line-height: var(--line-height-heading-h4);
   letter-spacing: var(--letter-spacing-heading-h4);
   color: var(--surface-colour-surface-invert-primary);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Not sourced from Figma — no reaction is defined on the icon layers in
+   either state. Added on request: a subtle scale-in-place pulse on card
+   hover, anchored on the glyph's own centre. */
+.usp-card:hover .usp-card__emoji {
+  transform: scale(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .usp-card__emoji {
+    transition: none;
+  }
+
+  .usp-card:hover .usp-card__emoji {
+    transform: none;
+  }
 }
 
 .usp-card__content {
   display: flex;
+  flex: 1 0 0;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--spacing-300);
+  gap: var(--spacing-700);
   width: 100%;
+}
+
+/* Pins "Read more" to the card's bottom edge (24px inset, via the card's
+   own padding) regardless of how many lines the body copy wraps to —
+   spacing-700 above still holds as the minimum gap. */
+.usp-card__content > .btn {
+  margin-top: auto;
 }
 
 .usp-card__text {
@@ -836,5 +876,16 @@
   background: var(--surface-colour-surface-accent-dark);
 }
 .btn--accent-fill .btn__label {
+  color: var(--text-colour-text-primary);
+}
+
+
+/* Accent fill, light — Page Cards' dog card CTA only (13137:12328), added
+   when the dog card moved onto the yellow colourway. Same shape as
+   --accent-fill above, bound to surface-accent-light instead of -dark. */
+.btn--accent-fill-light {
+  background: var(--surface-colour-surface-accent-light);
+}
+.btn--accent-fill-light .btn__label {
   color: var(--text-colour-text-primary);
 }
