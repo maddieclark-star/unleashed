@@ -285,6 +285,10 @@
    visible. All tuned by eye; same precedent as --pc-media-w above. */
 @media (prefers-reduced-motion: no-preference) {
   .page-cards__stack {
+    /* Where the stack comes to rest: the first card pins this far down
+       rather than flush against the top of the viewport, so the pinned
+       stack keeps a margin above it instead of butting into the header. */
+    --page-cards-pin-top: var(--spacing-800);
     --page-cards-peek: 64px;
     --page-cards-travel: 620px;
     --page-cards-hold: 360px;
@@ -299,16 +303,17 @@
     will-change: transform;
   }
 
-  /* Dog sticks flush to the top and scales toward its own top edge, so it
-     recedes in place rather than sliding as the cat rises over it. */
+  /* Dog pins at the stack's rest offset and scales toward its own top
+     edge, so it recedes in place rather than sliding as the cat rises. */
   .page-cards__card--dog {
-    top: 0;
+    top: var(--page-cards-pin-top);
     transform-origin: 50% 0%;
   }
 
-  /* Cat sticks one peek lower, which is what exposes the dog above it. */
+  /* Cat pins one peek below the dog, which is what exposes the dog above
+     it — so it carries the same offset plus the peek, not the peek alone. */
   .page-cards__card--cat {
-    top: var(--page-cards-peek);
+    top: calc(var(--page-cards-pin-top) + var(--page-cards-peek));
   }
 
   /* The hold — trailing space that keeps the assembled stack on screen
