@@ -31,8 +31,16 @@
   );
 }
 
-/* Height is left to the content deliberately — it resolves to exactly 500:
-   32 top + (264 copy + 32 + 52 buttons) + 120 bottom. */
+/* Height is left to the content deliberately. It used to resolve to exactly
+   500 as 32 top + (264 copy + 32 + 52 buttons) + 120 bottom, matching the
+   height recorded for 13020:15903 in CLAUDE.md.
+
+   Both of those numbers are now stale. The buttons moved onto the CTA Button
+   set (13243:25365), so the row is 60 not 52, and the section resolves to
+   508. Re-reading 13020:15903 on 2026-09-23 shows Figma itself is now 512,
+   not 500 — and draws these two as Text + Primary, which is what they are
+   built as. Do not "restore" 500 at pixel QA; if anything the 4px gap left
+   is worth chasing against the live node, not against the table. */
 .cta__rhs {
   position: relative;
   display: flex;

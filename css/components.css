@@ -889,3 +889,332 @@
 .btn--accent-fill-light .btn__label {
   color: var(--text-colour-text-primary);
 }
+
+
+/* ==========================================================================
+   CTA Button — Figma component set ". Button" (13243:25365)
+
+   A SECOND, NEWER button component, and the one the page now uses. All 18
+   buttons in index.html were migrated onto it on 2026-09-23, so everything
+   above this line — the old UI Kit set (1103:1217) — is now DEAD CODE kept
+   only until sibling worktrees have rebased. The two sets genuinely
+   disagree, which is why the migration was not a no-op:
+
+                  old kit (above)          this set
+     Default      52px, 26px inline        60px, 18px inline
+     Small        44px                     48px
+     Primary      pink fill, white label   DARK fill, white label
+     Secondary    transparent + 1px border SOLID colour fill
+     Text         —                        label + arrow, no fill
+
+   Every rule below is scoped to a COLOUR modifier — .btn--yellow /
+   .btn--blue / .btn--pink. That modifier is what opts a button into this
+   component; without one, the old kit rules above still apply. The scoping
+   was what let the two sets coexist during the migration. Now that the page
+   is fully migrated it is only protecting unrebased worktrees, so the
+   legacy blocks can be deleted and these selectors unscoped in one pass
+   once the other branches have landed.
+
+   Markup:
+     <a class="btn btn--{default|sm} btn--{primary|secondary|text} btn--{yellow|blue|pink}">
+       <span class="btn__label">Button Label</span>
+       <span class="btn__circle"><span class="btn__arrow"></span></span>
+     </a>
+   Add btn--reverse for placement on an inverted surface.
+
+   HOW THE HOVER WORKS (read off the layers, not invented):
+   Each variant in Figma is "Circle Hidden" -> "Button Label" -> "Circle".
+   The whole interaction is the trailing "Circle" frame, which is 0x0 with
+   overflow:clip in Default and 52px (40px at Small) in Hover, with the
+   20px arrow absolutely positioned inside it. So on hover the disc
+   inflates from nothing at the right end, the trailing padding collapses
+   to make room, and the arrow rides in as the clip opens.
+
+   WIDTH IS CONSTANT. A button is the same width hovered as at rest — it
+   must never shove its neighbours. This is the design's own intent, not an
+   addition: Figma pins Primary/Default/yellow to a FIXED 205px (13243:25366)
+   where the hug would be 201, and centres the label at x=46 inside it.
+
+   The rest paddings are what hold the width. The label is centred in the
+   HOVER width, so each side is (hoverWidth - label) / 2:
+
+     filled Default   rest 46 / 0 / 46   hover 20 / 16 + 52 / 4    = L + 92
+     filled Small     rest 36 / 0 / 36   hover 16 / 12 + 40 / 4    = L + 72
+     text  (both)     rest  4 / 32 / 24  hover  4 / 12 + 40 / 4    = L + 60
+                          padL / gap / padR       padL / gap + circle / padR
+
+   That is why 46, 36 and the text rule's 24px padding-right look arbitrary.
+   They are derived from the hover geometry, NOT measured off the Default
+   frame — do not "correct" them to Figma's 18 / 8 / 4 at pixel QA, or the
+   buttons start growing again.
+
+   The four animated values are balanced so they cancel: padding-left and
+   padding-right lose exactly what the gap and the circle gain. Filled
+   Default is -26 +16 +52 -42 = 0. This holds THROUGHOUT the transition, not
+   just at the endpoints — but only while padding, gap and circle width
+   share one duration and one easing. Give the circle its own timing and the
+   width will wobble mid-animation. The arrow is absolutely positioned and
+   out of flow, so it alone is free to carry a different, bouncier curve.
+
+   The leading "Circle Hidden" is a 0x0 frame whose only job is to
+   contribute one extra 26px gap on the left, keeping the label optically
+   centred in Default. It is not reproduced as an element: as a real node it
+   would have to be display:none'd on hover, which cannot transition, and
+   the label would snap instead of slide. The centred rest padding above
+   reproduces its effect exactly.
+
+   Style=Text is the one exception to the clip: its Circle has NO
+   overflow-clip, which is why its arrow is already visible in Default
+   with no disc behind it, sitting 20px left of the collapse point.
+   ========================================================================== */
+
+/* Unbound in Figma, local to this component — no motion tokens exist yet.
+   Layout gets a firm ease-out; the arrow gets the overshoot, because
+   bouncing the disc's own size past 52px would blow through the button's
+   4px inset and clip into an oval against overflow:hidden. */
+.btn {
+  --btn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --btn-ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --btn-duration: 380ms;
+  --btn-duration-arrow: 460ms;
+}
+
+/* ---------- Colourways ----------
+   Each carries three roles, read off all 46 variants in the set:
+     --btn-dark       the dark surface / dark label
+     --btn-light      the bright surface
+     --btn-disc-light the bright DISC, which is NOT always --btn-light
+     --btn-ink        the dark arrow, which tracks the colourway not text
+   Yellow is the only one where surface-light and disc-light differ
+   (#eaff00 vs #cee105). Blue and pink reuse one bright tone for both. */
+.btn--yellow {
+  --btn-dark: var(--surface-colour-surface-invert-secondary);
+  --btn-light: var(--surface-colour-surface-accent-light);
+  --btn-disc-light: var(--colour-yellow-200);
+  --btn-ink: var(--text-colour-text-primary);
+}
+.btn--blue {
+  --btn-dark: var(--colour-blue-950);
+  --btn-light: var(--colour-blue-400);
+  --btn-disc-light: var(--colour-blue-400);
+  --btn-ink: var(--colour-blue-950);
+}
+.btn--pink {
+  --btn-dark: var(--colour-pink-950);
+  --btn-light: var(--surface-colour-surface-accent-dark);
+  --btn-disc-light: var(--surface-colour-surface-accent-dark);
+  --btn-ink: var(--colour-pink-950);
+}
+
+/* ---------- Base ---------- */
+.btn:is(.btn--yellow, .btn--blue, .btn--pink) {
+  justify-content: flex-start;
+  overflow: hidden;
+  border: none;
+  background: var(--btn-surface, transparent);
+  cursor: pointer;
+  transition:
+    padding-left var(--btn-duration) var(--btn-ease),
+    padding-right var(--btn-duration) var(--btn-ease),
+    gap var(--btn-duration) var(--btn-ease),
+    background-color 200ms var(--btn-ease);
+}
+
+.btn:is(.btn--yellow, .btn--blue, .btn--pink) .btn__label {
+  color: var(--btn-label);
+  white-space: nowrap;
+}
+
+/* The disc. 0x0 in rest, full size on hover; the arrow inside is what it
+   reveals. overflow:hidden is the clip that hides the arrow at rest —
+   .btn--text lifts it, see below. */
+.btn:is(.btn--yellow, .btn--blue, .btn--pink) .btn__circle {
+  position: relative;
+  flex-shrink: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--btn-disc);
+  transition:
+    width var(--btn-duration) var(--btn-ease),
+    height var(--btn-duration) var(--btn-ease),
+    background-color 200ms var(--btn-ease);
+}
+
+/* 20px square, unbound in Figma — same figure as .btn__icon above.
+   Masked rather than an <img> so one asset serves every arrow colour in
+   the set; the source SVG has #0B0B07 baked in and the set needs it in
+   white, blue/950 and pink/950 too. */
+.btn:is(.btn--yellow, .btn--blue, .btn--pink) .btn__arrow {
+  position: absolute;
+  top: 50%;
+  left: var(--btn-arrow-rest);
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  background: var(--btn-arrow);
+  -webkit-mask: url("../assets/icons/arrow-right.svg") center / 20px 20px no-repeat;
+  mask: url("../assets/icons/arrow-right.svg") center / 20px 20px no-repeat;
+  transition: left var(--btn-duration-arrow) var(--btn-ease-back),
+    background-color 200ms var(--btn-ease);
+}
+
+/* ---------- Sizes ----------
+   Heights and the 46/36/52 figures are unbound in Figma, following the
+   precedent already set by the 52/60px heights and 12.8px further up this
+   file. Rest paddings are derived to hold width constant, see header. */
+
+/* Size=Default, filled styles — 60px */
+.btn--default:is(.btn--yellow, .btn--blue, .btn--pink) {
+  height: 60px;
+  padding-left: 46px;
+  padding-right: 46px;
+  padding-block: 0;
+  gap: 0;
+  --btn-circle: 52px;
+  --btn-arrow-rest: -46px;
+}
+.btn--default:is(.btn--yellow, .btn--blue, .btn--pink):is(:hover, :focus-visible) {
+  padding-left: var(--spacing-250);
+  padding-right: var(--spacing-50);
+  gap: var(--spacing-200);
+}
+
+/* Size=Small, filled styles — 48px.
+   36 is the centred rest padding, same derivation as Default's 46: Figma
+   pins this one to a fixed 172 and centres the label at x=35.5. */
+.btn--sm:is(.btn--yellow, .btn--blue, .btn--pink) {
+  height: var(--spacing-600);
+  padding-left: 36px;
+  padding-right: 36px;
+  padding-block: 0;
+  gap: 0;
+  --btn-circle: var(--spacing-500);
+  --btn-arrow-rest: -46px;
+}
+.btn--sm:is(.btn--yellow, .btn--blue, .btn--pink):is(:hover, :focus-visible) {
+  padding-left: var(--spacing-200);
+  padding-right: var(--spacing-50);
+  gap: var(--spacing-150);
+}
+
+.btn--default:is(.btn--yellow, .btn--blue, .btn--pink) .btn__label {
+  font-size: var(--size-button-lg-button);
+}
+.btn--sm:is(.btn--yellow, .btn--blue, .btn--pink) .btn__label {
+  font-size: var(--size-button-button);
+}
+
+/* Reveal — the one line the whole interaction turns on. */
+.btn:is(.btn--yellow, .btn--blue, .btn--pink):is(:hover, :focus-visible) .btn__circle {
+  width: var(--btn-circle);
+  height: var(--btn-circle);
+}
+.btn:is(.btn--yellow, .btn--blue, .btn--pink):is(:hover, :focus-visible) .btn__arrow {
+  left: calc((var(--btn-circle) - 20px) / 2);
+  background: var(--btn-arrow-hover);
+}
+
+/* ---------- Styles ---------- */
+
+/* Primary — dark surface, white label, bright disc */
+.btn--primary:is(.btn--yellow, .btn--blue, .btn--pink) {
+  --btn-surface: var(--btn-dark);
+  --btn-label: var(--text-colour-text-primary-invert);
+  --btn-disc: var(--btn-disc-light);
+  --btn-arrow-hover: var(--btn-ink);
+}
+
+/* FAITHFUL ODDITY: yellow's Primary/Default/Reverse=No hover disc is
+   surface-accent-light #eaff00, where every other yellow disc in the set
+   is yellow/200 #cee105 (13243:25414). Built as drawn. If this turns out
+   to be a slip rather than a deliberate pop against the black pill, delete
+   this rule and it falls back to the colourway default. */
+.btn--primary.btn--yellow:not(.btn--reverse):not(.btn--sm) {
+  --btn-disc: var(--btn-light);
+}
+
+/* Secondary — bright surface, dark label, dark disc */
+.btn--secondary:is(.btn--yellow, .btn--blue, .btn--pink) {
+  --btn-surface: var(--btn-light);
+  --btn-label: var(--text-colour-text-primary);
+  --btn-disc: var(--btn-dark);
+  --btn-arrow-hover: var(--text-colour-text-primary-invert);
+}
+
+/* Text — no surface. Its Circle does not clip, so the arrow shows at rest;
+   the disc simply inflates behind it. 48px tall at both sizes. */
+.btn--text:is(.btn--yellow, .btn--blue, .btn--pink) {
+  --btn-surface: transparent;
+  --btn-label: var(--btn-dark);
+  --btn-disc: var(--btn-disc-light);
+  --btn-arrow: var(--btn-dark);
+  --btn-arrow-hover: var(--btn-ink);
+  height: var(--spacing-600);
+  padding-left: var(--spacing-50);
+  /* 24, not Figma's 4. This is the reserve that stops Text growing 153 ->
+     173 on hover. The arrow still sits 12px after the label at rest — the
+     collapsed circle anchors it — the 24 is just dead air behind it. */
+  padding-right: var(--spacing-300);
+  gap: var(--spacing-400);
+  --btn-circle: var(--spacing-500);
+  --btn-arrow-rest: -20px;
+}
+.btn--text:is(.btn--yellow, .btn--blue, .btn--pink) .btn__circle {
+  overflow: visible;
+}
+.btn--text:is(.btn--yellow, .btn--blue, .btn--pink):is(:hover, :focus-visible) {
+  padding-inline: var(--spacing-50);
+  gap: var(--spacing-150);
+}
+
+/* Text at Small needs no geometry of its own — it inherits .btn--text
+   above, and only the label size changes. It used to override to Figma's
+   pl 4 / pr 24 / gap 22, which left ~2px of air between label and arrow
+   against the Default size's 12. That pr:24 was the same width-reserve
+   trick being applied here now; the gap:22 was what squeezed it. Dropped
+   in favour of one consistent Text geometry at both sizes. */
+
+/* Size=Small + Primary renders as Secondary in the set — bright surface,
+   dark label, dark disc (13243:25372, 13243:25508, 13243:25599). Not an
+   error on my part; the set really does break its own pattern here. */
+.btn--primary.btn--sm:is(.btn--yellow, .btn--blue, .btn--pink):not(.btn--reverse) {
+  --btn-surface: var(--btn-light);
+  --btn-label: var(--text-colour-text-primary);
+  --btn-disc: var(--btn-dark);
+  --btn-arrow-hover: var(--text-colour-text-primary-invert);
+}
+
+/* Reverse — on an inverted surface. Primary goes white-on-dark-label;
+   Text keeps no fill but flips its label to white. */
+.btn--primary.btn--reverse:is(.btn--yellow, .btn--blue, .btn--pink) {
+  --btn-surface: var(--surface-colour-surface-primary);
+  --btn-label: var(--text-colour-text-primary);
+  --btn-disc: var(--btn-disc-light);
+  --btn-arrow-hover: var(--btn-ink);
+}
+/* Small + Reverse keeps Primary's dark surface (13243:26771). Pink's
+   equivalent (13243:26997) is drawn identically to its non-reverse Small
+   and sits at the exact same x/y as 13243:25599 — an unrestyled duplicate,
+   so yellow's is taken as the intended one. */
+.btn--primary.btn--sm.btn--reverse:is(.btn--yellow, .btn--blue, .btn--pink) {
+  --btn-surface: var(--btn-dark);
+  --btn-label: var(--text-colour-text-primary-invert);
+  --btn-disc: var(--btn-disc-light);
+  --btn-arrow-hover: var(--btn-ink);
+}
+.btn--text.btn--reverse:is(.btn--yellow, .btn--blue, .btn--pink) {
+  --btn-label: var(--text-colour-text-primary-invert);
+  --btn-arrow: var(--text-colour-text-primary-invert);
+  --btn-arrow-hover: var(--btn-ink);
+}
+
+/* Static fallback — the disc is already open, nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:is(.btn--yellow, .btn--blue, .btn--pink),
+  .btn:is(.btn--yellow, .btn--blue, .btn--pink) .btn__circle,
+  .btn:is(.btn--yellow, .btn--blue, .btn--pink) .btn__arrow {
+    transition: none;
+  }
+}

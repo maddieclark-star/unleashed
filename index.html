@@ -47,11 +47,18 @@
       </nav>
 
       <div class="header__actions">
-        <a class="btn btn--nav btn--primary btn--reverse" href="#">
+        <a class="btn btn--sm btn--secondary btn--yellow" href="#">
           <span class="btn__label">Log in</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
-        <a class="btn btn--nav btn--dark" href="#">
+        <!-- btn--reverse here is NOT about an inverted surface — the header
+             bar is light. It is how the set spells "dark pill, white label"
+             at Small: Size=Small + Style=Primary is drawn bright-on-dark-label
+             (13243:25372), and the dark small pill only exists as
+             Reverse=Yes (13243:26771). Set's quirk, not a mistake here. -->
+        <a class="btn btn--sm btn--primary btn--reverse btn--yellow" href="#">
           <span class="btn__label">Get a quote</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
       </div>
     </div>
@@ -124,8 +131,9 @@
                 <input class="hero__input-value" type="text" value="Roxy" />
               </label>
             </div>
-            <a class="btn btn--dark btn--lg" href="#">
+            <a class="btn btn--default btn--primary btn--yellow" href="#">
               <span class="btn__label">Get a Free Quote</span>
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </div>
@@ -188,8 +196,9 @@
                     <span class="hero__input-value">Roxy</span>
                   </span>
                 </div>
-                <span class="btn btn--dark btn--lg">
+                <span class="btn btn--default btn--primary btn--yellow">
                   <span class="btn__label">Get a Free Quote</span>
+                  <span class="btn__circle"><span class="btn__arrow"></span></span>
                 </span>
               </div>
             </div>
@@ -216,8 +225,9 @@
       </div>
 
       <div class="headline__cta">
-        <a class="btn btn--default btn--dark" href="#">
+        <a class="btn btn--default btn--primary btn--yellow" href="#">
           <span class="btn__label">See how it works</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
       </div>
     </div>
@@ -233,9 +243,9 @@
               <h3 class="usp-card__title">Be proactive</h3>
               <p class="usp-card__body">Wellness and preventative care to keep them healthy, not just covered.</p>
             </div>
-            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+            <a class="btn btn--sm btn--text btn--yellow" href="#">
               <span class="btn__label">Read more</span>
-              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </article>
@@ -249,9 +259,9 @@
               <h3 class="usp-card__title">Be covered</h3>
               <p class="usp-card__body">Accident and illness cover for when the unexpected happens.</p>
             </div>
-            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+            <a class="btn btn--sm btn--text btn--yellow" href="#">
               <span class="btn__label">Read more</span>
-              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </article>
@@ -265,9 +275,9 @@
               <h3 class="usp-card__title">Be picky</h3>
               <p class="usp-card__body">Build your own or pick a package. Your pet, your priorities.</p>
             </div>
-            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+            <a class="btn btn--sm btn--text btn--yellow" href="#">
               <span class="btn__label">Read more</span>
-              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </article>
@@ -283,9 +293,9 @@
               <h3 class="usp-card__title">Be rewarded</h3>
               <p class="usp-card__body">Good pet parenting pays off, with rewards and money back.</p>
             </div>
-            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+            <a class="btn btn--sm btn--text btn--yellow" href="#">
               <span class="btn__label">Read more</span>
-              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </article>
@@ -299,9 +309,9 @@
               <h3 class="usp-card__title">24/7 TeleVet</h3>
               <p class="usp-card__body">Live vet advice any time, day or night, by phone or video.</p>
             </div>
-            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+            <a class="btn btn--sm btn--text btn--yellow" href="#">
               <span class="btn__label">Read more</span>
-              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </article>
@@ -315,9 +325,9 @@
               <h3 class="usp-card__title">Multi-pet discount</h3>
               <p class="usp-card__body">Cover more than one pet and save on every policy.</p>
             </div>
-            <a class="btn btn--sm btn--secondary btn--quiet" href="#">
+            <a class="btn btn--sm btn--text btn--yellow" href="#">
               <span class="btn__label">Read more</span>
-              <img class="btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </article>
@@ -342,8 +352,9 @@
       </div>
 
       <div class="headline__cta">
-        <a class="btn btn--default btn--accent-fill" href="#">
+        <a class="btn btn--default btn--secondary btn--pink" href="#">
           <span class="btn__label">Get a Free Quote</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
       </div>
     </div>
@@ -361,8 +372,9 @@
             </div>
 
             <div class="page-cards__cta">
-              <a class="btn btn--default btn--accent-fill-light" href="#">
+              <a class="btn btn--default btn--secondary btn--yellow" href="#">
                 <span class="btn__label">Explore dog cover</span>
+                <span class="btn__circle"><span class="btn__arrow"></span></span>
               </a>
             </div>
           </div>
@@ -384,8 +396,9 @@
             </div>
 
             <div class="page-cards__cta">
-              <a class="btn btn--default btn--accent-fill" href="#">
+              <a class="btn btn--default btn--secondary btn--pink" href="#">
                 <span class="btn__label">Explore cat cover</span>
+                <span class="btn__circle"><span class="btn__arrow"></span></span>
               </a>
             </div>
           </div>
@@ -417,8 +430,9 @@
       </div>
 
       <div class="headline__cta">
-        <a class="btn btn--default btn--brand" href="#">
+        <a class="btn btn--default btn--secondary btn--blue" href="#">
           <span class="btn__label">Get a Free Quote</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
       </div>
     </div>
@@ -628,8 +642,9 @@
           </div>
 
           <div class="image-lr__cta">
-            <a class="btn btn--default btn--brand-pink" href="#">
+            <a class="btn btn--default btn--secondary btn--pink" href="#">
               <span class="btn__label">See what&rsquo;s covered</span>
+              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </div>
@@ -666,11 +681,13 @@
       </span>
 
       <div class="cta__actions">
-        <a class="btn btn--default btn--secondary btn--accent" href="#">
+        <a class="btn btn--default btn--text btn--yellow" href="#">
           <span class="btn__label">Get a Free Quote</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
-        <a class="btn btn--default btn--dark" href="#">
+        <a class="btn btn--default btn--primary btn--yellow" href="#">
           <span class="btn__label">See how it works</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
       </div>
     </div>
