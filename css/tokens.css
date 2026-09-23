@@ -69,6 +69,7 @@
   --border-colour-border-secondary: #cccccc;
   --border-colour-border-invert: #ffffff;
   --border-colour-border-invert-secondary: #ffffff33;
+  --border-colour-border-accent: var(--colour-pink-400-brand);
 
   --cta-colour-primary-text: #ffffff;
   --cta-colour-primary-surface: #f926f9;

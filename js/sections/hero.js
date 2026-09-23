@@ -63,88 +63,90 @@ export function initHeroImageFlip() {
 }
 
 /* ==========================================================================
-   Unleashed — Quote widget reveal
-   Figma: 13295:31875 -> 13295:32002, the two frames after the grow finishes.
-   The copy block (and the real widget with it) has scrolled away above; a
-   mirror of the widget rises out from behind the expanded image's clipped
-   bottom edge and comes to rest overlapping the photo.
+   Unleashed — Condensed quote widget reveal
+   Figma: "Sticky Scroll" (13309:33155). Once the image above has finished
+   growing — the same "band has stopped growing" instant initHeroImageFlip's
+   scrollTrigger ends on — a condensed quote widget slides up and pins to the
+   bottom of the viewport. This is a single on/off toggle, not a scrub: the
+   band either has finished growing or it hasn't, so onEnter/onLeaveBack is
+   the right tool here, not a scroll-mapped gsap.to.
 
-   THE HOLD IS CSS, NOT ScrollTrigger's pin — see .hero__image-sticky in
-   hero.css. pin:true sizes its spacer once at refresh, while the band is
-   still collapsed, and the grow then makes the band 406px taller than the
-   reserved space, so the USPs section rides up over the image and collides
-   with the widget. Do not "simplify" this back to pin:true.
+   Reduced motion still gets the widget, just without the slide-in: unlike
+   the Flip/parallax above, this isn't decorative — it's the only way to
+   reach the quote form once the hero's own widget has scrolled out of view,
+   so the correct static fallback is "present without animating in", not
+   "absent". */
 
-   That leaves this trigger as a pure scrub driver: it owns no layout, it
-   only maps scroll distance onto the slide. The hold it scrubs against is
-   the sticky wrapper's padding-bottom, so the two stay in step by both
-   deriving from --hero-reveal-distance rather than from a number repeated
-   in two files.
+export function initHeroCondensedWidget() {
+  const wrapper = document.querySelector('[data-hero-condensed]');
+  const trigger = document.querySelector('[data-hero-sticky]');
 
-   Triggered off the WRAPPER, not the band. The band is the sticky element,
-   and a stuck element reports its stuck position to getBoundingClientRect,
-   which is not a stable thing to measure a start/end against. The wrapper
-   never moves relative to the document and its top edge is the band's top
-   edge (no padding-top), so the geometry is identical and the measurement
-   is honest. The grow above is pointed at it for the same reason.
+  if (!wrapper || !trigger) return;
 
-   ease:'none' for the same reason it is used on the Flip above: any other
-   ease double-eases against the scrub and reads as lag, and the brand's
-   overshoot has nowhere to go in a scrubbed animation anyway.
-   ========================================================================== */
-
-const FALLBACK_REVEAL_DISTANCE = 500;
-
-function revealDistance(hero) {
-  const declared = parseFloat(
-    getComputedStyle(hero).getPropertyValue('--hero-reveal-distance')
-  );
-  return Number.isFinite(declared) ? declared : FALLBACK_REVEAL_DISTANCE;
-}
-
-export function initHeroWidgetReveal() {
-  const hero = document.querySelector('.hero');
-  const sticky = document.querySelector('[data-hero-sticky]');
-  const slot = document.querySelector('[data-hero-widget-reveal]');
-
-  if (!hero || !sticky || !slot) return;
-
-  if (!window.gsap || !window.ScrollTrigger) {
-    console.warn('[hero] GSAP/ScrollTrigger not loaded — skipping widget reveal.');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    wrapper.classList.add('hero__condensed--visible');
     return;
   }
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (!window.gsap || !window.ScrollTrigger) {
+    console.warn('[hero] GSAP/ScrollTrigger not loaded — showing condensed widget without the reveal.');
+    wrapper.classList.add('hero__condensed--visible');
     return;
   }
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // `y: 0` in BOTH states is load-bearing, not noise. GSAP reads the element's
-  // existing computed transform as a matrix, so the parked translateY(100%) in
-  // hero.css comes back as a resolved pixel y (200px), not as yPercent — and
-  // then yPercent:100 stacks on top of it for 400px, double the slot height.
-  // The widget parks twice as far down as it should and never fully arrives.
-  // Declaring yPercent and y together makes GSAP the only author of the
-  // transform, so the CSS value is a fallback and nothing more.
-  gsap.fromTo(
-    slot,
-    { yPercent: 100, y: 0 },
-    {
-      yPercent: 0,
-      y: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: sticky,
-        start: 'top top',
-        // Matches the wrapper's reserved padding-bottom exactly, so the slide
-        // finishes on the same scroll pixel the band stops sticking.
-        end: () => `+=${revealDistance(hero)}`,
-        scrub: true,
-        invalidateOnRefresh: true,
-      },
-    }
-  );
+  // Triggered off the WRAPPER, not the band, for the same reason the Flip
+  // above is: the band is the sticky element, and a stuck element reports
+  // its stuck position to getBoundingClientRect rather than its document
+  // position — not a stable thing to measure start/end against.
+  ScrollTrigger.create({
+    trigger,
+    start: 'top top',
+    end: 'top top',
+    invalidateOnRefresh: true,
+    onEnter: () => wrapper.classList.add('hero__condensed--visible'),
+    onLeaveBack: () => wrapper.classList.remove('hero__condensed--visible'),
+  });
+}
+
+/* ==========================================================================
+   Unleashed — Full-screen quote modal
+   Figma: "Quote Modal" (13309:33130). Opened by clicking the condensed
+   widget above; closed via its own close button, Escape, or a click on the
+   backdrop outside the card. `inert` (already on the modal in the markup)
+   is toggled alongside the open state so its fields can't be tabbed or
+   read into while hidden — same technique the old widget mirror used. */
+
+export function initHeroQuoteModal() {
+  const trigger = document.querySelector('[data-hero-condensed-trigger]');
+  const modal = document.querySelector('[data-hero-modal]');
+  const closeBtn = document.querySelector('[data-hero-modal-close]');
+
+  if (!trigger || !modal || !closeBtn) return;
+
+  function open() {
+    modal.inert = false;
+    modal.classList.add('hero__quote-modal--open');
+    trigger.setAttribute('aria-expanded', 'true');
+    closeBtn.focus();
+  }
+
+  function close() {
+    modal.classList.remove('hero__quote-modal--open');
+    modal.inert = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.focus();
+  }
+
+  trigger.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) close();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal.classList.contains('hero__quote-modal--open')) close();
+  });
 }
 
 /* ==========================================================================

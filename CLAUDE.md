@@ -322,9 +322,14 @@ Flag these rather than silently deciding:
   (closest is `yellow/100` `#e0f504`).
 - **Making Choice Simple sliders** — undecided whether they are functional
   (draggable, values update) or static visual. Ask before building that section.
-- **Hero image container** has deliberate bleed: image rects sit at negative offsets
-  and overflow the frame. Needs `overflow: hidden` on the section and careful
-  z-index against the quote widget.
+- **Hero image container** has deliberate bleed, per Figma's own scroll sequence
+  (13239:23922 flush with the band -> 13239:24004 bled past it) — resolved
+  2026-09-23: `overflow-x: hidden` sits on `.hero__image-band` itself rather than
+  the section, because an ancestor of a `position: sticky` element with
+  non-visible overflow can constrain or break its stickiness, while the sticky
+  element clipping its own children is safe. The old "quote widget rising out of
+  the image" mechanic this note referenced is gone — replaced by the condensed
+  widget + full-screen modal sequence (13309:33155 / 13309:33130).
 - **Footer `Footer Link` is set in Geologica Regular (400)**, which is neither in
   `tokens.css` nor loaded in the head. Built in Light (300) on instruction — that is
   what the `Body/Sm Body` style token it carries actually resolves to. Do not

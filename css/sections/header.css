@@ -1,6 +1,6 @@
 /* ==========================================================================
    Unleashed — Header (default state only)
-   Figma: node 13052:17120
+   Figma: node 13052:17120, nav content updated from 13309:35283
    ========================================================================== */
 
 .header {
@@ -11,7 +11,15 @@
      Figma has this frame at 64 (spacing/1400) on a 1312 container. */
   padding-inline: var(--grid-margin);
   padding-block: var(--spacing-300);
-  border-radius: var(--radius-button);
+  background: var(--surface-colour-surface-primary);
+
+  /* Sticky at top on scroll, per 13309:35283. z-index is code-only (no
+     Figma binding, no token) — needs to clear the hero image band, which
+     also sticks to top:0 further down the page (hero.css); without this
+     the band would paint over the header once both are pinned. */
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .header__logo {
@@ -47,10 +55,6 @@
   font-size: var(--size-body-sm-body);
   line-height: var(--line-height-body-sm-body);
   letter-spacing: var(--letter-spacing-body-sm-body);
-}
-
-.header__nav-icon {
-  flex-shrink: 0;
 }
 
 .header__actions {

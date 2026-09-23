@@ -30,25 +30,16 @@
 
     <div class="header__contents">
       <nav class="header__nav" aria-label="Primary">
-        <a class="header__nav-link" href="#">
-          Pet insurance
-          <svg class="header__nav-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-            <path d="M3.75 5.625L7.5 9.375L11.25 5.625" stroke="currentColor" stroke-width="1.375" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </a>
-        <a class="header__nav-link" href="#">How it works</a>
-        <a class="header__nav-link" href="#">
-          Pet care
-          <svg class="header__nav-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-            <path d="M3.75 5.625L7.5 9.375L11.25 5.625" stroke="currentColor" stroke-width="1.375" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </a>
-        <a class="header__nav-link" href="#">About us</a>
+        <a class="header__nav-link" href="#">Dogs</a>
+        <a class="header__nav-link" href="#">Cats</a>
+        <a class="header__nav-link" href="#">Cover</a>
+        <a class="header__nav-link" href="#">Claims</a>
+        <a class="header__nav-link" href="#">About</a>
       </nav>
 
       <div class="header__actions">
         <a class="btn btn--sm btn--secondary btn--yellow" href="#">
-          <span class="btn__label">Log in</span>
+          <span class="btn__label">My account</span>
           <span class="btn__circle"><span class="btn__arrow"></span></span>
         </a>
         <!-- btn--reverse here is NOT about an inverted surface — the header
@@ -110,7 +101,7 @@
 
           <div class="hero__widget-row">
             <div class="hero__widget-fields">
-              <label class="hero__input hero__input--selected">
+              <label class="hero__input">
                 <span class="hero__input-option">
                   <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
                   <span class="hero__input-label">Dog</span>
@@ -131,9 +122,8 @@
                 <input class="hero__input-value" type="text" value="Roxy" />
               </label>
             </div>
-            <a class="btn btn--default btn--primary btn--yellow" href="#">
+            <a class="btn btn--default btn--dark" href="#">
               <span class="btn__label">Get a Free Quote</span>
-              <span class="btn__circle"><span class="btn__arrow"></span></span>
             </a>
           </div>
         </div>
@@ -159,50 +149,89 @@
       <div class="hero__image-band">
         <div class="hero__image-container" data-hero-flip>
           <img class="hero__image-photo" src="assets/img/hero-banner-photo.png" alt="A dalmatian holding a tennis ball in its mouth" />
+        </div>
+      </div>
+    </div>
 
-          <!-- Decorative mirror of the quote widget above, per the Figma scroll
-               sequence (13295:31875 -> 13295:32002): it rises out from behind the
-               expanded image's clipped bottom edge. `inert` because the real,
-               interactive widget is the one in .hero__lower — two live copies
-               would share a radio group name and drift out of sync. -->
-          <div class="hero__image-widget-slot" data-hero-widget-reveal inert aria-hidden="true">
-            <div class="hero__widget">
-              <div class="hero__widget-header">
-                <h4 class="hero__widget-title">Start your free quote</h4>
-                <div class="hero__widget-disclaimer">
-                  <span class="hero__widget-disclaimer-flame">🔥</span>
-                  <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
-                </div>
-              </div>
+    <!-- Condensed quote widget — Figma "Sticky Scroll" (13309:33155). Fixed
+         to the viewport, parked off-screen until initHeroCondensedWidget
+         (js/sections/hero.js) reveals it once the image above has finished
+         growing. The wrapper spans the full viewport only to centre the
+         pill with flexbox and never itself intercepts clicks — see
+         pointer-events in hero.css. -->
+    <div class="hero__condensed" data-hero-condensed>
+      <button
+        type="button"
+        class="hero__condensed-pill"
+        data-hero-condensed-trigger
+        aria-haspopup="dialog"
+        aria-controls="hero-quote-modal"
+        aria-expanded="false"
+      >
+        <span class="hero__condensed-label">Select your pet:</span>
+        <span class="hero__condensed-options">
+          <span class="hero__condensed-option">
+            <img class="hero__condensed-option-icon" src="assets/icons/dog-body.svg" alt="" />
+            <span>Dog</span>
+          </span>
+          <span class="hero__condensed-option">
+            <img class="hero__condensed-option-icon" src="assets/icons/cat.svg" alt="" />
+            <span>Cat</span>
+          </span>
+        </span>
+        <span class="btn btn--sm btn--secondary btn--yellow">
+          <span class="btn__label">Get a Free Quote</span>
+          <span class="btn__circle"><span class="btn__arrow"></span></span>
+        </span>
+      </button>
+    </div>
 
-              <div class="hero__widget-row">
-                <div class="hero__widget-fields">
-                  <span class="hero__input hero__input--selected">
-                    <span class="hero__input-option">
-                      <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
-                      <span class="hero__input-label">Dog</span>
-                    </span>
-                    <span class="hero__radio hero__radio--selected"></span>
-                  </span>
-                  <span class="hero__input">
-                    <span class="hero__input-option">
-                      <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
-                      <span class="hero__input-label">Cat</span>
-                    </span>
-                    <span class="hero__radio"></span>
-                  </span>
-                  <span class="hero__input hero__input--text">
-                    <span class="hero__input-caption">Your pet&rsquo;s name</span>
-                    <span class="hero__input-value">Roxy</span>
-                  </span>
-                </div>
-                <span class="btn btn--default btn--primary btn--yellow">
-                  <span class="btn__label">Get a Free Quote</span>
-                  <span class="btn__circle"><span class="btn__arrow"></span></span>
-                </span>
-              </div>
-            </div>
+    <!-- Full-screen quote modal — Figma "Quote Modal" (13309:33130). Revealed
+         by clicking the condensed widget above. `inert` while closed so its
+         (currently non-functional, name="pet-type-modal") fields can't be
+         tabbed into; js/sections/hero.js toggles both inert and the --open
+         class together. -->
+    <div class="hero__quote-modal" id="hero-quote-modal" data-hero-modal role="dialog" aria-modal="true" aria-labelledby="hero-quote-modal-title" inert>
+      <button type="button" class="hero__quote-modal-close" data-hero-modal-close aria-label="Close">
+        <img src="assets/icons/cross-glyph.svg" alt="" />
+      </button>
+
+      <div class="hero__widget hero__widget--lg">
+        <div class="hero__widget-header">
+          <h4 class="hero__widget-title" id="hero-quote-modal-title">Start your free quote</h4>
+          <div class="hero__widget-disclaimer">
+            <span class="hero__widget-disclaimer-flame" aria-hidden="true">🔥</span>
+            <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
           </div>
+        </div>
+
+        <div class="hero__widget-row">
+          <div class="hero__widget-fields">
+            <label class="hero__input">
+              <span class="hero__input-option">
+                <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
+                <span class="hero__input-label">Dog</span>
+              </span>
+              <input type="radio" name="pet-type-modal" checked hidden />
+              <span class="hero__radio hero__radio--selected"></span>
+            </label>
+            <label class="hero__input">
+              <span class="hero__input-option">
+                <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
+                <span class="hero__input-label">Cat</span>
+              </span>
+              <input type="radio" name="pet-type-modal" hidden />
+              <span class="hero__radio"></span>
+            </label>
+            <label class="hero__input hero__input--text">
+              <span class="hero__input-caption">Your pet&rsquo;s name</span>
+              <input class="hero__input-value" type="text" value="Roxy" />
+            </label>
+          </div>
+          <a class="btn btn--default btn--secondary btn--yellow" href="#">
+            <span class="btn__label">Get a Free Quote</span>
+            <span class="btn__circle"><span class="btn__arrow"></span></span>
+          </a>
         </div>
       </div>
     </div>

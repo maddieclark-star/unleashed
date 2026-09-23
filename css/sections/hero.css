@@ -25,13 +25,19 @@
 
 .hero {
   position: relative;
-  /* How far the image band holds still at the top of the viewport while the
-     quote widget slides out of it. Motion distance, not a spacing value, so
-     it is deliberately not a spacing token — but it IS shared: the sticky
-     wrapper below reserves exactly this much room, and js/sections/hero.js
-     reads this same property to size the reveal's scrub. Change it here and
-     both follow. */
+  /* How far the image band holds still at the top of the viewport after the
+     grow finishes, before the USPs section is allowed to scroll into it.
+     Motion distance, not a spacing value, so it is deliberately not a
+     spacing token. Also doubles as the runway initHeroCondensedWidget (in
+     js/sections/hero.js) waits out before revealing the condensed widget —
+     both key off the same "band has stopped growing" instant, so sharing
+     the property keeps them from drifting apart. */
   --hero-reveal-distance: 500px;
+  /* Symmetric overflow the expanded image bleeds past the band's own edges
+     — measured off Figma 13239:24004 (1669.24px image inside a 1568px band,
+     51 / 50.24 either side; treated as symmetric, the 0.76px gap being
+     rounding noise). See .hero__image-container--expanded below. */
+  --hero-image-bleed: 51px;
 }
 
 /* ---------- Copy block ---------- */
@@ -327,8 +333,22 @@
   /* 12px in Figma, unbound to a radius token — closest exact spacing
      match (--spacing-150) used instead of a raw value. */
   border-radius: var(--spacing-150);
-  /* unbound in Figma — decorative shadow only */
-  box-shadow: 1px 4px 7.6px rgba(165, 180, 0, 0.2);
+  /* unbound in Figma — decorative shadow only. Updated 2026-09-23 from
+     1px/4px/7.6px/20% to match the restyled widget reference
+     (13309:33218 / 13309:33360). */
+  box-shadow: 1px 4px 9.1px rgba(165, 180, 0, 0.3);
+}
+
+/* Larger variant used inside the full-screen quote modal (13309:33360) —
+   same widget, Lg Button sizing throughout: 60px-tall inputs instead of
+   52px, and the pet-type labels step up from Sm Body to Body. */
+.hero__widget--lg .hero__input {
+  height: 60px;
+}
+.hero__widget--lg .hero__input-label {
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
 }
 
 .hero__widget-header {
@@ -401,17 +421,9 @@
   height: 54px;
   padding: var(--grid-gutter);
   border-radius: var(--radius-button);
-  border: 1px solid color-mix(in srgb, var(--colour-yellow-100) 50%, transparent);
+  border: 1px solid var(--border-colour-border-secondary);
   background: var(--surface-colour-surface-primary);
   overflow: hidden;
-}
-
-.hero__input--selected {
-  /* unbound in Figma — decorative selected-state border only.
-     #c6d700 per the current node (13204:14630) — was #8f9c00 in the
-     previous hero iteration; the new Figma file moved it, ported literally. */
-  border-color: #c6d700;
-  box-shadow: 0px 1px 11.4px color-mix(in srgb, var(--colour-yellow-300) 50%, transparent);
 }
 
 .hero__input-option {
@@ -441,20 +453,19 @@
   width: 16px;
   height: 16px;
   border-radius: var(--radius-round);
-  border: 2px solid var(--colour-yellow-500);
+  border: 2px solid var(--border-colour-border-accent);
   flex-shrink: 0;
 }
 
 .hero__radio--selected {
   border: none;
-  background: var(--colour-yellow-500);
+  background: var(--border-colour-border-accent);
 }
 
 .hero__input--text {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  border-color: color-mix(in srgb, var(--colour-yellow-100) 50%, transparent);
 }
 
 .hero__input-caption {
@@ -579,6 +590,14 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  /* Clips the expanded image's horizontal bleed (see
+     .hero__image-container--expanded) to the viewport instead of creating a
+     page-wide horizontal scrollbar — the known-issue fix, scoped to the band
+     itself rather than a .hero-level rule. An ancestor of a position:sticky
+     element with non-visible overflow can constrain or break its stickiness;
+     the sticky element having overflow set on ITSELF does not, so clipping
+     here is safe where clipping higher up the tree would not have been. */
+  overflow-x: hidden;
   padding-top: var(--spacing-300);
   padding-inline: var(--spacing-300);
   /* Gap between the bottom of the (expanded) image and the USPs section
@@ -594,7 +613,9 @@
 /* Default: a small, centred 518x241 (~2.15:1) preview of the image.
    Expanded (.hero__image-container--expanded, toggled by js/sections/hero.js
    via GSAP Flip on scroll): grows to fill the band at a uniform scale — same
-   aspect ratio, no crop — leaving a 24px margin each side, not full bleed. */
+   aspect ratio, no crop — and keeps going past 100% into a deliberate bleed,
+   per Figma's own scroll sequence (13239:23922 flush with the band ->
+   13239:24004 bled past it). The zoom does not plateau at flush-with-band. */
 .hero__image-container {
   position: relative;
   width: 518px;
@@ -610,40 +631,10 @@
 }
 
 .hero__image-container--expanded {
-  width: 100%;
-}
-
-/* ---------- Quote widget reveal (inside the image) ----------
-   Figma: 13295:31875 (emerging, clipped by the image's bottom edge) ->
-   13295:32002 (at rest, overlapping the photo). Driven by
-   initHeroWidgetReveal in js/sections/hero.js.
-
-   Inset is 24px (--spacing-300) on left, right and bottom. Figma measures
-   ~25.5 there: those frames are a 1440 design captured at 1728, and 31 /
-   30.25 / 30.63 px divided by that 1.2 factor gives 25.8 / 25.2 / 25.5.
-   No token matches — 24 is the nearest, 1.5px under. Same "use the nearest
-   token rather than add one" call already made for this section's 20px
-   image radius and the band's 51.2 -> 48 bottom padding.
-
-   The slot exists so the parked state is a plain yPercent:100 with no
-   measured pixel offset anywhere in the JS: it carries the bottom inset as
-   its own padding, so slot height = widget + inset, and translating it by
-   one full slot height puts widget AND inset entirely below the container's
-   bottom edge, where overflow:hidden clips it.
-
-   translateY(100%) here is also the no-JS and prefers-reduced-motion state —
-   parked is invisible, so the fallback is simply the widget never appearing.
-   That is the correct static fallback: the real interactive widget is still
-   in normal flow above the image, untouched. */
-.hero__image-widget-slot {
-  position: absolute;
-  left: var(--spacing-300);
-  right: var(--spacing-300);
-  bottom: 0;
-  /* above .hero__image-photo, which is also absolutely positioned */
-  z-index: 1;
-  padding-bottom: var(--spacing-300);
-  transform: translateY(100%);
+  width: calc(100% + 2 * var(--hero-image-bleed));
+  /* Centres the bleed instead of relying on the band's flex centring to
+     overflow symmetrically on its own. */
+  margin-inline: calc(-1 * var(--hero-image-bleed));
 }
 
 .hero__image-photo {
@@ -657,4 +648,173 @@
      scroll. will-change hints the browser to promote this to its own layer
      ahead of time rather than on first transform write. */
   will-change: transform;
+}
+
+/* ---------- Condensed quote widget (fixed, bottom of viewport) ----------
+   Figma: "Sticky Scroll" (13309:33155). Revealed by initHeroCondensedWidget
+   in js/sections/hero.js once the image above finishes growing.
+
+   Two layers, deliberately: the outer .hero__condensed spans the full
+   viewport only so flexbox can centre the pill and pin it to the bottom —
+   it is not itself a hit target (pointer-events:none), so it never sits on
+   top of the rest of the page intercepting clicks/scroll. Only the pill
+   inside re-enables pointer-events.
+
+   Figma nests the visible pill inside an extra "Outer" frame that clips to
+   a 20px radius while the pill itself is already fully rounded (radius/round)
+   at the same size — the outer radius never has anything to clip and reads
+   as a Figma authoring artifact (a leftover wrapper from resizing a
+   component instance), not an intentional double-radius. Built as a single
+   rounded element instead. */
+.hero__condensed {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--spacing-300) var(--spacing-500);
+  pointer-events: none;
+}
+
+.hero__condensed-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--grid-gutter);
+  padding: var(--spacing-100) var(--spacing-100) var(--spacing-100) var(--grid-gutter);
+  border: none;
+  border-radius: var(--radius-round);
+  background: var(--surface-colour-surface-primary);
+  /* unbound in Figma — decorative shadow only, same colour as the widget's
+     own shadow above at a lighter weight for this smaller surface. */
+  box-shadow: 1px 4px 7.8px rgba(165, 180, 0, 0.2);
+  opacity: 0.9;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(150%);
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.2s ease;
+}
+
+.hero__condensed-pill:is(:hover, :focus-visible) {
+  opacity: 1;
+}
+
+.hero__condensed--visible .hero__condensed-pill {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__condensed-pill {
+    transition: opacity 0.2s ease;
+  }
+}
+
+.hero__condensed-label {
+  margin: 0;
+  font-family: var(--typography-heading-font-family);
+  font-weight: var(--typography-heading-weight);
+  font-size: var(--size-body-body);
+  line-height: var(--line-height-body-body);
+  letter-spacing: var(--letter-spacing-body-body);
+  color: var(--text-colour-text-primary);
+  white-space: nowrap;
+}
+
+.hero__condensed-options {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-200);
+}
+
+.hero__condensed-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+  /* 44px — the same unbound-in-the-scale spacing/900 figure already flagged
+     under "Known issues" in CLAUDE.md, reused here because it happens to be
+     exactly this pill's height in Figma. */
+  height: var(--spacing-900);
+  padding-inline: var(--spacing-200);
+  border: 1px solid var(--border-colour-border-secondary);
+  border-radius: var(--radius-round);
+  background: var(--surface-colour-surface-primary);
+  font-family: var(--typography-body-font-family);
+  font-weight: var(--typography-body-weight-strong);
+  font-size: var(--size-body-sm-body);
+  line-height: var(--line-height-body-sm-body);
+  letter-spacing: var(--letter-spacing-body-sm-body);
+  color: var(--text-colour-text-primary);
+  white-space: nowrap;
+}
+
+.hero__condensed-option-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+/* ---------- Full-screen quote modal ---------- */
+
+/* Figma: "Quote Modal" (13309:33130). The frame itself carries rounded
+   bottom corners (56px) and a large top padding, both read as an artifact
+   of the mockup's own device-frame chrome rather than an intended property
+   of the overlay — an edge-to-edge fixed overlay with two rounded corners
+   would be an unusual treatment this project's motion/layout principles
+   don't otherwise use, and no other overlay in the file rounds itself
+   against the viewport edge. Built as a plain edge-to-edge overlay instead;
+   flagging the deviation rather than porting it literally. */
+.hero__quote-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--spacing-500) var(--spacing-500);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12.5px);
+  -webkit-backdrop-filter: blur(12.5px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s linear 0.35s;
+}
+
+.hero__quote-modal--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__quote-modal {
+    transition: none;
+  }
+}
+
+.hero__quote-modal-close {
+  position: absolute;
+  top: var(--spacing-300);
+  right: var(--spacing-300);
+  /* 56px — unbound in Figma */
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-round);
+  background: var(--surface-colour-surface-primary);
+  cursor: pointer;
+}
+
+.hero__quote-modal-close img {
+  width: 24px;
+  height: 24px;
 }

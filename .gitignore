@@ -27,3 +27,12 @@ CLAUDE.local.md
 # Per-worktree run config — each worktree needs its own port, so this
 # must not be shared. Keep a local copy per checkout.
 .claude/launch.json
+
+# Scratch files. Kept on disk, never deployed — _button-lab.html would
+# otherwise be reachable at /_button-lab.html on the live site, and
+# ParallaxHero.tsx is a React reference file in a no-React project.
+_button-lab.html
+ParallaxHero.tsx
+
+# Working screenshots dropped into assets/ while building.
+assets/shot*.png
