@@ -6,21 +6,18 @@
    Two cards, identical shells, stacked with a 64px gap. Each is a copy
    panel plus a media panel.
 
-   The copy panel carries two brand shapes behind the text — the same
-   glyph as the swooshes, clipped to the panel. Cat card: pink/950 at
-   24%. Dog card: unbound, see the dog-specific override below.
+   The copy panel carries brand shapes behind the text — the same glyph
+   as the media-panel swoosh, clipped to the panel. Cat card: pink/950 at
+   24%, and only one shape — its second is duplicated live at content
+   level instead (see "Cat card live shape" below), so it isn't clipped
+   by the copy panel's own overflow. Dog card: unbound, keeps both, see
+   the dog-specific override below.
 
-   The cat card's media panel is a layered composite: a pale rect, the
-   photograph, brand swooshes, and a cut-out of the same animal laid back
-   over the top so it reads above the swooshes. Its second swoosh sits
-   ABOVE the cut-out instead of below it — see the brand swooshes section
-   below.
-
-   The dog card's media panel is NOT a live composite — as of the
-   13137:12319 update it's a single flattened image (photo + swoosh
-   already baked in by design), so it just fills the panel with
-   object-fit: cover. No swoosh, cut-out or bleed layer to maintain here
-   any more; that machinery still applies to the cat card only.
+   Neither card's media panel is a live composite any more — both are a
+   single flattened image (photo + swoosh already baked in by design:
+   dog per the 13137:12319 update, cat per 13137:12301), so each just
+   fills the panel with object-fit: cover. No swoosh, cut-out or bleed
+   layer to maintain on either card any more.
 
    Every vector here — swooshes and brand shapes alike — is the same
    exported glyph at different scales and rotations.
@@ -72,7 +69,10 @@
   background: var(--colour-yellow-300);
 }
 
+/* query container for the cat card's live swoosh, which sits above both
+   the copy panel and the media panel and has to scale with the row */
 .page-cards__content {
+  container: pc-content / inline-size;
   position: relative;
   z-index: 3;
   display: flex;
@@ -192,25 +192,12 @@
 
 
 /* ---------- Media panel ----------
-   The copy panel is a fixed 567, so every pixel of extra viewport width
-   lands on the media panel: 645 wide at the 1440 baseline, 933 at 1728.
-
-   The cat card's composite is sized in cqw — 1cqw is 1% of the panel's
-   own width, so 1cqw = 6.45px at the baseline and every value below is
-   just its Figma measurement divided by 6.45. Sizes AND offsets scale
-   together, so the whole arrangement grows as one piece and the
-   photography keeps reaching the panel edges at any width. Pinning any
-   of it in px is what left pale gutters on widescreen.
-
-   Percentages on the images inside a frame stay percentages: they are
-   relative to the frame, which is already scaling.
-
-   The dog card doesn't need any of this — its image is a single flat
-   photo with the swoosh graphic already baked in, so object-fit: cover
-   on a panel-filling img is enough. See "Dog card" below. */
+   A single photograph, filling the panel, on both cards. The copy panel
+   is a fixed 567, so every pixel of extra viewport width lands here:
+   645 wide at the 1440 baseline, 933 at 1728. The swoosh crossing the
+   frame is baked into each photo itself in Figma, not a separate layer. */
 
 .page-cards__media {
-  container: pc-media / inline-size;
   position: relative;
   flex: 1 0 0;
   min-inline-size: 0;
@@ -218,48 +205,6 @@
   border-radius: var(--radius-image);
   background: var(--colour-pink-50);
   overflow: hidden;
-}
-
-/* Photo and cut-out both hang well past the panel on every side, so each
-   is a window with the image offset inside it. */
-.page-cards__frame {
-  position: absolute;
-  overflow: hidden;
-}
-
-.page-cards__frame img {
-  position: absolute;
-  max-inline-size: none;
-}
-
-
-/* ---------- Brand swooshes ----------
-   Cat card only now — the dog card's swoosh is baked into its flattened
-   image (see "Dog card" below). Two different scales, and the second
-   one re-laid ABOVE the cut-out — it's after .page-cards__cutout in the
-   markup, so it paints on top with no z-index needed — which is what
-   lets the loop cross back in front of the cat's shoulder. Left/top
-   below are each glyph's unrotated box, rotation about its centre. */
-
-.page-cards__swoosh {
-  position: absolute;
-  max-inline-size: none;
-}
-
-.page-cards__card--cat .page-cards__swoosh--cat-1 {
-  left: 32.58566cqw;
-  top: -67.63938cqw;
-  inline-size: 129.11085cqw;
-  block-size: 107.58791cqw;
-  transform: rotate(-52.1deg);
-}
-
-.page-cards__card--cat .page-cards__swoosh--cat-2 {
-  left: -45.71008cqw;
-  top: 22.85209cqw;
-  inline-size: 99.85147cqw;
-  block-size: 83.20651cqw;
-  transform: rotate(162deg);
 }
 
 /* ---------- Dog card ----------
@@ -276,34 +221,35 @@
 
 
 /* ---------- Cat card ----------
-   Photo and cut-out share one framing: both windows sit at the same x
-   and hold the image at the same offset, so the cut-out lands exactly
-   over the cat in the photograph beneath. */
+   Single flattened image (photo + swoosh baked in by design, 13137:12301)
+   filling the panel — no live swoosh, cut-out or bleed layer needed. The
+   second brand shape still crosses the seam live — see "Cat card live
+   shape" below. */
 
 .page-cards__card--cat .page-cards__photo {
-  left: -11.17829cqw;
-  top: -31.78140cqw;
-  inline-size: 122.35504cqw;
-  block-size: 184.18605cqw;
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
 }
 
-.page-cards__card--cat .page-cards__photo img {
-  top: 12.71%;
-  left: -9%;
-  inline-size: 120.62%;
-  block-size: 62.29%;
-}
 
-.page-cards__card--cat .page-cards__cutout {
-  left: -11.16279cqw;
-  top: -31.78140cqw;
-  inline-size: 100.31008cqw;
-  block-size: 120.31008cqw;
-}
+/* ---------- Cat card live shape ----------
+   The cat card duplicates brand-shape--2 at content level instead of
+   confining it to the copy panel, so it isn't clipped by the copy
+   panel's own overflow — see file header. Same mask/colour-mix
+   treatment as the other brand shapes; it just needs its own position
+   because it's sized off .page-cards__content, not .page-cards__copy.
+   It's after the media panel in the markup, so it paints above it with
+   no z-index needed. 1cqw here is 1% of .page-cards__content's own
+   width (1520 at the 1440 baseline), so every value is its Figma
+   measurement divided by 15.2. */
 
-.page-cards__card--cat .page-cards__cutout img {
-  top: 19.46%;
-  left: -10.98%;
-  inline-size: 147.09%;
-  block-size: 95.36%;
+.page-cards__brand-shape--cat {
+  left: 3.69329cqw;
+  top: -7.64434cqw;
+  inline-size: 42.75895cqw;
+  block-size: 35.63111cqw;
+  transform: translate(-50%, -50%) rotate(151.95deg);
 }
