@@ -50,18 +50,30 @@ html.custom-cursor-active * {
 }
 
 .custom-cursor {
+  /* Hotspot — top-centre of the paw. paw-glyph.svg's artwork is not centred
+     in its own 42x42 viewBox: it spans 5.273%-93.359% across (centre 49.316%)
+     and starts 8.789% down. Both figures are measured off the file, so they
+     must be re-measured if the glyph is ever re-exported. js/cursor.js reads
+     these two custom properties, so the numbers live in one place only. */
+  --paw-hotspot-x: -49.316%;
+  --paw-hotspot-y: -8.789%;
+
   position: fixed;
   top: 0;
   left: 0;
-  width: 36px;
-  height: 24px;
+  /* Sized so the paw itself lands at ~22.9 x 21.0, matching the previous
+     artwork. No icon-size token exists; hardcoded per the components.css
+     precedent for one-off component dimensions. */
+  width: 26px;
+  height: 26px;
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
-  transform: translate(-50%, -6.69%);
-}
+  transform: translate(var(--paw-hotspot-x), var(--paw-hotspot-y));
 
-.custom-cursor img {
-  width: 100%;
-  height: 100%;
+  /* paw-glyph.svg is fill="currentColor", which an <img> cannot inherit, so
+     it is used as a mask and tinted from the token instead. */
+  background: var(--colour-pink-400-brand);
+  -webkit-mask: url(../assets/icons/paw-glyph.svg) center / contain no-repeat;
+  mask: url(../assets/icons/paw-glyph.svg) center / contain no-repeat;
 }
