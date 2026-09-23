@@ -763,7 +763,10 @@
 .hero__condensed-options {
   display: flex;
   align-items: center;
-  gap: var(--spacing-200);
+  /* 8px between the Dog and Cat pills, which is also what Figma's own
+     input row carries (13309:33040) — the 16px this used to be was a
+     misread of the row's outer gap. */
+  gap: var(--spacing-100);
 }
 
 .hero__condensed-option {
