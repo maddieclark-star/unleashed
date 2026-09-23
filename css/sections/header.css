@@ -3,6 +3,17 @@
    Figma: node 13052:17120, nav content updated from 13309:35283
    ========================================================================== */
 
+/* The header's own height, published for sections that have to sit clear of
+   it while it's pinned (page-cards' stacking offset is the first). 96 is the
+   Figma frame height for 13052:17120, and what the rule below resolves to
+   (24 padding, 48 of content, 24 padding). Raw rather than tokenised: it is a
+   measurement of a built component, not a spacing value — same precedent as
+   the 52/60px button heights in components.css. It lives here so it can't
+   drift from the rule that produces it. */
+:root {
+  --header-height: 96px;
+}
+
 .header {
   display: flex;
   align-items: center;

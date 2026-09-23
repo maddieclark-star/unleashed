@@ -289,10 +289,13 @@
    travel is not eye-tuned — see its own note. */
 @media (prefers-reduced-motion: no-preference) {
   .page-cards__stack {
-    /* Where the stack comes to rest: the first card pins this far down
-       rather than flush against the top of the viewport, so the pinned
-       stack keeps a margin above it instead of butting into the header. */
-    --page-cards-pin-top: var(--spacing-800);
+    /* Where the stack comes to rest: the dog card pins 40px below the
+       BOTTOM of the sticky header, not 40px below the top of the viewport,
+       so the gap you see is the gap between the two. Measured from the
+       header's published height (header.css) so it tracks that component
+       rather than restating it. Was a flat --spacing-800 from the viewport
+       top, which the pinned header ate most of. */
+    --page-cards-pin-top: calc(var(--header-height) + var(--spacing-500));
     /* 40 on request 2026-09-23, was 64. Left raw rather than swapped for
        --spacing-500 (which is also 40): this is the visual depth of the
        stack, not a layout measurement, same reasoning as the note above. */
