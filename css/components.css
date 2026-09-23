@@ -173,8 +173,11 @@
   padding-left: var(--spacing-50);
 }
 
-/* Raised — soft yellow lift. USPs only so far; the hero's eyebrow
-   (13013:13426) is flat, so this is opt-in rather than baked in. */
+/* Raised — soft yellow lift. Opt-in rather than baked into .eyebrow,
+   because the footer's three eyebrows and the CTA banner's are flat.
+   Carried by the USPs and, on request 2026-09-23, the hero — whose node
+   (13013:13426) draws it flat, so that one is a deliberate departure from
+   Figma, not a match to it. */
 .eyebrow--raised {
   box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-yellow-500) 14%, transparent);
 }

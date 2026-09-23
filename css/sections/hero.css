@@ -454,17 +454,23 @@
   white-space: nowrap;
 }
 
+/* One state only — a pink ring, never a pink fill. Both radios are drawn
+   identically in Figma (13309:33234 / 13309:33240 in the widget, and
+   :33376 / :33382 in the modal are all `border-2 border-accent`), so the
+   filled .hero__radio--selected that used to mark Dog was carried over
+   from the previous hero iteration and is gone as of 2026-09-23.
+
+   Consequence worth knowing: the widget now shows no selected pet. The
+   radios are decorative — the real <input type="radio"> behind them is
+   hidden and unwired — so this is a faithful port of a static design, not
+   a broken control. Giving selection a visual state again means designing
+   one, not restoring the fill. */
 .hero__radio {
   width: 16px;
   height: 16px;
   border-radius: var(--radius-round);
   border: 2px solid var(--border-colour-border-accent);
   flex-shrink: 0;
-}
-
-.hero__radio--selected {
-  border: none;
-  background: var(--border-colour-border-accent);
 }
 
 .hero__input--text {
