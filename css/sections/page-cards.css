@@ -37,9 +37,9 @@
   );
 }
 
-/* Holds the two cards. Becomes the pinned element when the scroll-driven
-   card swap lands at build step 13 — the cards themselves won't need to
-   change, so this stays a plain flow container for now. */
+/* Holds the two cards. Plain flow stack by default; the sticky stacking
+   treatment is layered on under prefers-reduced-motion: no-preference at
+   the foot of this file, so this stays the reduced-motion fallback. */
 .page-cards__stack {
   display: flex;
   flex-direction: column;
@@ -252,4 +252,88 @@
   inline-size: 42.75895cqw;
   block-size: 35.63111cqw;
   transform: translate(-50%, -50%) rotate(151.95deg);
+}
+
+
+/* ---------- Stacking cards (build step 14) ----------
+   Behaviour ported from fancycomponents.dev/docs/components/blocks/
+   stacking-cards — reference only, rebuilt in vanilla CSS/JS against our
+   own tokens and markup.
+
+   The whole effect is position: sticky on cards that stay in NORMAL FLOW.
+   There is deliberately no fixed-height frame and no overflow: hidden
+   anywhere in the stack, because that is the only way a card can never be
+   clipped: with nothing cropping it, the incoming card simply scrolls up
+   from below the viewport at full size, fully visible the entire way, and
+   then sticks. Earlier versions pinned a frame and slid the cat inside it,
+   which meant the frame's own bottom edge cut the card off on the way in.
+
+   Each card sticks a little lower than the one before it (--page-cards-peek
+   per step), and that offset is what leaves the previous card's top edge
+   peeking above — no clip-path or extra frame height needed to produce it.
+   The card underneath also scales down slightly as it's covered, which is
+   the reference's scaleMultiplier, applied from js/sections/page-cards.js.
+
+   Scoped to prefers-reduced-motion: no-preference so the fallback above
+   (plain flow stack, no JS needed) is what reduced-motion visitors get —
+   motion enhances, it never gates content.
+
+   The three lengths below have no tokens — they aren't design
+   measurements. travel is how much scroll the incoming card rises over,
+   hold keeps the finished stack on screen instead of letting it unstick
+   the instant it lands, and peek is how much of the card beneath stays
+   visible. All tuned by eye; same precedent as --pc-media-w above. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-cards__stack {
+    /* Where the stack comes to rest: the first card pins this far down
+       rather than flush against the top of the viewport, so the pinned
+       stack keeps a margin above it instead of butting into the header. */
+    --page-cards-pin-top: var(--spacing-800);
+    --page-cards-peek: 64px;
+    --page-cards-travel: 620px;
+    --page-cards-hold: 360px;
+
+    /* gap IS the scroll distance the incoming card travels — plain flow
+       spacing, and the sticky cards inside do the rest. */
+    gap: var(--page-cards-travel);
+  }
+
+  .page-cards__card {
+    position: sticky;
+    will-change: transform;
+  }
+
+  /* Dog pins at the stack's rest offset and scales toward its own top
+     edge, so it recedes in place rather than sliding as the cat rises. */
+  .page-cards__card--dog {
+    top: var(--page-cards-pin-top);
+    transform-origin: 50% 0%;
+  }
+
+  /* Cat pins one peek below the dog, which is what exposes the dog above
+     it — so it carries the same offset plus the peek, not the peek alone. */
+  .page-cards__card--cat {
+    top: calc(var(--page-cards-pin-top) + var(--page-cards-peek));
+  }
+
+  /* The hold — trailing space that keeps the assembled stack on screen
+     instead of letting it unstick the moment the cat lands.
+
+     It has to be a flex ITEM to work. A sticky box is constrained to its
+     parent's content box inset by its own margins, so neither padding on
+     the stack (outside the content box) nor a bottom margin on the cat
+     (adds height, but pushes the constraint up by exactly as much) buys
+     any stuck range. An empty ::after is real content-box height that
+     belongs to no sticky element, so it does.
+
+     The negative top margin cancels the flex gap that would otherwise sit
+     in front of it — gap applies between every pair of items, and this
+     spacer wants only its own height, not another full travel. */
+  .page-cards__stack::after {
+    content: '';
+    display: block;
+    flex: none;
+    block-size: var(--page-cards-hold);
+    margin-block-start: calc(-1 * var(--page-cards-travel));
+  }
 }
