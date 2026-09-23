@@ -33,11 +33,6 @@
      both key off the same "band has stopped growing" instant, so sharing
      the property keeps them from drifting apart. */
   --hero-reveal-distance: 500px;
-  /* Symmetric overflow the expanded image bleeds past the band's own edges
-     — measured off Figma 13239:24004 (1669.24px image inside a 1568px band,
-     51 / 50.24 either side; treated as symmetric, the 0.76px gap being
-     rounding noise). See .hero__image-container--expanded below. */
-  --hero-image-bleed: 51px;
 }
 
 /* ---------- Copy block ---------- */
@@ -580,52 +575,53 @@
   height: var(--hero-reveal-distance);
 }
 
-/* Reduced motion: both hero scroll animations bail out in js/sections/hero.js,
-   so the hold would reserve 500px of scroll for something that never happens —
-   a dead strip of yellow. Give the band its static layout back instead. This
-   restores the pre-animation hero exactly. */
-@media (prefers-reduced-motion: reduce) {
-  .hero__image-band {
-    position: relative;
-  }
-
-  .hero__image-sticky::after {
-    display: none;
-  }
-}
-
+/* The band fills the viewport and hangs the image off its BOTTOM edge, so
+   that once it sticks, the image's bottom sits one --spacing-300 above the
+   fold — level with the condensed pill, which is pinned at the same 24px.
+   That overlap is the point: Figma 13239:24004 draws the pill over the
+   photo's lower edge (image bottom 26.6px above the frame's, pill bottom
+   level with it), and with the image top-aligned in a content-height band
+   the two could never meet — the image bottomed out 93px above the pill at
+   every scroll position, leaving the pill floating on the pale band below
+   the photo. align-items:flex-end + min-height:100vh is what closes that
+   gap without resizing the image away from its Figma dimensions. */
 .hero__image-band {
   position: sticky;
   top: 0;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
+  min-height: 100vh;
   width: 100%;
-  /* Clips the expanded image's horizontal bleed (see
-     .hero__image-container--expanded) to the viewport instead of creating a
-     page-wide horizontal scrollbar — the known-issue fix, scoped to the band
-     itself rather than a .hero-level rule. An ancestor of a position:sticky
-     element with non-visible overflow can constrain or break its stickiness;
-     the sticky element having overflow set on ITSELF does not, so clipping
-     here is safe where clipping higher up the tree would not have been. */
+  /* Guard, not a workaround: the expanded image is inset 24px either side
+     so nothing overflows today, but the band is the safe place to clip if
+     it ever does. An ancestor of a position:sticky element with non-visible
+     overflow can constrain or break its stickiness; the sticky element
+     having overflow set on ITSELF does not. */
   overflow-x: hidden;
   padding-top: var(--spacing-300);
   padding-inline: var(--spacing-300);
-  /* Gap between the bottom of the (expanded) image and the USPs section
-     below it — was 24px, then 120px, then 80px, then 64px, now 48px
-     (--spacing-600) on request 2026-09-22 (a further 20% reduction from
-     64 = 51.2px exactly; no token matches, nearest is 48, off by 3.2px —
-     same "use nearest token" call made explicitly for the 120->96 step
-     earlier in this thread, applied consistently here without re-asking). */
-  padding-bottom: var(--spacing-600);
+  /* Matches the condensed pill's own offset from the fold, so image bottom
+     and pill bottom land on the same line. Was 48px (--spacing-600) when
+     this measured the gap to the USPs section; the band is now viewport
+     height, so the USPs are held off by the wrapper's ::after instead and
+     this value is free to serve the overlap. */
+  padding-bottom: var(--spacing-300);
   background: var(--colour-yellow-light-100);
 }
 
-/* Default: a small, centred 518x241 (~2.15:1) preview of the image.
+/* Default: a small 518x241 (~2.15:1) preview of the image.
    Expanded (.hero__image-container--expanded, toggled by js/sections/hero.js
    via GSAP Flip on scroll): grows to fill the band at a uniform scale — same
-   aspect ratio, no crop — and keeps going past 100% into a deliberate bleed,
-   per Figma's own scroll sequence (13239:23922 flush with the band ->
-   13239:24004 bled past it). The zoom does not plateau at flush-with-band. */
+   aspect ratio, no crop.
+
+   100% of the band's content box is 1392 at a 1440 viewport, which IS the
+   bled state: Figma 13239:24004 puts the image at 1669.24 wide inside a
+   1568 container at 1728 scale — 1391 x 647 inset 24px once divided by that
+   1.2 factor, i.e. wider than the 1280 page container every other section
+   uses, but not past the viewport. An earlier pass added another 51px per
+   side on top of this, double-counting that same bleed and rendering the
+   image ~7% oversize; do not reintroduce it. */
 .hero__image-container {
   position: relative;
   width: 518px;
@@ -641,10 +637,35 @@
 }
 
 .hero__image-container--expanded {
-  width: calc(100% + 2 * var(--hero-image-bleed));
-  /* Centres the bleed instead of relying on the band's flex centring to
-     overflow symmetrically on its own. */
-  margin-inline: calc(-1 * var(--hero-image-bleed));
+  width: 100%;
+}
+
+/* Reduced motion: both hero scroll animations bail out in js/sections/hero.js,
+   so the hold would reserve 500px of scroll for something that never happens —
+   a dead strip of yellow. Give the band its static layout back instead. This
+   restores the pre-animation hero exactly.
+
+   MUST STAY BELOW .hero__image-band. A media query carries no extra
+   specificity, so these declarations only win on source order — sitting above
+   the base rule (where this block used to live) left `position: relative`
+   silently losing to `position: sticky`, and the reduced-motion fallback was
+   never actually applying. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__image-band {
+    position: relative;
+    /* The viewport-height band and its bottom-hung image only exist to let
+       the condensed pill overlap the photo mid-scroll. Nothing scrolls here,
+       and the image never expands, so a 100vh band would just be a screenful
+       of yellow with a 518px preview parked at the foot of it. Back to a
+       content-height band with the original 48px gap to the USPs. */
+    min-height: 0;
+    align-items: center;
+    padding-bottom: var(--spacing-600);
+  }
+
+  .hero__image-sticky::after {
+    display: none;
+  }
 }
 
 .hero__image-photo {
@@ -703,17 +724,13 @@
      request — the pill floats clear of the viewport edge, so the shadow
      keeps the eyebrow's natural downward offset. */
   box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-yellow-500) 14%, transparent);
-  opacity: 0.9;
+  /* Fully opaque, on request 2026-09-23. Figma's frame carries opacity 90%
+     on the wrapper, which over the photo read as a wash rather than a
+     surface — the pill is a solid white control sitting on the image. */
   cursor: pointer;
   pointer-events: auto;
   transform: translateY(150%);
-  transition:
-    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.2s ease;
-}
-
-.hero__condensed-pill:is(:hover, :focus-visible) {
-  opacity: 1;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .hero__condensed--visible .hero__condensed-pill {
@@ -722,7 +739,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero__condensed-pill {
-    transition: opacity 0.2s ease;
+    transition: none;
   }
 }
 
