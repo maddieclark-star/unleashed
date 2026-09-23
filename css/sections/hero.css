@@ -542,6 +542,39 @@
   width: 100%;
 }
 
+/* ---------- Quote widget reveal (inside the image) ----------
+   Figma: 13295:31875 (emerging, clipped by the image's bottom edge) ->
+   13295:32002 (at rest, overlapping the photo). Driven by
+   initHeroWidgetReveal in js/sections/hero.js.
+
+   Inset is 24px (--spacing-300) on left, right and bottom. Figma measures
+   ~25.5 there: those frames are a 1440 design captured at 1728, and 31 /
+   30.25 / 30.63 px divided by that 1.2 factor gives 25.8 / 25.2 / 25.5.
+   No token matches — 24 is the nearest, 1.5px under. Same "use the nearest
+   token rather than add one" call already made for this section's 20px
+   image radius and the band's 51.2 -> 48 bottom padding.
+
+   The slot exists so the parked state is a plain yPercent:100 with no
+   measured pixel offset anywhere in the JS: it carries the bottom inset as
+   its own padding, so slot height = widget + inset, and translating it by
+   one full slot height puts widget AND inset entirely below the container's
+   bottom edge, where overflow:hidden clips it.
+
+   translateY(100%) here is also the no-JS and prefers-reduced-motion state —
+   parked is invisible, so the fallback is simply the widget never appearing.
+   That is the correct static fallback: the real interactive widget is still
+   in normal flow above the image, untouched. */
+.hero__image-widget-slot {
+  position: absolute;
+  left: var(--spacing-300);
+  right: var(--spacing-300);
+  bottom: 0;
+  /* above .hero__image-photo, which is also absolutely positioned */
+  z-index: 1;
+  padding-bottom: var(--spacing-300);
+  transform: translateY(100%);
+}
+
 .hero__image-photo {
   position: absolute;
   inset: 0;

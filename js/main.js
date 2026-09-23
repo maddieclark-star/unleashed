@@ -1,4 +1,5 @@
-import { initHeroImageFlip, initHeroParallax } from './sections/hero.js';
+import { initHeroImageFlip, initHeroWidgetReveal, initHeroParallax } from './sections/hero.js';
 
 initHeroImageFlip();
+initHeroWidgetReveal();
 initHeroParallax(0.4);

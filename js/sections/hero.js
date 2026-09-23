@@ -58,6 +58,81 @@ export function initHeroImageFlip() {
 }
 
 /* ==========================================================================
+   Unleashed — Quote widget reveal
+   Figma: 13295:31875 -> 13295:32002, the two frames after the grow finishes.
+   The copy block (and the real widget with it) has scrolled away above; a
+   mirror of the widget rises out from behind the expanded image's clipped
+   bottom edge and comes to rest overlapping the photo.
+
+   PINNED, unlike initHeroImageFlip above. The two are not in conflict — the
+   earlier "no pin" call was about pinning DURING the grow, which froze the
+   image three-quarters down the viewport and left a blank band above it.
+   This pin starts exactly where the grow ends ('top top', the band's top at
+   the viewport's top), so there is nothing above it to leave blank: the band
+   is already in its final resting position when it locks. Starting any
+   earlier would freeze the band mid-grow and reintroduce that bug. The band
+   is 719 tall once expanded (24 + 647 image + 48), which is shorter than the
+   viewport, so 'bottom bottom' would fire while the grow still had a couple
+   of hundred px to run. Keep these two boundaries touching.
+
+   Because the band is shorter than the viewport, a strip of the next section
+   shows beneath it while it is pinned. That is the design, not a leak:
+   frames 13295:31875 and :32002 are 966 tall with the image ending at 801,
+   i.e. they show the same strip underneath.
+
+   REVEAL_DISTANCE is scroll length, not duration — the slide is scrubbed, so
+   this is how far you scroll to pull the widget out. ease:'none' for the same
+   reason it is used on the Flip above: any other ease double-eases against
+   the scrub and reads as lag, and the brand's overshoot has nowhere to go in
+   a scrubbed animation anyway.
+   ========================================================================== */
+
+const REVEAL_DISTANCE = 500;
+
+export function initHeroWidgetReveal() {
+  const band = document.querySelector('.hero__image-band');
+  const slot = document.querySelector('[data-hero-widget-reveal]');
+
+  if (!band || !slot) return;
+
+  if (!window.gsap || !window.ScrollTrigger) {
+    console.warn('[hero] GSAP/ScrollTrigger not loaded — skipping widget reveal.');
+    return;
+  }
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // `y: 0` in BOTH states is load-bearing, not noise. GSAP reads the element's
+  // existing computed transform as a matrix, so the parked translateY(100%) in
+  // hero.css comes back as a resolved pixel y (200px), not as yPercent — and
+  // then yPercent:100 stacks on top of it for 400px, double the slot height.
+  // The widget parks twice as far down as it should and never fully arrives.
+  // Declaring yPercent and y together makes GSAP the only author of the
+  // transform, so the CSS value is a fallback and nothing more.
+  gsap.fromTo(
+    slot,
+    { yPercent: 100, y: 0 },
+    {
+      yPercent: 0,
+      y: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: band,
+        start: 'top top',
+        end: `+=${REVEAL_DISTANCE}`,
+        pin: true,
+        scrub: true,
+        invalidateOnRefresh: true,
+      },
+    }
+  );
+}
+
+/* ==========================================================================
    Hero image parallax — vanilla JS, no dependencies (IntersectionObserver +
    requestAnimationFrame), ported from the brief for components/ParallaxHero
    (that component doesn't exist in this repo — this project is plain
