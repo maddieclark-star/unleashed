@@ -403,6 +403,16 @@
   width: 100%;
 }
 
+/* The widget's CTA is a plain instance of the shared circle-arrow button
+   (.btn--default .btn--primary .btn--yellow — dark pill, white label,
+   yellow disc on hover), same as every other CTA on the page. Figma's
+   "Button - Concept 1" (13309:33246) draws a two-stacked-label text swap
+   here instead, which was built and then reverted 2026-09-23: the site's
+   established hover is the circle-and-arrow reveal, and one button using a
+   different motion language reads as a bug rather than a variant. If the
+   text swap is ever wanted, it belongs in components.css as a real variant
+   across the set, not as a one-off override in this section. */
+
 .hero__widget-fields {
   display: flex;
   flex: 1 0 0;
@@ -654,6 +664,10 @@
    Figma: "Sticky Scroll" (13309:33155). Revealed by initHeroCondensedWidget
    in js/sections/hero.js once the image above finishes growing.
 
+   A floating, centred pill — briefly built as a full-width bar on 2026-09-23
+   and reverted the same day against this frame. Do not widen it to 100%
+   again without checking the node.
+
    Two layers, deliberately: the outer .hero__condensed spans the full
    viewport only so flexbox can centre the pill and pin it to the bottom —
    it is not itself a hit target (pointer-events:none), so it never sits on
@@ -673,7 +687,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: var(--spacing-300) var(--spacing-500);
+  padding: var(--spacing-300) var(--grid-margin);
   pointer-events: none;
 }
 
@@ -685,9 +699,10 @@
   border: none;
   border-radius: var(--radius-round);
   background: var(--surface-colour-surface-primary);
-  /* unbound in Figma — decorative shadow only, same colour as the widget's
-     own shadow above at a lighter weight for this smaller surface. */
-  box-shadow: 1px 4px 7.8px rgba(165, 180, 0, 0.2);
+  /* Same lift as .eyebrow--raised (0 4px 6.45px, yellow/500 at 14%), on
+     request — the pill floats clear of the viewport edge, so the shadow
+     keeps the eyebrow's natural downward offset. */
+  box-shadow: 0 4px 6.45px color-mix(in srgb, var(--colour-yellow-500) 14%, transparent);
   opacity: 0.9;
   cursor: pointer;
   pointer-events: auto;
