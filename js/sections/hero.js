@@ -26,7 +26,12 @@
    ========================================================================== */
 
 export function initHeroImageFlip() {
-  const band = document.querySelector('.hero__image-band');
+  // The sticky wrapper, not the band itself: the band is position:sticky, and
+  // a stuck element reports its stuck position rather than its document
+  // position. The wrapper's top edge IS the band's top edge (it has no
+  // padding-top), so start/end resolve to the same scroll positions as before
+  // while staying measurable. Growth behaviour is unchanged.
+  const band = document.querySelector('[data-hero-sticky]');
   const container = document.querySelector('[data-hero-flip]');
 
   if (!band || !container) return;
@@ -64,36 +69,45 @@ export function initHeroImageFlip() {
    mirror of the widget rises out from behind the expanded image's clipped
    bottom edge and comes to rest overlapping the photo.
 
-   PINNED, unlike initHeroImageFlip above. The two are not in conflict — the
-   earlier "no pin" call was about pinning DURING the grow, which froze the
-   image three-quarters down the viewport and left a blank band above it.
-   This pin starts exactly where the grow ends ('top top', the band's top at
-   the viewport's top), so there is nothing above it to leave blank: the band
-   is already in its final resting position when it locks. Starting any
-   earlier would freeze the band mid-grow and reintroduce that bug. The band
-   is 719 tall once expanded (24 + 647 image + 48), which is shorter than the
-   viewport, so 'bottom bottom' would fire while the grow still had a couple
-   of hundred px to run. Keep these two boundaries touching.
+   THE HOLD IS CSS, NOT ScrollTrigger's pin — see .hero__image-sticky in
+   hero.css. pin:true sizes its spacer once at refresh, while the band is
+   still collapsed, and the grow then makes the band 406px taller than the
+   reserved space, so the USPs section rides up over the image and collides
+   with the widget. Do not "simplify" this back to pin:true.
 
-   Because the band is shorter than the viewport, a strip of the next section
-   shows beneath it while it is pinned. That is the design, not a leak:
-   frames 13295:31875 and :32002 are 966 tall with the image ending at 801,
-   i.e. they show the same strip underneath.
+   That leaves this trigger as a pure scrub driver: it owns no layout, it
+   only maps scroll distance onto the slide. The hold it scrubs against is
+   the sticky wrapper's padding-bottom, so the two stay in step by both
+   deriving from --hero-reveal-distance rather than from a number repeated
+   in two files.
 
-   REVEAL_DISTANCE is scroll length, not duration — the slide is scrubbed, so
-   this is how far you scroll to pull the widget out. ease:'none' for the same
-   reason it is used on the Flip above: any other ease double-eases against
-   the scrub and reads as lag, and the brand's overshoot has nowhere to go in
-   a scrubbed animation anyway.
+   Triggered off the WRAPPER, not the band. The band is the sticky element,
+   and a stuck element reports its stuck position to getBoundingClientRect,
+   which is not a stable thing to measure a start/end against. The wrapper
+   never moves relative to the document and its top edge is the band's top
+   edge (no padding-top), so the geometry is identical and the measurement
+   is honest. The grow above is pointed at it for the same reason.
+
+   ease:'none' for the same reason it is used on the Flip above: any other
+   ease double-eases against the scrub and reads as lag, and the brand's
+   overshoot has nowhere to go in a scrubbed animation anyway.
    ========================================================================== */
 
-const REVEAL_DISTANCE = 500;
+const FALLBACK_REVEAL_DISTANCE = 500;
+
+function revealDistance(hero) {
+  const declared = parseFloat(
+    getComputedStyle(hero).getPropertyValue('--hero-reveal-distance')
+  );
+  return Number.isFinite(declared) ? declared : FALLBACK_REVEAL_DISTANCE;
+}
 
 export function initHeroWidgetReveal() {
-  const band = document.querySelector('.hero__image-band');
+  const hero = document.querySelector('.hero');
+  const sticky = document.querySelector('[data-hero-sticky]');
   const slot = document.querySelector('[data-hero-widget-reveal]');
 
-  if (!band || !slot) return;
+  if (!hero || !sticky || !slot) return;
 
   if (!window.gsap || !window.ScrollTrigger) {
     console.warn('[hero] GSAP/ScrollTrigger not loaded — skipping widget reveal.');
@@ -121,10 +135,11 @@ export function initHeroWidgetReveal() {
       y: 0,
       ease: 'none',
       scrollTrigger: {
-        trigger: band,
+        trigger: sticky,
         start: 'top top',
-        end: `+=${REVEAL_DISTANCE}`,
-        pin: true,
+        // Matches the wrapper's reserved padding-bottom exactly, so the slide
+        // finishes on the same scroll pixel the band stops sticking.
+        end: () => `+=${revealDistance(hero)}`,
         scrub: true,
         invalidateOnRefresh: true,
       },

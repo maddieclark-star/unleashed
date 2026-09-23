@@ -147,49 +147,51 @@
       </div>
     </div>
 
-    <div class="hero__image-band">
-      <div class="hero__image-container" data-hero-flip>
-        <img class="hero__image-photo" src="assets/img/hero-banner-photo.png" alt="A dalmatian holding a tennis ball in its mouth" />
+    <div class="hero__image-sticky" data-hero-sticky>
+      <div class="hero__image-band">
+        <div class="hero__image-container" data-hero-flip>
+          <img class="hero__image-photo" src="assets/img/hero-banner-photo.png" alt="A dalmatian holding a tennis ball in its mouth" />
 
-        <!-- Decorative mirror of the quote widget above, per the Figma scroll
-             sequence (13295:31875 -> 13295:32002): it rises out from behind the
-             expanded image's clipped bottom edge. `inert` because the real,
-             interactive widget is the one in .hero__lower — two live copies
-             would share a radio group name and drift out of sync. -->
-        <div class="hero__image-widget-slot" data-hero-widget-reveal inert aria-hidden="true">
-          <div class="hero__widget">
-            <div class="hero__widget-header">
-              <h4 class="hero__widget-title">Start your free quote</h4>
-              <div class="hero__widget-disclaimer">
-                <span class="hero__widget-disclaimer-flame">🔥</span>
-                <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
+          <!-- Decorative mirror of the quote widget above, per the Figma scroll
+               sequence (13295:31875 -> 13295:32002): it rises out from behind the
+               expanded image's clipped bottom edge. `inert` because the real,
+               interactive widget is the one in .hero__lower — two live copies
+               would share a radio group name and drift out of sync. -->
+          <div class="hero__image-widget-slot" data-hero-widget-reveal inert aria-hidden="true">
+            <div class="hero__widget">
+              <div class="hero__widget-header">
+                <h4 class="hero__widget-title">Start your free quote</h4>
+                <div class="hero__widget-disclaimer">
+                  <span class="hero__widget-disclaimer-flame">🔥</span>
+                  <p class="hero__widget-disclaimer-text">5 minutes, tops. We&rsquo;ll take you straight to your quote.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="hero__widget-row">
-              <div class="hero__widget-fields">
-                <span class="hero__input hero__input--selected">
-                  <span class="hero__input-option">
-                    <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
-                    <span class="hero__input-label">Dog</span>
+              <div class="hero__widget-row">
+                <div class="hero__widget-fields">
+                  <span class="hero__input hero__input--selected">
+                    <span class="hero__input-option">
+                      <img class="hero__input-icon" src="assets/icons/dog-body.svg" alt="" />
+                      <span class="hero__input-label">Dog</span>
+                    </span>
+                    <span class="hero__radio hero__radio--selected"></span>
                   </span>
-                  <span class="hero__radio hero__radio--selected"></span>
-                </span>
-                <span class="hero__input">
-                  <span class="hero__input-option">
-                    <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
-                    <span class="hero__input-label">Cat</span>
+                  <span class="hero__input">
+                    <span class="hero__input-option">
+                      <img class="hero__input-icon" src="assets/icons/cat.svg" alt="" />
+                      <span class="hero__input-label">Cat</span>
+                    </span>
+                    <span class="hero__radio"></span>
                   </span>
-                  <span class="hero__radio"></span>
-                </span>
-                <span class="hero__input hero__input--text">
-                  <span class="hero__input-caption">Your pet&rsquo;s name</span>
-                  <span class="hero__input-value">Roxy</span>
+                  <span class="hero__input hero__input--text">
+                    <span class="hero__input-caption">Your pet&rsquo;s name</span>
+                    <span class="hero__input-value">Roxy</span>
+                  </span>
+                </div>
+                <span class="btn btn--dark btn--lg">
+                  <span class="btn__label">Get a Free Quote</span>
                 </span>
               </div>
-              <span class="btn btn--dark btn--lg">
-                <span class="btn__label">Get a Free Quote</span>
-              </span>
             </div>
           </div>
         </div>

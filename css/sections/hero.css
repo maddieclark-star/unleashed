@@ -25,6 +25,13 @@
 
 .hero {
   position: relative;
+  /* How far the image band holds still at the top of the viewport while the
+     quote widget slides out of it. Motion distance, not a spacing value, so
+     it is deliberately not a spacing token — but it IS shared: the sticky
+     wrapper below reserves exactly this much room, and js/sections/hero.js
+     reads this same property to size the reveal's scrub. Change it here and
+     both follow. */
+  --hero-reveal-distance: 500px;
 }
 
 /* ---------- Copy block ---------- */
@@ -503,8 +510,53 @@
 
 /* ---------- Image band ---------- */
 
+/* Sticky wrapper — the band's scroll room.
+
+   NOT ScrollTrigger's pin. Pinning measures the pin-spacer once at refresh,
+   while the band is still collapsed (313 tall); the grow then takes it to
+   719 and the spacer is ~406px short, so the USPs section rides up over the
+   image and collides with the widget. Sticky is recomputed by the browser
+   every paint, so a band whose height changes mid-scroll is a non-issue.
+
+   The ::after is what the band holds still for, and it has to be a child
+   rather than padding-bottom on the wrapper. A sticky element travels within
+   its containing block's CONTENT box, and padding is outside that — with
+   padding-bottom the content box was exactly the band's own height, leaving
+   precisely zero slack, so the band tested as position:sticky with top:0 and
+   still scrolled straight past. As a child it is inside the content box and
+   becomes real travel. It is also real layout space, which is why nothing
+   below can overlap any more.
+
+   The wrapper carries the band's own background so the reserved room reads
+   as the band continuing rather than a gap — and that matches Figma anyway:
+   frames 13295:31875 and :32002 both show pale yellow under the image. */
+.hero__image-sticky {
+  background: var(--colour-yellow-light-100);
+}
+
+.hero__image-sticky::after {
+  content: '';
+  display: block;
+  height: var(--hero-reveal-distance);
+}
+
+/* Reduced motion: both hero scroll animations bail out in js/sections/hero.js,
+   so the hold would reserve 500px of scroll for something that never happens —
+   a dead strip of yellow. Give the band its static layout back instead. This
+   restores the pre-animation hero exactly. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__image-band {
+    position: relative;
+  }
+
+  .hero__image-sticky::after {
+    display: none;
+  }
+}
+
 .hero__image-band {
-  position: relative;
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: center;
   width: 100%;
